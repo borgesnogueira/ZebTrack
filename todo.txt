@@ -1,0 +1,11 @@
+
+- Diferenciação de blobs baseados na cor (usar hsv - regioes com niveis de X muito altas/baixas (nao cinza) podem indicar regios com cor distinta).
+
+- Dividir experimento salvo em vários
+
+- calcular numero de rabiadas
+
+- definir se duas trajetorias sao parecidas
+
+- salvar todos os dados em excel
+

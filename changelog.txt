@@ -1,0 +1,86 @@
+Versao 1.1
+
+-Adicionado escolha do tipo de subtracao de fundo: estatistica ou basica
+
+Versao 1.2
+
+-Adicionadas algumas configuracoes (velocidade minima parado, tempo parado, tempo dormindo)
+
+Versao 1.3
+
+-Adicionada opcao de pausar o rastreamento
+-Adicionado rastro do peixe com controle do tamanho do rastro
+
+Versao 1.3.1
+
+-Corrigido bug ao abrir alguns videos (aprecia "quador final nao encontrado")
+
+Versao 1.3.2
+
+-Corrigido bug ao calcular relacao pixel/cm antes de criar areas
+
+Versao 1.3.3
+
+-Substituido os trechos de codigo de plotagem de areas por uma funcao
+
+Versao 2.0
+
+- Areas em formato polinogonal
+- Subtracao de fundo com máscara
+- Opcao de Threshold adaptativo
+- Modificado a forma de como eh calculada a variancia do fundo
+- Tooltips (dcias das funcoes quando o mouse passa por cima)
+- Barra de progresso para ciracao de imagem de fundo
+- Funcao de camera lenta
+- Tempo do frame atual do video sendo processado
+- Funcionalidade de corrigir a posicao do peixe em um frame durante a pausa
+
+Versao 2.0.1
+
+- Corrigido bug quando usuario pressionava tecla numerica para informar que o animal estava em certa area
+- Imagem diferença agora é mostrada na tela principal, e nao em outra janela
+- Opção para nao gravar o video resultado, para aumentar a velocidade
+
+Versao 2.0.2
+
+- Criação da classe uiwaitbar para mostrar a barra de progresso de acrodo com a versao nova do matlab
+- Tamanho maximo do blob para ser considerado um animal
+
+Versao 2.0.3
+
+- Modificado todos os textos para ingles
+
+Versao 2.0.4
+
+- Adionada funcionalidade de dividir o experimento em vários pedaços, gerando resultados para cada pedaço
+- Salvar os resultados no formato word
+
+Versao 2.1
+
+- Funcao separada para escolher blobs facilitando futura modificacao para diferenciação de blobs baseado na cor
+- Ao final do experimento com multiplos animais, salva a trajetoria de cada um
+- Transferida a parte que gera as figuras com as trajetorias para o relatorio, possibilitanto geralas apos
+ carregar um resultado ou fazendo que elas aparecam no .doc gerado
+- Calcula a distância do animal para uma aresta da area de processamento
+- Usa apenas o codigo de rep.m para mostrar os resultados, seja pra gerar relatorio ou para mostrar na tela
+- Salva automaticamente o resultado do experimento ao final no mesmo local e com o mesmo nome do video
+- Janela redimensionavel
+- Modificação dos menus, com a inclusão do menu analysis
+
+Versao 2.2
+
+- Janelas de carregar video e configuracao sobrepostas
+- Adicionada opção de rastrear o mouse
+- Adicionada informação sobre o numero do experimento, no caso de split
+- Movido para o relatorio a figura do fundo com a trajetoria do animal, e no caso de split, salva um pra cada experimento
+- Escolha dos itens de relatorio a serem apresentados
+- Distancia para ponto e reta com selecao de ponto e reta
+
+Versao 2.3
+
+- Opção de de dividir o experimento em vários depois de realizado (parte 1: junta varios em um unico)
+- Latencia (tempo que demorou para um peixe entrar em uma área de interesse)
+
+Versao 2.4
+
+- Calculo da velocidade angular e numero de curvas brucas realizadas

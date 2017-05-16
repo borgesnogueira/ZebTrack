@@ -1,0 +1,153 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration build-checksum="3130974025" file="C:\Users\Professor\Dropbox\Projeto ZebTrack\Fontes Matlab\v2.1\zebtrack.prj" location="C:\Users\Professor\Dropbox\Projeto ZebTrack\Fontes Matlab\v2.1" name="zebtrack" preferred-package-location="C:\Users\Professor\Dropbox\Projeto ZebTrack\Fontes Matlab\v2.1\zebtrack\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>zebtrack</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>2.1</param.version>
+    <param.authnamewatermark />
+    <param.email />
+    <param.company />
+    <param.summary />
+    <param.description />
+    <param.screenshot />
+    <param.guid />
+    <param.net.saved.interface />
+    <param.installpath.string>\zebtrack\</param.installpath.string>
+    <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
+    <param.logo />
+    <param.install.notes />
+    <param.intermediate>${PROJECT_ROOT}\zebtrack\for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}\zebtrack\for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}\zebtrack\for_redistribution</param.output>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.embed.ctf>true</param.embed.ctf>
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.required.mcr.products>
+      <item>35000</item>
+      <item>35010</item>
+      <item>35001</item>
+    </param.required.mcr.products>
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>false</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>true</param.windows.command.prompt>
+    <param.create.log>false</param.create.log>
+    <param.log.file />
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.summary />
+      <param.description />
+      <param.screenshot />
+      <param.guid />
+      <param.net.saved.interface />
+      <param.installpath.string />
+      <param.installpath.combo />
+      <param.logo />
+      <param.intermediate />
+      <param.files.only />
+      <param.output />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.embed.ctf />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.package.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.windows.command.prompt />
+      <param.create.log />
+      <param.log.file />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\zebtrack.m</file>
+    </fileset.main>
+    <fileset.resources>
+      <file>${PROJECT_ROOT}\actxlicense.m</file>
+      <file>${PROJECT_ROOT}\aleluia.mat</file>
+      <file>${PROJECT_ROOT}\changelog.txt</file>
+      <file>${PROJECT_ROOT}\criafundo.m</file>
+      <file>${PROJECT_ROOT}\desenha_areas.m</file>
+      <file>${PROJECT_ROOT}\exportfigs.fig</file>
+      <file>${PROJECT_ROOT}\exportfigs.m</file>
+      <file>${PROJECT_ROOT}\extractnblobs.m</file>
+      <file>${PROJECT_ROOT}\license.txt</file>
+      <file>${PROJECT_ROOT}\processando.jpeg</file>
+      <file>${PROJECT_ROOT}\rep.m</file>
+      <file>${PROJECT_ROOT}\sobre.fig</file>
+      <file>${PROJECT_ROOT}\sobre.m</file>
+      <file>${PROJECT_ROOT}\subplott.m</file>
+      <file>${PROJECT_ROOT}\toggleTooltips.m</file>
+      <file>${PROJECT_ROOT}\track.m</file>
+      <file>${PROJECT_ROOT}\trackGUI.fig</file>
+      <file>${PROJECT_ROOT}\trackGUI.m</file>
+      <file>${PROJECT_ROOT}\tracking.asv</file>
+      <file>${PROJECT_ROOT}\uiwaitbar.m</file>
+      <file>${PROJECT_ROOT}\zbuffer_cdata.m</file>
+      <file>${PROJECT_ROOT}\zebtrack.m</file>
+      <file>${PROJECT_ROOT}\zebtrack.prj</file>
+    </fileset.resources>
+    <fileset.package />
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}\zebtrack\for_testing" name="splash.png" optional="false">C:\Users\Professor\Dropbox\Projeto ZebTrack\Fontes Matlab\v2.1\zebtrack\for_testing\splash.png</file>
+      <file location="${PROJECT_ROOT}\zebtrack\for_testing" name="readme.txt" optional="true">C:\Users\Professor\Dropbox\Projeto ZebTrack\Fontes Matlab\v2.1\zebtrack\for_testing\readme.txt</file>
+      <file location="${PROJECT_ROOT}\zebtrack\for_testing" name="zebtrack.exe" optional="false">C:\Users\Professor\Dropbox\Projeto ZebTrack\Fontes Matlab\v2.1\zebtrack\for_testing\zebtrack.exe</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\MATLAB Production Server\R2015a</root>
+      <toolboxes>
+        <toolbox name="matlabhdlcoder" />
+        <toolbox name="fixedpoint" />
+        <toolbox name="embeddedcoder" />
+        <toolbox name="matlabcoder" />
+      </toolboxes>
+      <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
+      </toolbox>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>6.2</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
