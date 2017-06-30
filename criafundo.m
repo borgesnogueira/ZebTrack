@@ -48,8 +48,10 @@ function [fundo,V] = criafundo(caminho,video,quadroini,quadrofim,procframe,waitb
      V = M2/cont - fundo.^2;
      %calcula a variancia tons de cinza
      V(:,:,4) = Mpb/cont - fundopb.^2;
+
      %figure();
      %imagesc(sqrt(V(:,:,4)))
+
      warning off all
      fundo = uint8(fundo);
      %mostra na tela

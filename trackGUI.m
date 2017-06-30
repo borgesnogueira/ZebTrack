@@ -30,7 +30,7 @@ function varargout = trackGUI(varargin)
 
 % Edit the above text to modify the response to help trackGUI
 
-% Last Modified by GUIDE v2.5 29-Sep-2016 15:37:39
+% Last Modified by GUIDE v2.5 28-Jun-2017 08:28:53
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -2010,6 +2010,11 @@ function axes3_ButtonDownFcn(hObject, eventdata, handles)
 handles = guidata(hObject);
 figure();
 imshow(handles.fundo);
+title(['Background Image']);
+load([handles.directoryname,'/V.mat']);
+figure();
+imagesc(sqrt(V(:,:,4)));
+title(['Variance of Backgound Image']);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -3451,3 +3456,10 @@ function vangvelthres_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --------------------------------------------------------------------
+function uipanel2_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to uipanel2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

@@ -45,6 +45,7 @@ function [cc,cr,radius,boundingbox,ndetect,avi,foremm]=extractnblobs(Imwork,Imba
   
   end
   
+ 
   %fzer um AND com a mascara 
   fore = fore & mascara;
   
@@ -56,6 +57,9 @@ function [cc,cr,radius,boundingbox,ndetect,avi,foremm]=extractnblobs(Imwork,Imba
   
   foremm = imopen(fore,strel('disk',1));
   foremm = bwmorph(foremm,'dilate',3);
+  
+  %remover operacoes morfologicas
+  %foremm = fore;
     
   if criavideo
       %figure(h);
