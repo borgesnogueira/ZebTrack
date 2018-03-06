@@ -97,6 +97,7 @@ function [cc,cr,radius,boundingbox,ndetect,avi,foremm]=extractnblobs(Imwork,Imba
   end
 
   % conta quantos blobs tem mais que minpix e menos que maxpix
+  %falta remover os maiores que maxpix
   cont=0;
   for i=1:N
       if stats(i).Area > minpix && stats(i).Area < maxpix
@@ -109,7 +110,7 @@ function [cc,cr,radius,boundingbox,ndetect,avi,foremm]=extractnblobs(Imwork,Imba
 
  
   %ndetect = min(n,cont); %get the cetro of mass of at most n blobs
-  ndetect = cont;  % get center of mass and radius of all the blobs
+  ndetect = cont;  
   for i=1:ndetect
       centroid = stats(i).Centroid;
       radius(i) = sqrt(stats(i).Area/pi);
