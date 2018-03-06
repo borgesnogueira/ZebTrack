@@ -453,17 +453,19 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
             
             if apertada
                 areaescolhida = str2num(tecla);
-                if ~isempty(areaescolhida) && areaescolhida<=nareas %nao foi letra nem um numero de areas que nao existe
-                    %centro de massa
-                    tx = mean(areas(areaescolhida).x);
-                    ty = mean(areas(areaescolhida).y);
-                    if ~inpolygon(tx,ty,areas(areaescolhida).x,areas(areaescolhida).y) %se nao estiver dentro, pega na borda
-                        tx = mean(areas(areaescolhida).x(1:2));
-                        ty = mean(areas(areaescolhida).y(1:2));
-                    end
+                if ~ isnan(areaescolhida)
+                    if areaescolhida<=nareas %nao foi letra nem um numero de areas que nao existe
+                        %centro de massa
+                        tx = mean(areas(areaescolhida).x);
+                        ty = mean(areas(areaescolhida).y);
+                        if ~inpolygon(tx,ty,areas(areaescolhida).x,areas(areaescolhida).y) %se nao estiver dentro, pega na borda
+                            tx = mean(areas(areaescolhida).x(1:2));
+                            ty = mean(areas(areaescolhida).y(1:2));
+                        end
 
-                    px(1,cont) = tx;
-                    py(1,cont) = ty;
+                        px(1,cont) = tx;
+                        py(1,cont) = ty;
+                    end
                 else
                     %procura qual letra foi
                     for indletra = 1:length(vetorletras)

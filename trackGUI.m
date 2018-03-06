@@ -2167,24 +2167,27 @@ function figure1_WindowKeyPressFcn(hObject, eventdata, handles)
 %	Character: character interpretation of the key(s) that was pressed
 %	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
 % handles    structure with handles and user data (see GUIDATA)
+  
 global tecla
 tecla = eventdata.Key;
 global apertada
 apertada = 1;
-if ~ isempty(str2double(tecla))
+if ~ isnan(str2double(tecla))
     if (str2double(tecla) == 1 || str2double(tecla) == 2 || str2double(tecla) == 3 || str2double(tecla) == 4 || str2double(tecla) == 5 || str2double(tecla) == 6 || str2double(tecla) == 7 || str2double(tecla) == 8 || str2double(tecla) == 9) && str2double(tecla)<=length(handles.areaint)
         set(handles.mensagem,'String',['Animal forced to be on area ' tecla] );    
         set(handles.mensagem,'Visible','on');
     end
 else
     vetorletras = ['q' 'w' 'e' 'r' 't' 'y' 'u' 'i' 'o' 'p' 'a' 's' 'd' 'f' 'g' 'h' 'j' 'k' 'l'];
-    for indletra = 1:length(vetorletras)
-        if tecla == vetorletras(indletra)
-            set(handles.mensagem,'String',['Starting behaviour ' num2str(indletra)] );    
+     for indletra = 1:length(vetorletras)
+       if tecla == vetorletras(indletra)
+            set(handles.mensagem,'String',['Starting behaviour ' num2str(indletra)] );  
             set(handles.mensagem,'Visible','on');
         end
     end
 end
+% Update handles structure
+guidata(hObject, handles);
 
 
 % --- Executes on key release with focus on figure1 or any of its controls.

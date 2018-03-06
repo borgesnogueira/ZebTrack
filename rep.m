@@ -67,7 +67,7 @@ for ne=1:n
         end
     end
 
-    %Ex: Behauviour Information: time spent in each behaviour
+    %Ex: Behaviour Information: time spent in each behaviour
     if e(1).behaviourinfo 
         nc = max(comportamento.tipo); %numero de comportamentos
         tempcomp = zeros(1,nc);
@@ -78,6 +78,13 @@ for ne=1:n
             disp(['Time spent in behaviour ' num2str(i) ' : ' num2str(tempcomp(i))])
         end
         fprintf('\n');
+        %behaviour transitions matrix
+        btm = zeros(max(comportamento.tipo)) - eye(max(comportamento.tipo));
+        for i=1:length(comportamento.tipo)-1
+            btm(comportamento.tipo(i),comportamento.tipo(i+1)) = btm(comportamento.tipo(i),comportamento.tipo(i+1)) + 1;
+        end
+        disp('Behaviour Transition Matrix')
+        disp(btm);
     end
     
 
