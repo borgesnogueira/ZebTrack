@@ -83,4 +83,8 @@ Versao 2.3
 
 Versao 2.4
 
-- Calculo da velocidade angular e numero de curvas brucas realizadas
+- Calculo da velocidade angular e numero de curvas bruscas realizadas
+
+Versao 2.5
+
+- Calculo das transicoes de comportamento
