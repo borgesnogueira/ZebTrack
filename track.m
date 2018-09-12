@@ -663,7 +663,7 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
         
         %para acelerar o funcionamento, so mostra na tela de tempos em
         %tempos
-        if rem(cont,3) == 0
+        if rem(cont,round(get(handles.slider11,'Value'))) == 0
                        
             if criavideores
                     
