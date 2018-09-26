@@ -182,9 +182,9 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
 %     
    
     %carrega a imagem de fundo 
-    backg = imread([fotos,'/fundo.jpeg']);
+    backg = imread([fotos,'/',handles.filenameSemExtensao,'.jpeg']);
     %carrega varicancia da imagem de fundo (variavel V)
-    load([fotos,'/V.mat']);
+    load([fotos,'/',handles.filenameSemExtensao,'V.mat']);
     [l,c,cor] = size(backg);
     
     if colorida || (cor == 1)
