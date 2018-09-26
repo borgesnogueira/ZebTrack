@@ -69,7 +69,7 @@
 
 
 
-function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento]=track(mostraresnatela,quadroini,quadrofim,fotos,video,pixelcm,nanimais,procframe,corte,areas,areasexc,criavideores,viddiff,thresh,filt,handles,fundodinamico,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,cameralenta,trackmouse,pinicial)
+function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento] = track(mostraresnatela,quadroini,quadrofim,fotos,video,pixelcm,nanimais,procframe,corte,areas,areasexc,criavideores,viddiff,thresh,filt,handles,fundodinamico,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,cameralenta,trackmouse,pinicial)
 
     %CONSTANTES A SEREM AJUSTADAS:
     
@@ -211,7 +211,7 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
     
     if criavideores
         %aviobj = avifile([fotos,'/result.avi'],'fps',fps*1/procframe);
-        aviobj = VideoWriter([fotos,'/result.avi']);
+        aviobj = VideoWriter([fotos,'/',handles.filenameSemExtensao,'result.avi']);
         aviobj.FrameRate = fps*1/procframe;
         open(aviobj);
     end
@@ -235,7 +235,7 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
     
     if criavideodiff
         %aviobj2 = avifile([fotos,'/resultdiff.avi'],'fps',fps*1/procframe);
-        aviobj2 = VideoWriter([fotos,'/resultdiff.avi']);
+        aviobj2 = VideoWriter([fotos,'/',handles.filenameSemExtensao,'resultdiff.avi']);
         aviobj2.FrameRate = fps*1/procframe;
         open(aviobj2);
         %figvideodiff = figure(6);
@@ -928,7 +928,7 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
     %desenha as areas e salva
     desenha_areas(areas,'','b',1);
     
-    saveas(figvid,[fotos,'/areas.jpg']);
+    saveas(figvid,[fotos,'/',handles.filenameSemExtensao,'areas.jpg']);
     
     if (~mostraresnatela) || exist('handles','var')
         set(0,'CurrentFigure',figvid); %seta com atual sem mostrar
@@ -948,7 +948,7 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
         plot(px(j,:),py(j,:),'Color',vcores(mod(j,7)+1,:));
     end
     
-    saveas(figvid,[fotos,'/result.jpg']);
+    saveas(figvid,[fotos,'/',handles.filenameSemExtensao,'result.jpg']);
     
     %salva as trajetorias de cada animal
     if nanimais>1
@@ -960,7 +960,7 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
                 set(figvid,'Visible', 'on')
             end
             plot(px(j,:),py(j,:),'Color',vcores(mod(j,7)+1,:));
-            saveas(figvid,[fotos,'/result' num2str(j) '.jpg']);
+            saveas(figvid,[fotos,'/',handles.filenameSemExtensao,'result',num2str(j),'.jpg']);
         end
     end
     

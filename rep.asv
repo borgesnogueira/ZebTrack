@@ -15,7 +15,7 @@ for ne=1:n
     pxcm = e(1).pxcm;
     figdimensions = e(1).figdimensions;
     directory = e(1).directory;
-    filename = e(1).filename;
+    filename = handles.e(1).filename;
 
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -335,17 +335,11 @@ for ne=1:n
         end
     end
     
-    
-    %computes heat map
     if e(1).heat_map
         for j=1:nanimais
-            heat_map_figure = zeros(figdimensions.l, figdimensions.c);
-            for i=1:length(posicao{j}.x)
-                heat_map_figure(floor(figdimensions.l-posicao{j}.y(i)), floor(posicao{j}.x(i))) =  heat_map_figure(floor(figdimensions.l-posicao{j}.y(i)), floor(posicao{j}.x(i))) + 1;
-            end
-            
-            f1 = figure;
-            imagesc(heat_map_figure);
+            heat_map_figure = zeros(figdimensions.a, figdimensions.l);
+            for i=0:length(posicao)
+                heat_map_figure(posicao{j}.x(i), posicao{j}.y(i));
         end
     end
     

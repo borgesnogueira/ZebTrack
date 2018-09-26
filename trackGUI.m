@@ -30,7 +30,7 @@ function varargout = trackGUI(varargin)
 
 % Edit the above text to modify the response to help trackGUI
 
-% Last Modified by GUIDE v2.5 01-Aug-2018 15:35:14
+% Last Modified by GUIDE v2.5 26-Sep-2018 14:25:43
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -734,7 +734,9 @@ if get(handles.splitexperiment,'Value')
         handles.e(1).figdimensions.l = handles.l;
         handles.e(1).figdimensions.c = handles.c;
         handles.e(1).directory = handles.directoryname;
+        handles.e(1).filename = handles.filenameSemExtensao;
         handles.e(1).areaint = handles.areaint;
+        
     for i=1:ceil((ffim-fini)/splitframe)
         set(handles.expnumber,'String',['Experiment number ' num2str(i) ' of ' num2str(ceil((ffim-fini)/splitframe))]);
         finitemp = fini+(i-1)*splitframe;
@@ -769,6 +771,7 @@ else
     handles.e.figdimensions.c = handles.c;
     handles.e.directory = handles.directoryname;
     handles.e.areaint = handles.areaint;
+    handles.e.filename = handles.filenameSemExtensao;
 end
 
 
@@ -1040,6 +1043,7 @@ handles.e(1).animalplot3D = get(handles.animalplot3D,'Value');
 handles.e(1).backgplot = get(handles.backgplot,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
+handles.e(1).heat_map = get(handles.HeatMap,'Value');
 guidata(hObject, handles);
 % Hint: delete(hObject) closes the figure
 if isequal(get(hObject, 'waitstatus'),'waiting')
@@ -1971,6 +1975,7 @@ handles.e(1).animalplot3D = get(handles.animalplot3D,'Value');
 handles.e(1).backgplot = get(handles.backgplot,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
+handles.e(1).heat_map = get(handles.HeatMap,'Value');
  assignin('base', 'e', handles.e);
  publish('rep.m','format','doc','showCode',false,'outputDir',PathName, 'useNewFigure',false);
  movefile(fullfile(PathName,'rep.doc'),fullfile(PathName,FileName),'f')
@@ -2016,7 +2021,7 @@ handles = guidata(hObject);
 figure();
 imshow(handles.fundo);
 title(['Background Image']);
-load([handles.directoryname,'/V.mat']);
+load([handles.directoryname,'/',handles.filenameSemExtensao,'V.mat']);
 figure();
 imagesc(sqrt(V(:,:,4)));
 title(['Variance of Backgound Image']);
@@ -2491,6 +2496,7 @@ handles.e(1).distlineinfo = get(handles.distlineinfo,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
 handles.e(1).behaviourinfo = get(handles.behaviourinfo,'Value');
+handles.e(1).heat_map = get(handles.HeatMap,'Value');
 
 if handles.e(1).distlineinfo
 s ={'animal' 'mean speed' 'maximum speed' 'total distance' 'total time stoped' 'mean distance from a line' 'area number' 'time spent in area' 'latency'};
@@ -2965,7 +2971,9 @@ handles.e(1).animalplot3D = get(handles.animalplot3D,'Value');
 handles.e(1).backgplot = get(handles.backgplot,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
-
+handles.e(1).heat_map = get(handles.HeatMap,'Value');
+handles.e(1).filename = handles.filenameSemExtensao;
+guidata(hObject, handles);%salva o handles nessa porra.
 e=handles.e;
 rep;
  
@@ -3422,6 +3430,7 @@ if ne~=1
    g.pxcm = handles.e(1).pxcm;
    g.figdimensions = handles.e(1).figdimensions;
    g.directory = handles.e(1).directory;
+   g.filename = handles.e(1).filename;
    g.areaint = handles.e(1).areaint;
 %    g.report = handles.e(1).report;
 %    g.basicinfo = handles.e(1).basicinfo;
@@ -3555,3 +3564,12 @@ function showrate_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in HeatMap.
+function HeatMap_Callback(hObject, eventdata, handles)
+% hObject    handle to HeatMap (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of HeatMap

@@ -30,7 +30,7 @@ function varargout = trackGUI(varargin)
 
 % Edit the above text to modify the response to help trackGUI
 
-% Last Modified by GUIDE v2.5 01-Aug-2018 15:35:14
+% Last Modified by GUIDE v2.5 26-Sep-2018 14:25:43
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -148,6 +148,7 @@ if ~isempty( directoryname )
     set(handles.pasta,'String',fullfile(directoryname, filename));
     handles.directoryname = directoryname;
     handles.filename = filename;
+    handles.filenameSemExtensao = filenameSemExtensao;
     
     
     %handles.areaproc = [];
@@ -224,7 +225,7 @@ if ~isempty( directoryname )
         imshow(p);
         drawnow;
         %set(handles.waibarfundo,'Visible','on');
-        [fundo,V] = criafundo(handles.directoryname,filename,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
+        [fundo,V] = criafundo(handles.directoryname,handles.filenameSemExtensao,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
     end
 
 [l,c,~]=size(fundo);
@@ -424,7 +425,7 @@ handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(ge
 handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 
 handles.waibarfundo.visivel('on');
-[fundo,V] = criafundo(handles.directoryname,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
+[fundo,V] = criafundo(handles.directoryname,handles.filenameSemExtensao,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
 handles.fundo = fundo;
 handles.V = V;
 axes(handles.axes3);
@@ -462,7 +463,7 @@ if filename ~= 0
     handles.directoryname = directoryname;
     handles.filename = filename;
     [directoryname, filenameSemExtensao, ext] = fileparts(get(handles.pasta,'String'));
-    
+    handles.filenameSemExtensao = filenameSemExtensao;
     
     
     %handles.areaproc = [];
@@ -532,8 +533,6 @@ if filename ~= 0
     try
         fundo = imread([handles.directoryname,'/',filenameSemExtensao,'.jpeg']);
         load([handles.directoryname,'/', filenameSemExtensao,'V.mat']);
-        fundo = imread([handles.directoryname,'/fundo.jpeg']);
-        load([handles.directoryname,'/V.mat']);
     catch
         %se nao tem, cria
         %ajusta a quantidade de iamgens utilizadas de acordo com a duração do
@@ -545,7 +544,7 @@ if filename ~= 0
         drawnow;
         %[fundo,V] = criafundo(handles.directoryname,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')));
         handles.waibarfundo.visivel('on');
-        [fundo,V] = criafundo(handles.directoryname,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
+        [fundo,V] = criafundo(handles.directoryname,handles.filenameSemExtensao,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
     end
 
 [l,c,~]=size(fundo);
@@ -735,6 +734,7 @@ if get(handles.splitexperiment,'Value')
         handles.e(1).figdimensions.l = handles.l;
         handles.e(1).figdimensions.c = handles.c;
         handles.e(1).directory = handles.directoryname;
+        handles.e(1).filename = handles.filenameSemExtensao;
         handles.e(1).areaint = handles.areaint;
     for i=1:ceil((ffim-fini)/splitframe)
         set(handles.expnumber,'String',['Experiment number ' num2str(i) ' of ' num2str(ceil((ffim-fini)/splitframe))]);
@@ -1041,6 +1041,7 @@ handles.e(1).animalplot3D = get(handles.animalplot3D,'Value');
 handles.e(1).backgplot = get(handles.backgplot,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
+handles.e(1).heat_map = get(handles.HeatMap,'Value');
 guidata(hObject, handles);
 % Hint: delete(hObject) closes the figure
 if isequal(get(hObject, 'waitstatus'),'waiting')
@@ -1972,6 +1973,7 @@ handles.e(1).animalplot3D = get(handles.animalplot3D,'Value');
 handles.e(1).backgplot = get(handles.backgplot,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
+handles.e(1).heat_map = get(handles.HeatMap,'Value');
  assignin('base', 'e', handles.e);
  publish('rep.m','format','doc','showCode',false,'outputDir',PathName, 'useNewFigure',false);
  movefile(fullfile(PathName,'rep.doc'),fullfile(PathName,FileName),'f')
@@ -2492,6 +2494,7 @@ handles.e(1).distlineinfo = get(handles.distlineinfo,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
 handles.e(1).behaviourinfo = get(handles.behaviourinfo,'Value');
+handles.e(1).heat_map = get(handles.HeatMap,'Value');
 
 if handles.e(1).distlineinfo
 s ={'animal' 'mean speed' 'maximum speed' 'total distance' 'total time stoped' 'mean distance from a line' 'area number' 'time spent in area' 'latency'};
@@ -2966,6 +2969,7 @@ handles.e(1).animalplot3D = get(handles.animalplot3D,'Value');
 handles.e(1).backgplot = get(handles.backgplot,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
+handles.e(1).heat_map = get(handles.HeatMap,'Value');
 
 e=handles.e;
 rep;
@@ -3556,3 +3560,12 @@ function showrate_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in HeatMap.
+function HeatMap_Callback(hObject, eventdata, handles)
+% hObject    handle to HeatMap (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of HeatMap
