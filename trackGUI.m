@@ -178,8 +178,8 @@ if ~isempty( directoryname )
     
     %barras de roalgem do video
     set(handles.sliderti,'Min',1);
-    set(handles.slidertf,'Min',handles.video.Framerate);
-    set(handles.sliderti,'Max',handles.video.NumberOfFrames - handles.video.Framerate); %seta maximo
+    set(handles.slidertf,'Min',handles.frameRate);
+    set(handles.sliderti,'Max',handles.video.NumberOfFrames - handles.frameRate); %seta maximo
     set(handles.slidertf,'Max',handles.video.NumberOfFrames); %seta maximo
     set(handles.sliderti,'Value',1); %seta valor inicial
     set(handles.slidertf,'Value',handles.video.NumberOfFrames); %seta valor inicial
@@ -189,8 +189,8 @@ if ~isempty( directoryname )
     
     set(handles.sliderti,'Value',handles.valsliti);
     set(handles.slidertf,'Value',handles.valslitf);
-    set(handles.tfimmin,'String',num2str(floor(handles.valslitf/(handles.video.Framerate*60))));
-    set(handles.tfimseg,'String',num2str(floor(handles.valslitf/(handles.video.Framerate) - 60*floor(handles.valslitf/(handles.video.Framerate*60)))));
+    set(handles.tfimmin,'String',num2str(floor(handles.valslitf/(handles.frameRate*60))));
+    set(handles.tfimseg,'String',num2str(floor(handles.valslitf/(handles.frameRate) - 60*floor(handles.valslitf/(handles.frameRate*60)))));
     
     %set(handles.qini,'String','1'); 
     set(handles.tinimin,'String','0')
@@ -200,12 +200,12 @@ if ~isempty( directoryname )
     %set(handles.tfimseg,'String',num2str( floor( handles.video.Duration -  floor(handles.video.Duration/60)*60 )));
     
     
-    handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.video.Framerate + 1;
-    handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.video.Framerate;
+    handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1;
+    handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 
    
     %if handles.framefim > handles.video.NumberOfFrames
-    %    handles.framefim = handles.video.NumberOfFrames - handles.video.Framerate;
+    %    handles.framefim = handles.video.NumberOfFrames - handles.frameRate;
     %end
     
     
@@ -313,19 +313,19 @@ function visualizar_Callback(hObject, eventdata, handles)
 % hObject    handle to visualizar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.video.Framerate + 1;
-handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.video.Framerate;
+handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1;
+handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 if handles.framefim<=handles.frameini
-    handles.framefim = handles.frameini + handles.video.Framerate;
+    handles.framefim = handles.frameini + handles.frameRate;
 end
 %if handles.framefim > handles.video.NumberOfFrames
-%        handles.framefim = handles.video.NumberOfFrames - handles.video.Framerate;
+%        handles.framefim = handles.video.NumberOfFrames - handles.frameRate;
 %end
 set(handles.sliderti,'Value',handles.frameini);
 set(handles.slidertf,'Value',handles.framefim);
 
-set(handles.tfimmin,'String',num2str(floor(handles.framefim/(handles.video.Framerate*60))));
-set(handles.tfimseg,'String',num2str(floor(handles.framefim/(handles.video.Framerate) - 60*floor(handles.framefim/(handles.video.Framerate*60)))));
+set(handles.tfimmin,'String',num2str(floor(handles.framefim/(handles.frameRate*60))));
+set(handles.tfimseg,'String',num2str(floor(handles.framefim/(handles.frameRate) - 60*floor(handles.framefim/(handles.frameRate*60)))));
 
 
 try
@@ -419,8 +419,8 @@ set(handles.btcriafundo,'Enable','off')
 set(handles.run,'Enable','off')
 drawnow;
 
-handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.video.Framerate + 1;
-handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.video.Framerate;
+handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1;
+handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 
 handles.waibarfundo.visivel('on');
 [fundo,V] = criafundo(handles.directoryname,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
@@ -490,11 +490,12 @@ if filename ~= 0
     set(handles.axes4,'Color','w','XTick',[],'YTick',[],'XColor','w','YColor','w');
     
     %disp(['numero de frames ' num2str(handles.video.NumberOfFrames)])
+    handles.frameRate = handles.video.NumberOfFrames/handles.video.Duration;
     
     %barras de roalgem do video
     set(handles.sliderti,'Min',1);
-    set(handles.slidertf,'Min',handles.video.Framerate);
-    set(handles.sliderti,'Max',handles.video.NumberOfFrames - handles.video.Framerate); %seta maximo
+    set(handles.slidertf,'Min',handles.frameRate);
+    set(handles.sliderti,'Max',handles.video.NumberOfFrames - handles.frameRate); %seta maximo   handles.frameRate
     set(handles.slidertf,'Max',handles.video.NumberOfFrames); %seta maximo
     set(handles.sliderti,'Value',1); %seta valor inicial
     set(handles.slidertf,'Value',handles.video.NumberOfFrames); %seta valor inicial
@@ -504,8 +505,8 @@ if filename ~= 0
     
     set(handles.sliderti,'Value',handles.valsliti);
     set(handles.slidertf,'Value',handles.valslitf);
-    set(handles.tfimmin,'String',num2str(floor(handles.valslitf/(handles.video.Framerate*60))));
-    set(handles.tfimseg,'String',num2str(floor(handles.valslitf/(handles.video.Framerate) - 60*floor(handles.valslitf/(handles.video.Framerate*60)))));
+    set(handles.tfimmin,'String',num2str(floor(handles.valslitf/(handles.frameRate*60))));
+    set(handles.tfimseg,'String',num2str(floor(handles.valslitf/(handles.frameRate) - 60*floor(handles.valslitf/(handles.frameRate*60)))));
     
     %set(handles.qini,'String','1'); 
     set(handles.tinimin,'String','0')
@@ -515,13 +516,13 @@ if filename ~= 0
     %set(handles.tfimseg,'String',num2str( floor( handles.video.Duration -  floor(handles.video.Duration/60)*60 )));
     
     
-    handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.video.Framerate + 1;
-    handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.video.Framerate;
+    handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1;
+    handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 
     %disp(['frame fim ' num2str(handles.framefim)])
     
     %if handles.framefim > handles.video.NumberOfFrames
-    %    handles.framefim = handles.video.NumberOfFrames - handles.video.Framerate;
+    %    handles.framefim = handles.video.NumberOfFrames - handles.frameRate;
     %end
     
     
@@ -676,8 +677,8 @@ function run_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 toggleTooltips(handles.figure1,'off'); 
 visu = 1;
-handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.video.Framerate + 1;
-handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.video.Framerate;
+handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1;
+handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 %fini = str2double(get(handles.qini,'String'));
 fini = handles.frameini;
 %ffim = str2double(get(handles.qfim,'String'));
@@ -722,7 +723,7 @@ if trackmouse
 end
 
 if get(handles.splitexperiment,'Value')
-    splitframe = str2double(get(handles.splittime,'String'))*handles.video.Framerate;
+    splitframe = str2double(get(handles.splittime,'String'))*handles.frameRate;
     set(handles.expnumber,'Visible','on');
         handles.e(1).areaproc=handles.areaproc;
         handles.e(1).pxcm = pxcm;
@@ -1325,12 +1326,12 @@ end
     
 %barras de roalgem do video
     set(handles.sliderti,'Min',1);
-    set(handles.slidertf,'Min',handles.video.Framerate);
-    set(handles.sliderti,'Max',handles.video.NumberOfFrames - handles.video.Framerate); %seta maximo
+    set(handles.slidertf,'Min',handles.frameRate);
+    set(handles.sliderti,'Max',handles.video.NumberOfFrames - handles.frameRate); %seta maximo
     set(handles.slidertf,'Max',handles.video.NumberOfFrames); %seta maximo
       
-    handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.video.Framerate + 1;
-    handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.video.Framerate;
+    handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1;
+    handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 
 try
     fundo = imread([handles.directoryname,'/fundo.jpeg']);
@@ -2404,8 +2405,8 @@ function sliderti_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 handles.valsliti = round(get(handles.sliderti,'Value'));
-set(handles.tinimin,'String',num2str(floor(handles.valsliti/(handles.video.Framerate*60))));
-set(handles.tiniseg,'String',num2str(floor(handles.valsliti/(handles.video.Framerate) - 60*floor(handles.valsliti/(handles.video.Framerate*60)))));
+set(handles.tinimin,'String',num2str(floor(handles.valsliti/(handles.frameRate*60))));
+set(handles.tiniseg,'String',num2str(floor(handles.valsliti/(handles.frameRate) - 60*floor(handles.valsliti/(handles.frameRate*60)))));
 
 
  guidata(hObject, handles);
@@ -2441,11 +2442,11 @@ function slidertf_Callback(hObject, eventdata, handles)
 handles.valsliti = round(get(handles.sliderti,'Value'));
 handles.valslitf = round(get(handles.slidertf,'Value'));
 %if(handles.valslitf<=handles.valsliti)
-%    handles.valslitf = handles.valsliti+handles.video.Framerate;
+%    handles.valslitf = handles.valsliti+handles.frameRate;
 %end
 set(handles.slidertf,'Value',handles.valslitf);
-set(handles.tfimmin,'String',num2str(floor(handles.valslitf/(handles.video.Framerate*60))));
-set(handles.tfimseg,'String',num2str(floor(handles.valslitf/(handles.video.Framerate) - 60*floor(handles.valslitf/(handles.video.Framerate*60)))));
+set(handles.tfimmin,'String',num2str(floor(handles.valslitf/(handles.frameRate*60))));
+set(handles.tfimseg,'String',num2str(floor(handles.valslitf/(handles.frameRate) - 60*floor(handles.valslitf/(handles.frameRate*60)))));
 
  guidata(hObject, handles);
 
@@ -2748,8 +2749,8 @@ for j=1:str2double(get(handles.npeixes,'String'))
     set(phandle,'ButtonDownFcn', @axes4_ButtonDownFcn);
 end
 
-set(handles.tamin,'String',num2str(floor((numframeatual + procf*handles.avanco)/(handles.video.Framerate*60))));
-set(handles.taseg,'String',num2str(floor((numframeatual + procf*handles.avanco)/(handles.video.Framerate) - 60*floor((numframeatual + procf*handles.avanco)/(handles.video.Framerate*60)))));
+set(handles.tamin,'String',num2str(floor((numframeatual + procf*handles.avanco)/(handles.frameRate*60))));
+set(handles.taseg,'String',num2str(floor((numframeatual + procf*handles.avanco)/(handles.frameRate) - 60*floor((numframeatual + procf*handles.avanco)/(handles.frameRate*60)))));
 
 guidata(hObject, handles);
 
@@ -2786,8 +2787,8 @@ for j=1:str2double(get(handles.npeixes,'String'))
     set(phandle,'ButtonDownFcn', @axes4_ButtonDownFcn);
 end
 
-set(handles.tamin,'String',num2str(floor((numframeatual + procf*handles.avanco)/(handles.video.Framerate*60))));
-set(handles.taseg,'String',num2str(floor((numframeatual + procf*handles.avanco)/(handles.video.Framerate) - 60*floor((numframeatual + procf*handles.avanco)/(handles.video.Framerate*60)))));
+set(handles.tamin,'String',num2str(floor((numframeatual + procf*handles.avanco)/(handles.frameRate*60))));
+set(handles.taseg,'String',num2str(floor((numframeatual + procf*handles.avanco)/(handles.frameRate) - 60*floor((numframeatual + procf*handles.avanco)/(handles.frameRate*60)))));
 
 
 guidata(hObject, handles);
