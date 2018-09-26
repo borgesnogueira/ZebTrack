@@ -148,7 +148,6 @@ if ~isempty( directoryname )
     set(handles.pasta,'String',fullfile(directoryname, filename));
     handles.directoryname = directoryname;
     handles.filename = filename;
-    handles.filenameSemExtensao = filenameSemExtensao;
     
     
     %handles.areaproc = [];
@@ -225,7 +224,7 @@ if ~isempty( directoryname )
         imshow(p);
         drawnow;
         %set(handles.waibarfundo,'Visible','on');
-        [fundo,V] = criafundo(handles.directoryname,handles.filenameSemExtensao,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
+        [fundo,V] = criafundo(handles.directoryname,filename,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
     end
 
 [l,c,~]=size(fundo);
@@ -425,7 +424,7 @@ handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(ge
 handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 
 handles.waibarfundo.visivel('on');
-[fundo,V] = criafundo(handles.directoryname,handles.filenameSemExtensao,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
+[fundo,V] = criafundo(handles.directoryname,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
 handles.fundo = fundo;
 handles.V = V;
 axes(handles.axes3);
@@ -463,7 +462,7 @@ if filename ~= 0
     handles.directoryname = directoryname;
     handles.filename = filename;
     [directoryname, filenameSemExtensao, ext] = fileparts(get(handles.pasta,'String'));
-    handles.filenameSemExtensao = filenameSemExtensao;
+    
     
     
     %handles.areaproc = [];
@@ -533,6 +532,8 @@ if filename ~= 0
     try
         fundo = imread([handles.directoryname,'/',filenameSemExtensao,'.jpeg']);
         load([handles.directoryname,'/', filenameSemExtensao,'V.mat']);
+        fundo = imread([handles.directoryname,'/fundo.jpeg']);
+        load([handles.directoryname,'/V.mat']);
     catch
         %se nao tem, cria
         %ajusta a quantidade de iamgens utilizadas de acordo com a duração do
@@ -544,7 +545,7 @@ if filename ~= 0
         drawnow;
         %[fundo,V] = criafundo(handles.directoryname,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')));
         handles.waibarfundo.visivel('on');
-        [fundo,V] = criafundo(handles.directoryname,handles.filenameSemExtensao,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
+        [fundo,V] = criafundo(handles.directoryname,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
     end
 
 [l,c,~]=size(fundo);

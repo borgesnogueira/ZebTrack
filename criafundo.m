@@ -6,7 +6,7 @@
 %variancia de cada pixel, retornando na matriz V
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [fundo,V] = criafundo(caminho,video,quadroini,quadrofim,procframe,waitbar)
+function [fundo,V] = criafundo(caminho,filename,video,quadroini,quadrofim,procframe,waitbar)
 
     %disp(['Utilizando ', int2str(floor((quadrofim-quadroini)/procframe)+1), ' imagens para compor o fundo']) 
     
@@ -61,8 +61,8 @@ function [fundo,V] = criafundo(caminho,video,quadroini,quadrofim,procframe,waitb
         fundo = rgb2gray(fundo);
      end
      %salva o fundo
-     imwrite(fundo,[caminho,'/fundo.jpeg'],'jpeg','Quality',100);
-     save([caminho,'/V'],'V');
+     imwrite(fundo,[caminho,'/',filename,'.jpeg'],'jpeg','Quality',100);
+     save([caminho,'/',filename,'V'],'V');
      warning on all
      %disp('Novo fundo calculado')
 end

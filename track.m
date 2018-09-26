@@ -172,14 +172,14 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
     pmousey=-1;
 
     %ajusta o alpha de acordo com o procframe
-    if tipfilt == 0
-        novoalpha = 0;
-        for i=1:procframe
-           novoalpha = novoalpha + (-1)^(i-1)*alpha^i*calctermoserie(procframe,i);
-        end
-        alpha = novoalpha/procframe;
-    end
-    
+%     if tipfilt == 0
+%         novoalpha = 0;
+%         for i=1:procframe
+%            novoalpha = novoalpha + (-1)^(i-1)*alpha^i*calctermoserie(procframe,i);
+%         end
+%         alpha = novoalpha/procframe;
+%     end
+%     
    
     %carrega a imagem de fundo 
     backg = imread([fotos,'/fundo.jpeg']);
