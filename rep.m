@@ -344,8 +344,33 @@ for ne=1:n
                 heat_map_figure(floor(figdimensions.l-posicao{j}.y(i)), floor(posicao{j}.x(i))) =  heat_map_figure(floor(figdimensions.l-posicao{j}.y(i)), floor(posicao{j}.x(i))) + 1;
             end
             
+            %max(max(heat_map_figure)); %to normalize the heatmap matrix.
+            hmfb = ind2rgb(uint8(heat_map_figure), jet(max(max(heat_map_figure)))); %é preferível que os valores de jet sejam baixos!
+            
+            
             f1 = figure;
-            imagesc(heat_map_figure);
+            imshow(hmfb);
+            
+            %sobrepor
+            alpha = 0.5;
+            f2 = figure;
+            
+%             tentado modificar com uso de OPERAÇÕES MORFOLÓFICAS e o filtro
+%             gaussiano.
+%             
+%             SE = strel('disk',1); %referencia de um circulo com raio de tamnho 1 pixel!
+%             heatMapBonitoDilatado = imdilate(hmfb,SE); %dilata a figura.
+            
+            
+            sobreposta = (1-alpha)*double(backg) + alpha*double(255*heatMapBonitoDilatado);%multiplied by 255 given that ind2rgb returns a value between 0 and 1.
+            imshow(uint8(sobreposta));
+            
+            if e(1).report
+                snapnow
+                close(f1);
+                close(f2);
+            end
+            
         end
     end
     
