@@ -3,8 +3,6 @@
 
 - Dividir experimento salvo em vários
 
-- calcular numero de rabiadas
-
 - definir se duas trajetorias sao parecidas
 
 - salvar todos os dados em excel
