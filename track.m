@@ -689,10 +689,11 @@ for i=quadroini:procframe:quadrofim
                 end
             end
             
-            warning ('off','all');
-            frameavi = im2frame(zbuffer_cdata(figvid)); %pega e o frame fica invisivel. em breve nao sera mais suportado
-            warning ('on','all');
-            %frameavi = print(figvid,'-RGBImage'); %jeito novo (2015a) (mais lento)
+            %warning ('off','all');
+            %frameavi = im2frame(zbuffer_cdata(figvid)); %pega e o frame fica invisivel. em breve nao sera mais suportado
+            %warning ('on','all');
+            
+            frameavi = print(figvid,'-RGBImage'); %jeito novo (2015a) (mais lento)
             
             %adiciona o frame ao video
             writeVideo(aviobj,frameavi);
