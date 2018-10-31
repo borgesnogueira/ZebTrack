@@ -202,8 +202,8 @@ if ~isempty( directoryname )
     %set(handles.tfimseg,'String',num2str( floor( handles.video.Duration -  floor(handles.video.Duration/60)*60 )));
     
     
-    handles.frameini = floor((str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1);
-    handles.framefim = floor((str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate);
+    handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1;
+    handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 
    
     %if handles.framefim > handles.video.NumberOfFrames
@@ -315,8 +315,8 @@ function visualizar_Callback(hObject, eventdata, handles)
 % hObject    handle to visualizar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.frameini = floor((str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1);
-handles.framefim = floor((str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate);
+handles.frameini = floor(str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1;
+handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 
 
 if handles.framefim<=handles.frameini
@@ -455,7 +455,7 @@ function btbrowse_Callback(hObject, eventdata, handles)
 % hObject    handle to btbrowse (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[filename, directoryname] = uigetfile('*.avi;*.mov;*.mp4;*.wmv;*.flv','Choose the video file:');
+[filename, directoryname] = uigetfile('*.avi','Choose the video file:');
  
 if filename ~= 0
     %le o video na memoria
@@ -522,8 +522,8 @@ if filename ~= 0
     %set(handles.tfimseg,'String',num2str( floor( handles.video.Duration -  floor(handles.video.Duration/60)*60 )));
     
     
-    handles.frameini = floor((str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1);
-    handles.framefim = floor((str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate);
+    handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1;
+    handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 
     %disp(['frame fim ' num2str(handles.framefim)])
     
@@ -683,8 +683,8 @@ function run_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 toggleTooltips(handles.figure1,'off'); 
 visu = 1;
-handles.frameini = floor((str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1);
-handles.framefim = floor((str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate);
+handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1;
+handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 %fini = str2double(get(handles.qini,'String'));
 fini = handles.frameini;
 %ffim = str2double(get(handles.qfim,'String'));
