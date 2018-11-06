@@ -362,7 +362,7 @@ for ne=1:n
 %             heatMapBonitoDilatado = imdilate(hmfb,SE); %dilata a figura.
             
             
-            sobreposta = (1-alpha)*double(backg) + alpha*double(255*heatMapBonitoDilatado);%multiplied by 255 given that ind2rgb returns a value between 0 and 1.
+            sobreposta = (1-alpha)*double(backg) + alpha*double(255*hmfb);%multiplied by 255 given that ind2rgb returns a value between 0 and 1.
             imshow(uint8(sobreposta));
             
             if e(1).report

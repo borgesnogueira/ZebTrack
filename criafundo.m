@@ -12,6 +12,7 @@ function [fundo,V] = criafundo(caminho,filename,video,quadroini,quadrofim,procfr
     
     %fundo = double(imread([fotos,'/frame',int2str(quadroini), '.jpeg']));
     %ja le a primeira vez!
+    quadroini = floor(quadroini);
     fundo = double(read(video,quadroini));
     fundopb = double(rgb2gray(uint8(fundo)));
     [MR,MC,cor] = size(fundo);
@@ -23,7 +24,7 @@ function [fundo,V] = criafundo(caminho,filename,video,quadroini,quadrofim,procfr
     Mpb = double(rgb2gray(uint8(fundo))).^2;
      for i=quadroini+procframe:procframe:quadrofim
         cont = cont +1;
-        im = double(read(video,i));
+        im = double(read(video,floor(i)));
         if cor==1
             im = cat(3, im, im, im);
         end

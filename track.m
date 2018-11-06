@@ -233,6 +233,8 @@ else
     figvideodiff=0;
 end
 
+
+quadroini = floor(quadroini);
 %gera o vetor tempo, iniciando no tempo inicial da rastreio
 t = 1/fps*(quadroini-1:procframe:quadrofim-1);
 
@@ -332,7 +334,7 @@ for i=quadroini:procframe:quadrofim
     %variavel global para informar o frame atual para o gui
     numframeatual = i;
     %frame = imread([fotos,'/frame',int2str(i), '.jpeg']);
-    frame = read(video,i);
+    frame = read(video,floor(i));
     
     if pmousex==-1 && pmousey==-1
         
