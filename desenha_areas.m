@@ -3,7 +3,7 @@ function desenha_areas(areas,ptrfunc,cor,numero)
 
 nareas = length(areas);
 hold on
-for k=1:nareas 
+for k=1:nareas
     if ~isempty(areas(k).x)
         linehandle = line(areas(k).x,areas(k).y,'Color',cor);
         set(linehandle,'ButtonDownFcn', ptrfunc);
