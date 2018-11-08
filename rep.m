@@ -340,13 +340,22 @@ for ne=1:n
     if e(1).heat_map
         for j=1:nanimais
             heat_map_figure = zeros(figdimensions.l, figdimensions.c);
-            for i=1:length(posicao{j}.x)
-                heat_map_figure(floor(figdimensions.l-posicao{j}.y(i)), floor(posicao{j}.x(i))) =  heat_map_figure(floor(figdimensions.l-posicao{j}.y(i)), floor(posicao{j}.x(i))) + 1;
+            for i=1:length(posicao{j}.x)%a quantidade de pontos pintados depende só de uma das coordenanadas,
+                                        %mais especificamente do quantidade
+                                        %armaezenada em posicao{}.x da
+                                        %mesma.
+                %dimensões do retangulo em que desejamos pintar
+                for k = -5:1:5
+                    for m = -5:1:5
+                        heat_map_figure(floor(figdimensions.l-posicao{j}.y(i)) + m, floor(posicao{j}.x(i)) + k) =  heat_map_figure(floor(figdimensions.l-posicao{j}.y(i)) + m, floor(posicao{j}.x(i)) + k) + 1;
+                    end
+                end
+                
             end
             
             %max(max(heat_map_figure)); %to normalize the heatmap matrix.
             hmfb = ind2rgb(uint8(heat_map_figure), jet(max(max(heat_map_figure)))); %é preferível que os valores de jet sejam baixos!
-            
+
             
             f1 = figure;
             imshow(hmfb);
@@ -361,6 +370,8 @@ for ne=1:n
 %             SE = strel('disk',1); %referencia de um circulo com raio de tamnho 1 pixel!
 %             heatMapBonitoDilatado = imdilate(hmfb,SE); %dilata a figura.
             
+               
+            hmfb = imgaussfilt(hmfb, 2);    %aplicação do filtro gaussiano aqui!
             
             sobreposta = (1-alpha)*double(backg) + alpha*double(255*hmfb);%multiplied by 255 given that ind2rgb returns a value between 0 and 1.
             imshow(uint8(sobreposta));
