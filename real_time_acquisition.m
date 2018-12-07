@@ -1,4 +1,4 @@
-video = videoinput('winvideo', 1, 'YUY2_320x240');
+video = videoinput('winvideo', 1, 'I420_320x240');
 %inicia um objeto videoinput que acessa a webcam, o entrada, no caso a web
 %cam seria '1' o tipo de imagem e a resolução
 set(video, 'FramesPerTrigger', inf);

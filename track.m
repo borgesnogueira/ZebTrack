@@ -65,11 +65,14 @@
 %           cada processamento
 %   trackmouse: indica se o programa ira apenas rastrear o mouse
 %   pinicial: posição inicial do peixe
+%   liveTracking: faz o rastreamento a partir de imagens obtidas de uma
+%   webcam
 
 
 
 
-function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento] = track(mostraresnatela,quadroini,quadrofim,fotos,video,pixelcm,nanimais,procframe,corte,areas,areasexc,criavideores,viddiff,thresh,filt,handles,fundodinamico,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,cameralenta,trackmouse,pinicial)
+function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento] = track(mostraresnatela,quadroini,quadrofim,fotos,video,pixelcm,nanimais,procframe...
+    ,corte,areas,areasexc,criavideores,viddiff,thresh,filt,handles,fundodinamico,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,cameralenta,trackmouse,pinicial,liveTracking)
 
 %CONSTANTES A SEREM AJUSTADAS:
 
@@ -135,6 +138,11 @@ end
 if ~exist('tipfilt','var')
     tipfilt = 0;
 end
+
+if ~exist('liveTracking','var')
+    liveTracking = 0;
+end
+
 
 global abort
 if isempty(abort)
@@ -329,12 +337,25 @@ Vrm =  V.^.5;
 %garante que todo mundo em Vrm eh no mínimo 0.5
 Vrm(Vrm<0.5) = 0.5;
 
+
+%%%%%%%%
+if(liveTracking)
+    %cria o objeto ou pega o criado do gui (handles.objvid)
+    %seta quadroini e quadrofim
+end
+    
+
 for i=quadroini:procframe:quadrofim
     
     %variavel global para informar o frame atual para o gui
     numframeatual = i;
     %frame = imread([fotos,'/frame',int2str(i), '.jpeg']);
-    frame = read(video,floor(i));
+    
+    if(liveTrackin)
+       %frame = getframe 
+    else
+        frame = read(video,floor(i));
+    end
     
     if pmousex==-1 && pmousey==-1
         
