@@ -351,7 +351,7 @@ for i=quadroini:procframe:quadrofim
     numframeatual = i;
     %frame = imread([fotos,'/frame',int2str(i), '.jpeg']);
     
-    if(liveTrackin)
+    if(liveTracking)
        %frame = getframe 
     else
         frame = read(video,floor(i));
