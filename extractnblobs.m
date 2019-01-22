@@ -55,8 +55,16 @@ fore = fore & mascara;
 
 %foremm = bwmorph(fore,'open',2);
 
-foremm = imopen(fore,strel('disk',1));
-foremm = bwmorph(foremm,'dilate',3);
+%change the size of the elements of morphological operations based on image
+%size. The base will be 720x480 images
+
+ImArea = MR*MC;
+mult = sqrt(ImArea/(720*480)); %since we specify radius below, root the multiplier
+radImopen = max(1,round(mult*1));
+radBwmorph = max(2,round(mult*3));
+
+foremm = imopen(fore,strel('disk',radImopen));%erosion followed by a dilation
+foremm = bwmorph(foremm,'dilate',radBwmorph);%dilate even more to join adjacent blobs
 
 %remover operacoes morfologicas
 %foremm = fore;
