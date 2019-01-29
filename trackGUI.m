@@ -30,7 +30,7 @@ function varargout = trackGUI(varargin)
 
 % Edit the above text to modify the response to help trackGUI
 
-% Last Modified by GUIDE v2.5 26-Sep-2018 14:25:43
+% Last Modified by GUIDE v2.5 29-Jan-2019 11:56:48
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -3575,3 +3575,15 @@ function HeatMap_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of HeatMap
+
+
+% --- Executes on button press in pushbutton27.
+function pushbutton27_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton27 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.live=true;
+%cria objeto de video
+videoLive = videoinput('winvideo', 1);
+handles.videoLive = vide...
+criafundovivo;
