@@ -1131,26 +1131,35 @@ end
 
 function [pxn,pyn,detectado,caixa] = associate(nanimais,ndetect,pxa,pya,cx,cy,radius,boundingbox,detectado,dicax,dicay,caixa,l,c,frame)
 
+%no uso da função associate pxn/pxa representam as vari
 pxn = pxa;
 pyn = pya;
 
+%se nenhum blob for achado minha função termina
 if ndetect==0
     return
 end
 
+
 %verifica a dica
 if dicax ~=-1 && dicay ~=-1
+    
     %acha o animal mais proximo da dica
     mindist = l^2+c^2;
+    
     for k=1:nanimais
-        dist = sqrt( (pxa(k)-dicax)^2 + (pya(k)-dicay)^2 );
+        dist = sqrt( (pxa(k)-dicax)^2 + (pya(k)-dicay)^2 );     %distância euclidiana entre os pontos e as dicas.
+        
         if dist < mindist
             mindist = dist;
-            maisproximod = k;
+            maisproximod = k;       %pego o indice do animal mais proximo(?)
         end
+        
     end
-    pxa(maisproximod) = dicax;
+    
+    pxa(maisproximod) = dicax;      %
     pya(maisproximod) = dicay;
+
 end
 
 
