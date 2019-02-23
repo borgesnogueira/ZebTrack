@@ -117,7 +117,7 @@ end
 selected = (labeled==id(1));
 
 
-%ndetect = min(n,cont); %get the cetro of mass of at most n blobs
+%ndetect = min(n,cont); %get the ceter of mass of at most n blobs
 ndetect = cont;
 for i=1:ndetect
     centroid = stats(i).Centroid;
