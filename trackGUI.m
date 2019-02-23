@@ -3586,4 +3586,5 @@ handles.live=true;
 %cria objeto de video
 videoLive = videoinput('winvideo', 1);
 handles.videoLive = vide...
-criafundovivo;
+%criafundovivo;%ARIEL COMENTOU ESSE TRECHO AQUI NO DIA 23/02 TAVA DANDO
+%ERRO!
