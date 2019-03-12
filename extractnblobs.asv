@@ -19,16 +19,6 @@
 % tipsfundo -> flag que diz se há dicas na detecção no fundo;
 
 
-%outputs:
-% cc, cr ->
-% radius ->
-% boudingbox -> vetor que vem de stats(i).BoundingBox com as coordenadas [x0 y0 w(width) h(height)] onde x0 e y0 são as coordenadas do canto inferior esquerdo
-% das bounding boxes dos blobs ([h w] seriam as dimensões da bounding box enquanto matriz!);
-% ndetect ->
-% avi ->
-% foremm -> foreground com a mascara aplicada (fore & mascara) e pós operações morfológicas para eliminar blobs pequenos;
-
-
 
 function [cc,cr,radius,boundingbox,ndetect,avi,foremm] = extractnblobs(Imwork,Imback,V,n,mascara,minpix,maxpix,tol,avi,criavideo,tipsubfundo)
 
@@ -107,9 +97,9 @@ end
 % separete the objects found
 labeled = bwlabel(foremm,8); %conectividade 8
 
-stats = regionprops(labeled,['basic']);%basic mohem nist (only relevant information here: Area, centroid coordinates and Bounding box coordinates);
-[N,W] = size(stats);                   %N-> número de blobs;
-if N < 1 %|| n>N %se nao achou nenhum ou achou menos que o pedido a função acaba;
+stats = regionprops(labeled,['basic']);%basic mohem nist (only relevant information here: Area, centroid coordinates and Bounding box coordinates
+[N,W] = size(stats);
+if N < 1 %|| n>N %se nao achrou nenhum ou achou menos que o pedido
     return
 end
 
@@ -130,7 +120,6 @@ for i = 1 : N-1
         end
     end
 end
-
 
 % conta quantos blobs tem mais que minpix e menos que maxpix
 %falta remover os maiores que maxpix
@@ -154,5 +143,4 @@ for i=1:ndetect
     cr(i) = centroid(2);
     boundingbox(i,1:4) = stats(i).BoundingBox;
 end
-
 return
