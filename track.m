@@ -855,6 +855,8 @@ for i=quadroini:procframe:quadrofim
     
 end
 
+
+
 %verifica se tinha gente parado que ficou parado até o final do
 %rastreamento
 for j=1:nanimais

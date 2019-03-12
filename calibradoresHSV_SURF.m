@@ -35,9 +35,3 @@ end
 function frames_video = geraVetor_frames_video(video_rastreio, frame_inicial, frame_final)
     frames_video = read(video_rastreio, [frame_inicial frame_final]);
 end
-
-
-function videoBinario = gera_video_binario(video_rastreio, tolerancia)
-    
-
-end
