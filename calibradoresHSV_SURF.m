@@ -8,7 +8,8 @@
 
 
 %media e variancia são dois vetores, já que posso ter mais de 1 peixe.
-function [media, variancia] = calculaMediaVarianciaHSV(video_rastreio, tempo_inicial, tempo_final, tolerancia)
+function [media, variancia] = calculaMediaVarianciaHSV(video_rastreio, tempo_inicial, tempo_final, ...
+                                                       ,Imwork, Imback, V, n, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo)
 
     [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video_rastreio); %aqui obtenho os índices final e inicial para a calibração.
     frames_video = read(video_rastreio, [frame_inicial, frame_final]);      %cria um vetor com todos os frames entre frame_incial e frame_final.
