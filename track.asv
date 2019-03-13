@@ -145,9 +145,6 @@ if ~exist('liveTracking','var')
     liveTracking = 0;
 end
 
-if ~exist('trackindividuals','var')
-    trackindividuals = 0;
-end
 
 global abort
 if isempty(abort)

@@ -30,7 +30,7 @@ function varargout = trackGUI(varargin)
 
 % Edit the above text to modify the response to help trackGUI
 
-% Last Modified by GUIDE v2.5 29-Jan-2019 11:56:48
+% Last Modified by GUIDE v2.5 13-Mar-2019 16:17:07
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -3577,9 +3577,9 @@ function HeatMap_Callback(hObject, eventdata, handles)
 % Hint: get(hObject,'Value') returns toggle state of HeatMap
 
 
-% --- Executes on button press in pushbutton27.
-function pushbutton27_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton27 (see GCBO)
+% --- Executes on button press in pushbuttonLive_Tracking.
+function pushbuttonLive_Tracking_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbuttonLive_Tracking (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 handles.live=true;
@@ -3588,3 +3588,19 @@ videoLive = videoinput('winvideo', 1);
 handles.videoLive = vide...
 %criafundovivo;%ARIEL COMENTOU ESSE TRECHO AQUI NO DIA 23/02 TAVA DANDO
 %ERRO!
+guidata(hObject,handles);
+
+% --- Executes on button press in pushbuttonTrack_Ind.
+function pushbuttonTrack_Ind_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbuttonTrack_Ind (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+guidata(hObject,handles);
+
+% --- Executes on button press in checkboxTrack_Ind.
+function checkboxTrack_Ind_Callback(hObject, eventdata, handles)
+% hObject    handle to checkboxTrack_Ind (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+guidata(hObject,handles);
+% Hint: get(hObject,'Value') returns toggle state of checkboxTrack_Ind
