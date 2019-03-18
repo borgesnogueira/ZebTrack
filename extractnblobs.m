@@ -7,14 +7,14 @@
 %toloerancia tol para determinar se um pixel eh pixel de blob ou nao
 
 %Inputs:
-% Imwork ->
+% Imwork -> Frame atual
 % Imback -> wbackg que é o background;
 % V ->
 % n -> Número de animais a serem detectados (namimais);
 % mascara -> A mascara (região de interesse selecionada pelo usuário [é um array]);
 % minpix, maxpix -> define o TAMANHO MINIMO e MAXIMO, em pixeis, de uma área para ser considerada de um animal.
 % tol -> tolerância/threshold;
-% avi -> aviobj2 que é o video diferença;
+% avi -> aviobj2 que é o objeto de video diferença (não um vídeo!);
 % criavideo -> flag pra criar o video-diferença (criavideodiff);
 % tipsfundo -> flag que diz se há dicas na detecção no fundo;
 
@@ -62,7 +62,7 @@ else
     
     % subtracao de fundo gaussiana: valor da diferença maior que
     % threshhold*raiz(variancia) para cada pixel
-    if ~colorida
+    if ~video
         fore = abs(Imback - Imwork) > tol*V(:,:,4);
     else
         fore = (abs(Imwork(:,:,1)-Imback(:,:,1)) > tol*V(:,:,1)) ...
