@@ -27,7 +27,7 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
     %variáveis de controle do for, média e variância.
     length_frames_video = (frame_final - frame_inicial) + 1;                                 %Necessário para a implementação do for (o +1 é pra incluir o primeiro termo!)
     
-    media = 0;
+    mediaTOTAL = [];
     mediaBlobsEmFrame = 0;
     mediaFrameIndividual = 0; %(Em 1 peixe e muda em cada loop).
     
@@ -101,14 +101,15 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
         end
         
         mediaBlobsEmFrame = mediaBlobsEmFrame/ndetect;
-        media = media + mediaBlobsEmFrame;
+        mediaTOTAL(i) = mediaBlobsEmFrame;
         
         %zerando as variáveis de média locais
         mediaBlobsEmFrame = 0;
         
     end
     
-    media = media/length_frames_video;  %MEDIA FINAL CALCULADA
+    media = mean(mediaTOTAL);  %MEDIA FINAL CALCULADA
+    variancia = var(mediaTOTAL); %VARIÂNCIA FINAL CALCULADA
     
     
 end
