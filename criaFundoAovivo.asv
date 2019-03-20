@@ -11,12 +11,11 @@ start(videoLive);
 %videoFundo = VideoWriter('C:\Users\jonatas\OneDrive\Documentos\GitHub\ZebTrack\\live.avi', 'Uncompressed AVI');
 %open(videoFundo);
 %criando um objeto videowriter
-disp('entrou na função');
 data = getsnapshot(videoLive);
 size(data);
 frame = double(data);
 sframe=frame;
-numFrames = 600;
+numFrames = 30;
 for ii = 1:numFrames
     data = getsnapshot(videoLive);
     frame = double(data);
@@ -25,12 +24,17 @@ for ii = 1:numFrames
     f = frame;
     f = double(f);
     sframe = sframe + f;
+    disp('bla')
 end
-disp('aaeee');
+disp('ble')
 delete(videoLive);
+disp('bli')
 fundo = sframe/numFrames;
-imwrite(uint8(fundo), 'live.jpg');
-imshow(uint8(fundo));
+disp('blo')
+
+imwrite(uint8(fundo), '.\live.jpg');
+
+
 %close(videoFundo);
 %criafundo('C:\Users\jonatas\OneDrive\Documentos\GitHub\ZebTrack\','live.avi');
 %depois de gerar um vídeo com os snapshots da webcam

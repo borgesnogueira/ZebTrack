@@ -141,6 +141,10 @@ if ~exist('tipfilt','var')
     tipfilt = 0;
 end
 
+if ~exist('liveTracking','var')
+    liveTracking = 0;
+end
+
 if ~exist('trackindividuals','var')
     trackindividuals = 0;
 end
@@ -341,15 +345,14 @@ Vrm(Vrm<0.5) = 0.5;
 
 
 %%%%%%%%
-liveTracking = false;
-disp('chegou aqui');
 if(handles.live == true)
-    disp('entrou no if');
     criaFundoAovivo();
     start(handles.videoLive);
-    liveTracking = true;
+    data = getsnapshot(handles.videoLive); 
 end
-disp('funfou');
+    
+
+
 for i=quadroini:procframe:quadrofim
     
     %variavel global para informar o frame atual para o gui
@@ -357,9 +360,9 @@ for i=quadroini:procframe:quadrofim
     %frame = imread([fotos,'/frame',int2str(i), '.jpeg']);
     
     if(liveTracking)
-       frame = getsnapshot(handles.videoLive);
+       %frame = getframe 
     else
-       frame = read(video,floor(i));
+        frame = read(video,floor(i));
     end
     
     if pmousex==-1 && pmousey==-1

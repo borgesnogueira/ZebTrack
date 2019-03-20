@@ -3588,8 +3588,11 @@ handles.live = true;
 videoLive = videoinput('winvideo', 1);
 %passando a referência do objeto videoinput para o handles
 handles.videoLive = videoLive;
+
 set(handles.run,'Enable','on');
+set(handles.run,'Visible','off');
 set(handles.abortar,'Visible','on');
+
 guidata(hObject,handles);
 
 % --- Executes on button press in pushbuttonTrack_Ind.
