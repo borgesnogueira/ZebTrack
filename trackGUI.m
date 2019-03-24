@@ -217,7 +217,7 @@ if ~isempty( directoryname )
         load([handles.directoryname,'/', filenameSemExtensao,'V.mat']);
     catch
         %se nao tem, cria
-        %ajusta a quantidade de iamgens utilizadas de acordo com a duração do
+        %ajusta a quantidade de iamgens utilizadas de acordo com a duraÃ§Ã£o do
         %video
         set(handles.fundoframe,'String',num2str(round(handles.video.NumberOfFrames*0.004)));
         p = imread('processando.jpeg');
@@ -537,7 +537,7 @@ if filename ~= 0
         load([handles.directoryname,'/', filenameSemExtensao,'V.mat']);
     catch
         %se nao tem, cria
-        %ajusta a quantidade de iamgens utilizadas de acordo com a duração do
+        %ajusta a quantidade de iamgens utilizadas de acordo com a duraÃ§Ã£o do
         %video
         set(handles.fundoframe,'String',num2str(round(handles.video.NumberOfFrames*0.004)));
         p = imread('processando.jpeg');
@@ -1348,7 +1348,7 @@ try
     load([handles.directoryname,'/V.mat']);
 catch
     %se nao tem, cria
-    %ajusta a quantidade de iamgens utilizadas de acordo com a duração do
+    %ajusta a quantidade de iamgens utilizadas de acordo com a duraÃ§Ã£o do
     %video
     set(handles.fundoframe,'String',num2str(round(handles.video.NumberOfFrames*0.004)));
     p = imread('processando.jpeg');
@@ -2558,7 +2558,7 @@ for ne=1:n
         end
         s = [s;noval];        
         for j=2:nareas
-            if handles.e(ne).tempoareas{i,j}.tf(1) ~= 0  %se o peixe entrou pelo menos uma vez na área
+            if handles.e(ne).tempoareas{i,j}.tf(1) ~= 0  %se o peixe entrou pelo menos uma vez na Ã¡rea
                 if handles.e(1).distlineinfo
                     noval = {'', '', '', '', '','', j, sum(handles.e(ne).tempoareas{i,j}.tf - handles.e(ne).tempoareas{i,j}.ti), handles.e(ne).tempoareas{i,j}.ti(1) - handles.e(ne).t(1)};
                 else
@@ -3288,7 +3288,7 @@ function splitres_Callback(hObject, eventdata, handles)
 % hObject    handle to splitres (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-%verifica se o experimento ja é splitado
+%verifica se o experimento ja Ã© splitado
 
 ne = length(handles.e);
 if ne~=1
@@ -3585,8 +3585,17 @@ function pushbuttonLive_Tracking_Callback(hObject, eventdata, handles)
 % Setando a flag do live tracking
 handles.live = true;
 %cria objeto de video
-videoLive = videoinput('winvideo', 1);
-%passando a referência do objeto videoinput para o handles
+videoLive = videoinput('winvideo');
+triggerconfig(videoLive, 'manual');
+%Criando o fundo ao vivo e salvando na pasta do zebtrack
+p = imread('processando.jpeg');
+axes(handles.axes3);
+imshow(p);
+drawnow;
+fundo = criaFundoAoVivo();
+handles.fundo = fundo;
+imshow(fundo);
+%passando a referÃªncia do objeto videoinput para o handles
 handles.videoLive = videoLive;
 set(handles.run,'Enable','on');
 set(handles.abortar,'Visible','on');
