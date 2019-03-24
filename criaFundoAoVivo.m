@@ -1,22 +1,23 @@
 function fundo = criaFundoAoVivo()
-videoLive = videoinput('winvideo', 1);
+videoLive = videoinput('winvideo');
+triggerconfig(videoLive, 'manual');
 %cria um objeto videoinput, com o adptador e formatos suportados pelo
-%hardware da maquina onde ser· executado o programa
+%hardware da maquina onde ser√° executado o programa
 src = getselectedsource(videoLive);
 %videoLive.FramesPerTrigger = 300;
-%definiÁ„o da quantidade de frames capturados para gerar o video que
-%ser· usado para criaÁ„o do fundo
+%defini√ß√£o da quantidade de frames capturados para gerar o video que
+%ser√° usado para cria√ß√£o do fundo
 start(videoLive);
-%funÁıes para iniciar a captura dos frames e mostrar na tela
+%fun√ß√µes para iniciar a captura dos frames e mostrar na tela
 %videoFundo = VideoWriter('C:\Users\jonatas\OneDrive\Documentos\GitHub\ZebTrack\\live.avi', 'Uncompressed AVI');
 %open(videoFundo);
 %criando um objeto videowriter
-disp('entrou na funÁ„o');
+disp('entrou na fun√ß√£o');
 data = getsnapshot(videoLive);
 size(data);
 frame = double(data);
 sframe=frame;
-numFrames = 600;
+numFrames = 1000;
 for ii = 1:numFrames
     data = getsnapshot(videoLive);
     frame = double(data);
@@ -33,7 +34,7 @@ imwrite(uint8(fundo), 'live.jpg');
 imshow(uint8(fundo));
 %close(videoFundo);
 %criafundo('C:\Users\jonatas\OneDrive\Documentos\GitHub\ZebTrack\','live.avi');
-%depois de gerar um vÌdeo com os snapshots da webcam
-%foi usada a funÁ„o j· existente criafundo para criar o fundo a partir
-%do vÌdeo ao vivo
+%depois de gerar um v√≠deo com os snapshots da webcam
+%foi usada a fun√ß√£o j√° existente criafundo para criar o fundo a partir
+%do v√≠deo ao vivo
 end
