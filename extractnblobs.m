@@ -62,7 +62,7 @@ else
     
     % subtracao de fundo gaussiana: valor da diferença maior que
     % threshhold*raiz(variancia) para cada pixel
-    if ~video
+    if ~colorida
         fore = abs(Imback - Imwork) > tol*V(:,:,4);
     else
         fore = (abs(Imwork(:,:,1)-Imback(:,:,1)) > tol*V(:,:,1)) ...

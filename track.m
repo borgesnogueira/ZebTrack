@@ -343,7 +343,7 @@ Vrm(Vrm<0.5) = 0.5;
 %%%%%%%%
 liveTracking = false;
 disp('chegou aqui');
-if(handles.live == true)
+if(liveTracking == true)
     disp('entrou no if');
     criaFundoAovivo();
     start(handles.videoLive);
