@@ -17,7 +17,7 @@ data = getsnapshot(videoLive);
 size(data);
 frame = double(data);
 sframe=frame;
-numFrames = 1000;
+numFrames = 100;
 for ii = 1:numFrames
     data = getsnapshot(videoLive);
     frame = double(data);

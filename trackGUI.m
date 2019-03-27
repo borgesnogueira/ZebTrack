@@ -106,6 +106,8 @@ handles.pontButtonDown = @axes4_ButtonDownFcn;
 global threshadaptativo;
 threshadaptativo = 0;
 
+handles.live = false;
+
 movegui(hObject,'center')
 
 % Update handles structure
@@ -683,8 +685,10 @@ function run_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 toggleTooltips(handles.figure1,'off'); 
 visu = 1;
-handles.frameini = floor((str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1);
-handles.framefim = floor((str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate);
+if ~handles.live
+    handles.frameini = floor((str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1);
+    handles.framefim = floor((str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate);
+end
 %fini = str2double(get(handles.qini,'String'));
 fini = handles.frameini;
 %ffim = str2double(get(handles.qfim,'String'));
@@ -692,7 +696,11 @@ ffim = handles.framefim;
 np = str2double(get(handles.npeixes,'String'));
 pxcm.x = str2double(get(handles.pxcmx,'String')); 
 pxcm.y = str2double(get(handles.pxcmy,'String')); 
-procf = str2double(get(handles.procframe,'String')); 
+if ~handles.live
+    procf = str2double(get(handles.procframe,'String')); 
+else
+    procf=1;
+end
 criavideores = get(handles.resvideo,'Value'); 
 mostradiff = get(handles.checkbox2,'Value');
 tipsubfundo = get(handles.radiosfe,'Value');
@@ -706,6 +714,8 @@ tempmin = str2double(get(handles.tminparado,'String'));
 tempminparado = str2double(get(handles.tmindormindo,'String'));
 camlent = str2double(get(handles.cameralenta,'String'));
 trackmouse = get(handles.trackmouse,'Value');
+liveTracking = handles.live;
+trackindividuals = get(handles.checkboxTrack_Ind,'Value');
 set(handles.run,'Visible','off');
 set(handles.abortar,'Visible','on');
 set(handles.pause,'Enable','on');
@@ -750,13 +760,13 @@ if get(handles.splitexperiment,'Value')
         guidata(hObject, handles);
         if i==1
             [handles.e(i).t,handles.e(i).posicao,handles.e(i).velocidade,handles.e(i).parado,handles.e(i).dormindo,handles.e(i).tempoareas,handles.e(i).distperc,handles.e(i).comportamento]=...
-            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse);
+            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals);
         else
             pinicial.x(:,1) = px(:,end);
             pinicial.y(:,1) = py(:,end);
 
             [handles.e(i).t,handles.e(i).posicao,handles.e(i).velocidade,handles.e(i).parado,handles.e(i).dormindo,handles.e(i).tempoareas,handles.e(i).distperc,handles.e(i).comportamento]=...
-            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,pinicial);
+            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals,pinicial);
         end
         
         if abort
@@ -766,7 +776,7 @@ if get(handles.splitexperiment,'Value')
     
 else
     [handles.e.t,handles.e.posicao,handles.e.velocidade,handles.e.parado,handles.e.dormindo,handles.e.tempoareas,handles.e.distperc,handles.e.comportamento]=...
-    track(visu,fini,ffim,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse);
+    track(visu,fini,ffim,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals);
     handles.e.areaproc=handles.areaproc;
     handles.e.pxcm = pxcm;
     handles.e.figdimensions.l = handles.l;
@@ -3584,6 +3594,7 @@ function pushbuttonLive_Tracking_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 % Setando a flag do live tracking
 handles.live = true;
+handles.video = [];
 %cria objeto de video
 videoLive = videoinput('winvideo');
 triggerconfig(videoLive, 'manual');
@@ -3593,12 +3604,74 @@ axes(handles.axes3);
 imshow(p);
 drawnow;
 fundo = criaFundoAoVivo();
-handles.fundo = fundo;
-imshow(fundo);
+
 %passando a referência do objeto videoinput para o handles
 handles.videoLive = videoLive;
+handles.filenameSemExtensao = 'live';
+handles.directoryname = '.';
 set(handles.run,'Enable','on');
 set(handles.abortar,'Visible','on');
+
+%track(visu,fini,ffim,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse);
+
+handles.frameini=1;
+handles.framefim=2;
+
+set(handles.apclick,'Enable','off')
+set(handles.aiclick,'Enable','off')
+set(handles.btareaintlimpar,'Enable','off')
+set(handles.aeclick,'Enable','off')
+set(handles.btareaexclimpar,'Enable','off')
+set(handles.calcpxcm,'Enable','off')
+
+axes(handles.axes1);
+cla reset
+set(handles.axes1,'Color','w','XTick',[],'YTick',[],'XColor','w','YColor','w');
+axes(handles.axes2);
+cla reset
+set(handles.axes2,'Color','w','XTick',[],'YTick',[],'XColor','w','YColor','w');
+axes(handles.axes3);
+cla reset
+set(handles.axes3,'Color','w','XTick',[],'YTick',[],'XColor','w','YColor','w');
+axes(handles.axes4);
+cla reset
+set(handles.axes4,'Color','w','XTick',[],'YTick',[],'XColor','w','YColor','w');
+
+[l,c,~]=size(fundo);
+handles.c = c;
+handles.l = l;
+handles.fundo = fundo;
+%handles.V = V;
+axes(handles.axes3);
+fundohandle = imshow(fundo);
+set(fundohandle,'ButtonDownFcn', @axes3_ButtonDownFcn);
+axes(handles.axes4);
+hold off
+fundohandle = imshow(fundo);
+set(fundohandle,'ButtonDownFcn', @axes4_ButtonDownFcn);
+handles.waibarfundo.setvalue(0);
+handles.waibarfundo.visivel('off');
+
+%area de processamento na imagem toda
+handles.areaproc.x(1) = 1;
+handles.areaproc.y(1) = 1;
+handles.areaproc.x(2) = handles.c;
+handles.areaproc.y(2) = 1;
+handles.areaproc.x(3) = handles.c;
+handles.areaproc.y(3) = handles.l;
+handles.areaproc.x(4) = 1;
+handles.areaproc.y(4) = handles.l;
+handles.areaproc.x(5) = 1;
+handles.areaproc.y(5) = 1;
+
+
+guidata(hObject, handles);
+
+visualizar_Callback(hObject, eventdata, guidata(hObject))
+
+handles=guidata(hObject);
+guidata(hObject,handles);
+
 guidata(hObject,handles);
 
 % --- Executes on button press in pushbuttonTrack_Ind.
