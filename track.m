@@ -218,7 +218,7 @@ if ~liveTracking
     %carrega varicancia da imagem de fundo (variavel V)
     load([fotos,'/',handles.filenameSemExtensao,'V.mat']);
 else
-    backg = imread('live.jpg');
+    backg = imread('live.jpeg');
 end
 
 [l,c,cor] = size(backg);    %Pegando as dimensões do meu fundo.
@@ -366,8 +366,9 @@ Vrm =  V.^.5;
 Vrm(Vrm<0.5) = 0.5;
 
 
-
-for i=quadroini:procframe:quadrofim
+i=quadroini;
+%for i=quadroini:procframe:quadrofim
+while i<=quadrofim
     
     %variavel global para informar o frame atual para o gui
     numframeatual = i;
@@ -809,9 +810,10 @@ for i=quadroini:procframe:quadrofim
             
         end
         
-        set(handles.tamin,'String',num2str(floor((numframeatual)/(handles.video.Framerate*60))));
-        set(handles.taseg,'String',num2str(floor((numframeatual)/(handles.video.Framerate) - 60*floor((numframeatual)/(handles.video.Framerate*60)))));
-        
+        if ~liveTracking
+            set(handles.tamin,'String',num2str(floor((numframeatual)/(handles.video.Framerate*60))));
+            set(handles.taseg,'String',num2str(floor((numframeatual)/(handles.video.Framerate) - 60*floor((numframeatual)/(handles.video.Framerate*60)))));
+        end
         
         if cameralenta>0
             pause(cameralenta)
@@ -823,15 +825,19 @@ for i=quadroini:procframe:quadrofim
     if mod(cont,10) == 5
         tf=toc(ti);
         tgasto=tf/60; %em minutos
-        tmedio=tf/(cont*60);
-        trestante=tmedio*((quadrofim-quadroini)/procframe-cont);
-        %mostra no gui
-        if exist('handles','var')
-            set(handles.trest,'String',num2str(trestante,2));
+        if liveTracking
             set(handles.tgasto,'String',num2str(tgasto,2));
-            handles.waibar.setvalue(tgasto/(trestante+tgasto));
         else
-            disp(['Tempo gasto: ' num2str(tgasto) ' minutos. Tempo restante: ' num2str(trestante) ' minutos'])
+            tmedio=tf/(cont*60);
+            trestante=tmedio*((quadrofim-quadroini)/procframe-cont);
+            %mostra no gui
+            if exist('handles','var')
+                set(handles.trest,'String',num2str(trestante,2));
+                set(handles.tgasto,'String',num2str(tgasto,2));
+                handles.waibar.setvalue(tgasto/(trestante+tgasto));
+            else
+                disp(['Tempo gasto: ' num2str(tgasto) ' minutos. Tempo restante: ' num2str(trestante) ' minutos'])
+            end
         end
         
     end
@@ -876,10 +882,7 @@ for i=quadroini:procframe:quadrofim
         break;
     end
     
-    
-    if liveTracking
-        quadrofim = i+1;
-    end
+    i = i + procframe;  
     
 end
 

@@ -1,4 +1,4 @@
-function fundo = criaFundoAoVivo()
+function fundo = criaFundoAoVivo(waitbar)
 videoLive = videoinput('winvideo');
 triggerconfig(videoLive, 'manual');
 %cria um objeto videoinput, com o adptador e formatos suportados pelo
@@ -12,7 +12,6 @@ start(videoLive);
 %videoFundo = VideoWriter('C:\Users\jonatas\OneDrive\Documentos\GitHub\ZebTrack\\live.avi', 'Uncompressed AVI');
 %open(videoFundo);
 %criando um objeto videowriter
-disp('entrou na função');
 data = getsnapshot(videoLive);
 size(data);
 frame = double(data);
@@ -21,17 +20,20 @@ numFrames = 100;
 for ii = 1:numFrames
     data = getsnapshot(videoLive);
     frame = double(data);
-    size(frame)
+    %size(frame)
     %writeVideo(videoFundo, data(:,:,:,ii));
     f = frame;
     f = double(f);
     sframe = sframe + f;
+    waitbar.setvalue(ii/numFrames);
+    drawnow
 end
-disp('aaeee');
+%disp('aaeee');
 delete(videoLive);
 fundo = sframe/numFrames;
-imwrite(uint8(fundo), 'live.jpg');
-imshow(uint8(fundo));
+imwrite(uint8(fundo), 'live.jpeg');
+%imshow(uint8(fundo));
+fundo = uint8(fundo);
 %close(videoFundo);
 %criafundo('C:\Users\jonatas\OneDrive\Documentos\GitHub\ZebTrack\','live.avi');
 %depois de gerar um vídeo com os snapshots da webcam

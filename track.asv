@@ -51,7 +51,7 @@
 %           tracking nela)
 %   fundodinamico: indica se vamos utilizar fundo adaptativo
 %   tipfilt: tipo de filtragem utilizada 0 -> media movel  1 -> kalman
-%   tipsubfundo: tioi de subtracao de fundo 0 -> subtracao basica  1 ->
+%   tipsubfundo: tipo de subtracao de fundo 0 -> subtracao basica  1 ->
 %           subtracao que leva em consideracao a estatistica (variancia) da imagem
 %           de fundo criada
 %   velmin: velocidade minima, em cm/s, para que um animal seja considerado parado
@@ -99,8 +99,7 @@ tmin = tempmin;
 %TEMPO, em segundos, que o animal tem que ficar PARADO para se considerar que DORMIU
 tminparado = tempminparado;
 
-%numero de QAUDROS por SEGUNDO do video
-fps = video.FrameRate;
+
 
 %threshold adaptativo
 global threshadaptativo;
@@ -150,6 +149,24 @@ if ~exist('trackindividuals','var')
     trackIndividuals = 0;
 end
 
+%numero de QUADROS por SEGUNDO do video
+
+
+
+if liveTracking
+    fps = 1;
+    
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%% POR ENQUANTO
+    
+    tipsubfundo=0;
+    V = zeros(handles.l,handles.c);
+    
+    
+else
+    fps = video.FrameRate;
+end
+
 global abort
 if isempty(abort)
     abort = 0;
@@ -196,9 +213,13 @@ pmousey=-1;
 %
 
 %carrega a imagem de fundo
-backg = imread([fotos,'/',handles.filenameSemExtensao,'.jpeg']);
-%carrega varicancia da imagem de fundo (variavel V)
-load([fotos,'/',handles.filenameSemExtensao,'V.mat']);
+if ~liveTracking
+    backg = imread([fotos,'/',handles.filenameSemExtensao,'.jpeg']);
+    %carrega varicancia da imagem de fundo (variavel V)
+    load([fotos,'/',handles.filenameSemExtensao,'V.mat']);
+else
+    backg = imread('live.jpg');
+end
 
 [l,c,cor] = size(backg);    %Pegando as dimensões do meu fundo.
 
@@ -788,9 +809,10 @@ for i=quadroini:procframe:quadrofim
             
         end
         
-        set(handles.tamin,'String',num2str(floor((numframeatual)/(handles.video.Framerate*60))));
-        set(handles.taseg,'String',num2str(floor((numframeatual)/(handles.video.Framerate) - 60*floor((numframeatual)/(handles.video.Framerate*60)))));
-        
+        if ~liveTracking
+            set(handles.tamin,'String',num2str(floor((numframeatual)/(handles.video.Framerate*60))));
+            set(handles.taseg,'String',num2str(floor((numframeatual)/(handles.video.Framerate) - 60*floor((numframeatual)/(handles.video.Framerate*60)))));
+        end
         
         if cameralenta>0
             pause(cameralenta)
@@ -854,6 +876,8 @@ for i=quadroini:procframe:quadrofim
         t = t(1:cont-1);
         break;
     end
+    
+      
     
 end
 

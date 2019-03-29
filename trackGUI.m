@@ -107,6 +107,9 @@ global threshadaptativo;
 threshadaptativo = 0;
 
 handles.live = false;
+%apaga objetos de video ao vivo que estejam ocupando a camera
+objects = imaqfind;
+delete(objects);
 
 movegui(hObject,'center')
 
@@ -317,63 +320,64 @@ function visualizar_Callback(hObject, eventdata, handles)
 % hObject    handle to visualizar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.frameini = floor((str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1);
-handles.framefim = floor((str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate);
+if ~handles.live
+    handles.frameini = floor((str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1);
+    handles.framefim = floor((str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate);
 
 
-if handles.framefim<=handles.frameini
-    handles.framefim = handles.frameini + handles.frameRate;
+    if handles.framefim<=handles.frameini
+        handles.framefim = handles.frameini + handles.frameRate;
+    end
+    %if handles.framefim > handles.video.NumberOfFrames
+    %        handles.framefim = handles.video.NumberOfFrames - handles.frameRate;
+    %end
+    set(handles.sliderti,'Value',handles.frameini);
+    set(handles.slidertf,'Value',handles.framefim);
+
+    set(handles.tfimmin,'String',num2str(floor(handles.framefim/(handles.frameRate*60))));
+    set(handles.tfimseg,'String',num2str(floor(handles.framefim/(handles.frameRate) - 60*floor(handles.framefim/(handles.frameRate*60)))));
+
+
+    try
+        fini = read(handles.video,handles.frameini);
+        %fini = read(handles.video,str2double(get(handles.qini,'String')));
+        %fini = imread([handles.directoryname,'/frame',get(handles.qini,'String') ,'.jpeg']);
+    catch
+        msgbox('Starting frame not found!','Erro','error');
+        set(handles.apclick,'Enable','off')
+        set(handles.aiclick,'Enable','off')
+        set(handles.btareaintlimpar,'Enable','off')
+        set(handles.aeclick,'Enable','off')
+        set(handles.btareaexclimpar,'Enable','off')
+        set(handles.run,'Enable','off')
+        set(handles.calcpxcm,'Enable','off')
+        set(handles.btcriafundo,'Enable','off')
+       return 
+    end
+    axes(handles.axes1);
+    axe1handle=imshow(fini);
+    set(axe1handle,'ButtonDownFcn', @axes1_ButtonDownFcn);
+
+    try
+        ffim = read(handles.video,handles.framefim);
+        %ffim = read(handles.video,str2double(get(handles.qfim,'String')));
+        %ffim = imread([handles.directoryname,'/frame',get(handles.qfim,'String') ,'.jpeg']);
+    catch
+        msgbox('Ending frame not found!','Erro','error'); 
+        set(handles.apclick,'Enable','off')
+        set(handles.aiclick,'Enable','off')
+        set(handles.btareaintlimpar,'Enable','off')
+        set(handles.aeclick,'Enable','off')
+        set(handles.btareaexclimpar,'Enable','off')
+        set(handles.run,'Enable','off')
+        set(handles.calcpxcm,'Enable','off')
+        set(handles.btcriafundo,'Enable','off')
+       return 
+    end
+    axes(handles.axes2);
+    axe2handle=imshow(ffim);
+    set(axe2handle,'ButtonDownFcn', @axes2_ButtonDownFcn);
 end
-%if handles.framefim > handles.video.NumberOfFrames
-%        handles.framefim = handles.video.NumberOfFrames - handles.frameRate;
-%end
-set(handles.sliderti,'Value',handles.frameini);
-set(handles.slidertf,'Value',handles.framefim);
-
-set(handles.tfimmin,'String',num2str(floor(handles.framefim/(handles.frameRate*60))));
-set(handles.tfimseg,'String',num2str(floor(handles.framefim/(handles.frameRate) - 60*floor(handles.framefim/(handles.frameRate*60)))));
-
-
-try
-    fini = read(handles.video,handles.frameini);
-    %fini = read(handles.video,str2double(get(handles.qini,'String')));
-    %fini = imread([handles.directoryname,'/frame',get(handles.qini,'String') ,'.jpeg']);
-catch
-    msgbox('Starting frame not found!','Erro','error');
-    set(handles.apclick,'Enable','off')
-    set(handles.aiclick,'Enable','off')
-    set(handles.btareaintlimpar,'Enable','off')
-    set(handles.aeclick,'Enable','off')
-    set(handles.btareaexclimpar,'Enable','off')
-    set(handles.run,'Enable','off')
-    set(handles.calcpxcm,'Enable','off')
-    set(handles.btcriafundo,'Enable','off')
-   return 
-end
-axes(handles.axes1);
-axe1handle=imshow(fini);
-set(axe1handle,'ButtonDownFcn', @axes1_ButtonDownFcn);
-
-try
-    ffim = read(handles.video,handles.framefim);
-    %ffim = read(handles.video,str2double(get(handles.qfim,'String')));
-    %ffim = imread([handles.directoryname,'/frame',get(handles.qfim,'String') ,'.jpeg']);
-catch
-    msgbox('Ending frame not found!','Erro','error'); 
-    set(handles.apclick,'Enable','off')
-    set(handles.aiclick,'Enable','off')
-    set(handles.btareaintlimpar,'Enable','off')
-    set(handles.aeclick,'Enable','off')
-    set(handles.btareaexclimpar,'Enable','off')
-    set(handles.run,'Enable','off')
-    set(handles.calcpxcm,'Enable','off')
-    set(handles.btcriafundo,'Enable','off')
-   return 
-end
-axes(handles.axes2);
-axe2handle=imshow(ffim);
-set(axe2handle,'ButtonDownFcn', @axes2_ButtonDownFcn);
-
 axes(handles.axes4);
 hold off
 fundohandle = imshow(handles.fundo);
@@ -3595,6 +3599,7 @@ function pushbuttonLive_Tracking_Callback(hObject, eventdata, handles)
 % Setando a flag do live tracking
 handles.live = true;
 handles.video = [];
+handles.frameRate = 1;
 %cria objeto de video
 videoLive = videoinput('winvideo');
 triggerconfig(videoLive, 'manual');
@@ -3603,7 +3608,8 @@ p = imread('processando.jpeg');
 axes(handles.axes3);
 imshow(p);
 drawnow;
-fundo = criaFundoAoVivo();
+handles.waibarfundo.visivel('on');
+fundo = criaFundoAoVivo(handles.waibarfundo);
 
 %passando a referência do objeto videoinput para o handles
 handles.videoLive = videoLive;
@@ -3615,7 +3621,7 @@ set(handles.abortar,'Visible','on');
 %track(visu,fini,ffim,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse);
 
 handles.frameini=1;
-handles.framefim=2;
+handles.framefim=20;
 
 set(handles.apclick,'Enable','off')
 set(handles.aiclick,'Enable','off')
@@ -3664,10 +3670,11 @@ handles.areaproc.y(4) = handles.l;
 handles.areaproc.x(5) = 1;
 handles.areaproc.y(5) = 1;
 
-
 guidata(hObject, handles);
 
 visualizar_Callback(hObject, eventdata, guidata(hObject))
+
+
 
 handles=guidata(hObject);
 guidata(hObject,handles);
