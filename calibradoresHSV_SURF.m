@@ -75,19 +75,22 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
         
         %parte que trata das médias.
         frameHSV = rgb2hsv(frames_video(i));
+        %convertendo o wframe e logical(wframe) para separar as areas em regiões pretas e brancas
+        %só faço isso pra pegar exatamente as areas dos peixes.
+        wframe_log = logical(wframe);
         
         %percorrendo de k=1 até o numero de animais (podemos ter mais de um blob por frame)
         for k=1:1:ndetect %blob individual do frame
-            HuePartMatrix = frameHSV(:,:,1); % m x n HUE matrix.
             
             sizeOfBlob = 0; %number of pixels/blob;
             
             for m=caixa(k, floor(1)):1:( caixa(k, floor(1)) + caixa(k,3) )   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
                 for n=caixa(k, floor(2)):1:( caixa(k, floor(2)) + caixa(k,4) )                                %(goes from 'y0' to 'y0 + height')
-                    if(HuePartMatrix(m,n) >= 0 && HuePartMatrix(m,n) <= 15) %testando para o vermelho aqui.
-                        mediaFrameIndividual = mediaFrameIndividual + HuePartMatrix(m,n);
-                        sizeOfBlob = sizeOfBlob + 1;
-                    end
+                    if 
+                        if(wframe_log(m,n) == 1 && frameHSV(m,n,1) >= 0 && frameHSV(m,n,1) <= 15) %testando para o vermelho aqui.
+                            mediaFrameIndividual = mediaFrameIndividual + frameHSV(m,n,1);
+                            sizeOfBlob = sizeOfBlob + 1;
+                        end
                 end
             end
             
