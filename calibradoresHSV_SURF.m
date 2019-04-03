@@ -10,7 +10,7 @@
 %avi = aviobj2 do track.m (o input e não o output nessa função!);
 %wframe = working frame (double e em greyscale);
 %frames_video(i) = frame do track.m;
-%CORDOPEIXE = intervalo do H do peixe em questão (um vetor);
+%INTENSO = intervalo que dita o valor do V de HSV, ou seja, dita o limite para que as cores sejam mais 'intensas';
 
 
 %media e variancia são dois vetores, já que posso ter mais de 1 peixe.
@@ -18,7 +18,7 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
                                                        , Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo ...
                                                        , pxa, pya, detectado, dicax, dicay, caixa, l, c ...
                                                        , colorida, cor, tipfilt ...
-                                                       , CORDOPEIXE)
+                                                       , INTENSO)
 
     [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os índices final e inicial para a calibração.
     frames_video = read(video, [frame_inicial, frame_final]);                                %cria um vetor com todos os frames entre frame_incial e frame_final.
@@ -86,8 +86,7 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
             
             for m=caixa(k, floor(1)):1:( caixa(k, floor(1)) + caixa(k,3) )   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
                 for n=caixa(k, floor(2)):1:( caixa(k, floor(2)) + caixa(k,4) )                                %(goes from 'y0' to 'y0 + height')
-                    if 
-                        if(wframe_log(m,n) == 1 && frameHSV(m,n,1) >= 0 && frameHSV(m,n,1) <= 15) %testando para o vermelho aqui.
+                        if(wframe_log(m,n) == 1 && frameHSV(m,n,3) >= INTENSO) %testando para o vermelho aqui.
                             mediaFrameIndividual = mediaFrameIndividual + frameHSV(m,n,1);
                             sizeOfBlob = sizeOfBlob + 1;
                         end
