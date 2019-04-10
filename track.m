@@ -1034,14 +1034,17 @@ end
 pxcm = px/pixelcm.x;
 pycm = (l-py)/pixelcm.y; %inverte o eixo y
 
-
+difft = diff(t);
 for i=1:nanimais
     %calcula o vetor velocidade
-    velocidade{i}.x = diff(pxcm(i,:))*fps/procframe;
-    velocidade{i}.y = diff(pycm(i,:))*fps/procframe;
+    %velocidade{i}.x = diff(pxcm(i,:))*fps/procframe;
+    velocidade{i}.x = diff(pxcm(i,:)) ./ difft;
+    %velocidade{i}.y = diff(pycm(i,:))*fps/procframe;
+    velocidade{i}.y = diff(pycm(i,:)) ./ difft;
     velocidade{i}.total = sqrt(velocidade{i}.x.^2+velocidade{i}.y.^2);
     %calcula a distancia percorrida por cada animal
-    distperc(i) = sum(velocidade{i}.total*procframe/fps);
+    %distperc(i) = sum(velocidade{i}.total*procframe/fps);
+    distperc(i) = sum(velocidade{i}.total .* difft);
 end
 
 if exist('handles','var')

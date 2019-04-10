@@ -159,17 +159,9 @@ for ne=1:n
                 close(f1)
             end
             
-            f2=figure;
+            f1=figure;
             %distance by time 
             plot(t(1:end-1),cumsum(velocidade{i}.total.*diff(t))) 
-            title(['Animal ' num2str(i) ' distance traveled']);
-            xlabel('Time (s)')
-            ylabel('Distance (cm)')
-            
-            if e(1).report
-                snapnow
-                close(f2)
-            end
             
         end
     end
