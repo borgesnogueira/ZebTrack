@@ -3623,6 +3623,10 @@ set(handles.abortar,'Visible','on');
 handles.frameini=1;
 handles.framefim=20;
 
+%liga o fundo dinâmico por padrão
+%set(handles.fundodinamico,'Value',true);   %descomentar quando a criacao
+%de fundo estiver criand o V certinho
+
 set(handles.apclick,'Enable','off')
 set(handles.aiclick,'Enable','off')
 set(handles.btareaintlimpar,'Enable','off')

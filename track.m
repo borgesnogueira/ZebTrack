@@ -368,6 +368,20 @@ Vrm(Vrm<0.5) = 0.5;
 
 i=quadroini;
 %for i=quadroini:procframe:quadrofim
+
+
+
+videoLive = videoinput('winvideo');
+triggerconfig(videoLive, 'manual');
+%cria um objeto videoinput, com o adptador e formatos suportados pelo
+%hardware da maquina onde será executado o programa
+src = getselectedsource(videoLive);
+%videoLive.FramesPerTrigger = 300;
+%definição da quantidade de frames capturados para gerar o video que
+%será usado para criação do fundo
+start(videoLive);
+
+tinicio=tic;
 while i<=quadrofim
     
     %variavel global para informar o frame atual para o gui
@@ -375,7 +389,8 @@ while i<=quadrofim
     %frame = imread([fotos,'/frame',int2str(i), '.jpeg']);
     
     if(liveTracking)
-       frame = getsnapshot(handles.videoLive);
+       frame = getsnapshot(videoLive);
+       t(cont)=toc(tinicio);
     else
        frame = read(video,floor(i));
     end
@@ -859,7 +874,7 @@ while i<=quadrofim
         end
         %atualiza variancia de acordo com a formula em http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
         %vamos supor sempre que estamos adicionando o 100 frame ao conjutno
-        if ~colorida
+        if ~colorida 
             medianova = wbackg + (wframe - wbackg)/100;
             V(:,:,4) = (99*V(:,:,4) + (wframe - wbackg).*(wframe - medianova))/100;
         end
@@ -884,8 +899,10 @@ while i<=quadrofim
     
     i = i + procframe;  
     
+    quadrofim=i+1;
 end
 
+delete(videoLive);
 
 
 %verifica se tinha gente parado que ficou parado at� o final do
