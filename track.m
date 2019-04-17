@@ -371,17 +371,18 @@ i=quadroini;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %TESTES DE ARIEL
+if(trackIndividuals)
 INTENSO = 0.5;
-tempo_inicial = 0;
+tempo_inicial = 1;
 tempo_final = 20;
 
 if ~exist('caixa','var')    %não tenho a mínima ideia de onde a caixa possa vir a ter surgido.
-    caixa = 0;
+    caixa = ones(nanimais,4);
 end
 
 [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tempo_final ...
                                            , wbackg, Vrm, nanimais, mascara, minpix, maxpix, threshold, aviobj2, criavideodiff, tipsubfundo ...
-                                           , px, py, dicax, dicay, caixa, l, c ...
+                                           , caixa, l, c ...
                                            , colorida, cor, tipfilt ...
                                            , INTENSO);
                                        
@@ -389,6 +390,7 @@ end
 
 %FIM DOS TESTES DE ARIEL
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+end
 
 videoLive = videoinput('winvideo');
 triggerconfig(videoLive, 'manual');

@@ -17,11 +17,18 @@
 %media e variancia são dois vetores, já que posso ter mais de 1 peixe.
 function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tempo_final ...
                                                        , Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo ...
-                                                       , pxa, pya, dicax, dicay, caixa, l, c ...
+                                                       , caixa, l, c ...
                                                        , colorida, cor, tipfilt ...
                                                        , INTENSO)
-
+    
+    dicax = -1;
+    dicay = -1;
+    
+    pxant=zeros(1,nanimais);
+    pyant=zeros(1,nanimais);
+    
     [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os índices final e inicial para a calibração.
+    
     frames_video = read(video, [frame_inicial, frame_final]);                                %cria um vetor com todos os frames entre frame_incial e frame_final.
                                                                                              %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);
     
@@ -32,16 +39,15 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
     mediaBlobsEmFrame = 0;
     mediaFrameIndividual = 0; %(Em 1 peixe e muda em cada loop).
     
-    
-    
+        
     %LOOP PRINCIPAL
     for i=1:1:length_frames_video
          
         %converte pra tons de cinza e double pra trabalhar
         if colorida || (cor == 1)
-            wframe = double(frames_video(i));
+            wframe = double(frames_video(:,:,:,i));
         else
-            wframe  = double(rgb2gray(frames_video(i)));
+            wframe  = double(rgb2gray(frames_video(:,:,:,i)));
         end
         
         
@@ -52,49 +58,50 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
         %vetor que irá decorar cada animal que ja foi associado a um blob
         detectado = zeros(nanimais);
     
-        if cont>1 %global variable;
+        if pxant(1)==0 %global variable;
 
             if  tipfilt == 1
                 %previsao do filtro de kalman
                 for j=1:nanimais
-                    pdecorada = [px(j,cont-1); py(j,cont-1)];
+                    pdecorada = [pxant(j); pyant(j)];
                     predita = A*[pdecorada;v(:,j)] + Bu;
                     %garantir que esta dentro da imagem
                     predita(1) = min(max(predita(1),1),c);
                     predita(2) = min(max(predita(2),1),l);
-                    px(j,cont-1) = predita(1);
-                    py(j,cont-1) = predita(2);
+                    pxant(j) = predita(1);
+                    pyant(j) = predita(2);
                     v(:,j) = predita(3:4);
                 end
             end
             
             
-            %OLHAR POR PXN E PXY
-            [pxn(:,cont), pyn(:,cont), detectado, caixa] = associateeuclid(nanimais, ndetect, px(:,cont-1), py(:,cont-1), cx, cy, radius, boundingbox, detectado, dicax, dicay ...
-                                                                        , caixa, l, c, frames_video(i));
+            %OLHAR POR PX E PY
+            [px, py, detectado, caixa] = associateeuclid(nanimais, ndetect, pxant, pyant, cx, cy, radius, boundingbox, detectado, dicax, dicay ...
+                                                                        , caixa, l, c, frames_video(:,:,:,i));
         end
         
         %parte que trata das médias.
-        frameHSV = rgb2hsv(frames_video(i));
+        frameHSV = rgb2hsv(frames_video(:,:,:,i));
         %convertendo o wframe e logical(wframe) para separar as areas em regiões pretas e brancas
         %só faço isso pra pegar exatamente as areas dos peixes.
         wframe_log = logical(wframe);
         
         %percorrendo de k=1 até o numero de animais (podemos ter mais de um blob por frame)
-        for k=1:1:ndetect %blob individual do frame
-            
-            sizeOfBlob = 0; %number of pixels/blob;
-            
-            for m=caixa(k, floor(1)):1:( caixa(k, floor(1)) + caixa(k,3) )   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
-                for n=caixa(k, floor(2)):1:( caixa(k, floor(2)) + caixa(k,4) )                                %(goes from 'y0' to 'y0 + height')
+        for k=1:1:nanimais %blob individual do frame
+               sizeOfBlob = 0; %number of pixels/blob;
+             disp(caixa(k,:))
+            for m=floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3) )   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
+                for n=floor(caixa(k, 2)):1:floor( caixa(k, 2) + caixa(k,4) )                                %(goes from 'y0' to 'y0 + height')
+                    if(detectado(k))
                         if(wframe_log(m,n) == 1 && frameHSV(m,n,3) >= INTENSO) %testando para o vermelho aqui.
                             mediaFrameIndividual = mediaFrameIndividual + frameHSV(m,n,1);
                             sizeOfBlob = sizeOfBlob + 1;
                         end
+                    end
                 end
             end
             
-            mediaFrameIndividual = mediaFrameIndivual/sizeOfBlob;
+            mediaFrameIndividual =  mediaFrameIndividual/sizeOfBlob;
             mediaBlobsEmFrame = mediaBlobsEmFrame + mediaFrameIndividual;
             
             %zerando as variáveis de controle
@@ -108,7 +115,8 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
         
         %zerando as variáveis de média locais
         mediaBlobsEmFrame = 0;
-        
+        pxant=px;
+        pyant=py;
     end
     
     media = mean(mediaTOTAL);  %MEDIA FINAL CALCULADA
