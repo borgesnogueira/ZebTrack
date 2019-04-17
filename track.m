@@ -369,7 +369,26 @@ Vrm(Vrm<0.5) = 0.5;
 i=quadroini;
 %for i=quadroini:procframe:quadrofim
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%TESTES DE ARIEL
+INTENSO = 0.5;
+tempo_inicial = 0;
+tempo_final = 20;
 
+if ~exist('caixa','var')    %não tenho a mínima ideia de onde a caixa possa vir a ter surgido.
+    caixa = 0;
+end
+
+[media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tempo_final ...
+                                           , wbackg, Vrm, nanimais, mascara, minpix, maxpix, threshold, aviobj2, criavideodiff, tipsubfundo ...
+                                           , px, py, dicax, dicay, caixa, l, c ...
+                                           , colorida, cor, tipfilt ...
+                                           , INTENSO);
+                                       
+                                       
+
+%FIM DOS TESTES DE ARIEL
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 videoLive = videoinput('winvideo');
 triggerconfig(videoLive, 'manual');
