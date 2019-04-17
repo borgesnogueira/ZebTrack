@@ -11,12 +11,13 @@
 %wframe = working frame (double e em greyscale);
 %frames_video(i) = frame do track.m;
 %INTENSO = intervalo que dita o valor do V de HSV, ou seja, dita o limite para que as cores sejam mais 'intensas';
+%V = Vrm do track.m;
 
 
 %media e variancia são dois vetores, já que posso ter mais de 1 peixe.
 function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tempo_final ...
                                                        , Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo ...
-                                                       , pxa, pya, detectado, dicax, dicay, caixa, l, c ...
+                                                       , pxa, pya, dicax, dicay, caixa, l, c ...
                                                        , colorida, cor, tipfilt ...
                                                        , INTENSO)
 
@@ -46,7 +47,7 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
         
         %faz a diferenca so na area de interesse e extrai o centro de massas
         %das regioes (blobs) maiores que minpix
-        [cx, cy, radius, boundingbox, ndetect, aviobj2, imdif] = extractnblobs(wframe, Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo);
+        [cx, cy, radius, boundingbox, ndetect, ~, ~] = extractnblobs(wframe, Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo);
     
         %vetor que irá decorar cada animal que ja foi associado a um blob
         detectado = zeros(nanimais);
