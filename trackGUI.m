@@ -465,8 +465,9 @@ function btbrowse_Callback(hObject, eventdata, handles)
  
 if filename ~= 0
     %le o video na memoria
+    warning ('off','all');
     handles.video = VideoReader([directoryname,filename]);
-    
+    warning ('on','all');
     set(handles.pasta,'String',fullfile(directoryname, filename));
     handles.directoryname = directoryname;
     handles.filename = filename;
@@ -815,10 +816,10 @@ toggleTooltips(handles.figure1,'on');
 set(handles.pause,'Enable','off');
 
 %atumatically saves the results
-[directoryname,filename,~] = fileparts(get(handles.pasta,'String'));
+%[directoryname,filename,~] = fileparts(get(handles.pasta,'String'));
 e=handles.e;
-save(fullfile(directoryname, [filename '.mat']),'e');
-set(handles.mensagem,'String',['Result atumatically saved to "' filename '.mat"' ]);
+save(fullfile(handles.directoryname, [handles.filenameSemExtensao '.mat']),'e');
+set(handles.mensagem,'String',['Result atumatically saved to "' handles.filenameSemExtensao '.mat"' ]);
 
 
 guidata(hObject, handles);
@@ -1060,6 +1061,8 @@ handles.e(1).backgplot = get(handles.backgplot,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
 handles.e(1).heat_map = get(handles.HeatMap,'Value');
+handles.e(1).groupInfo = false;
+handles.e(1).groupInfoVsanimalOne = false;
 guidata(hObject, handles);
 % Hint: delete(hObject) closes the figure
 if isequal(get(hObject, 'waitstatus'),'waiting')
@@ -1992,6 +1995,9 @@ handles.e(1).backgplot = get(handles.backgplot,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
 handles.e(1).heat_map = get(handles.HeatMap,'Value');
+handles.e(1).groupInfo = false;
+handles.e(1).groupInfoVsanimalOne = false;
+
  assignin('base', 'e', handles.e);
  publish('rep.m','format','doc','showCode',false,'outputDir',PathName, 'useNewFigure',false);
  movefile(fullfile(PathName,'rep.doc'),fullfile(PathName,FileName),'f')
@@ -2513,6 +2519,9 @@ handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
 handles.e(1).behaviourinfo = get(handles.behaviourinfo,'Value');
 handles.e(1).heat_map = get(handles.HeatMap,'Value');
+handles.e(1).groupInfo = false;
+handles.e(1).groupInfoVsanimalOne = false;
+
 
 if handles.e(1).distlineinfo
 s ={'animal' 'mean speed' 'maximum speed' 'total distance' 'total time stoped' 'mean distance from a line' 'area number' 'time spent in area' 'latency'};
@@ -2988,6 +2997,9 @@ handles.e(1).backgplot = get(handles.backgplot,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
 handles.e(1).heat_map = get(handles.HeatMap,'Value');
+handles.e(1).groupInfo = false;
+handles.e(1).groupInfoVsanimalOne = false;
+
 handles.e(1).filename = handles.filenameSemExtensao;
 guidata(hObject, handles);%salva o handles nessa porra.
 e=handles.e;
@@ -3614,7 +3626,7 @@ fundo = criaFundoAoVivo(handles.waibarfundo);
 %passando a referência do objeto videoinput para o handles
 handles.videoLive = videoLive;
 handles.filenameSemExtensao = 'live';
-handles.directoryname = '.';
+handles.directoryname = './live';
 set(handles.run,'Enable','on');
 set(handles.abortar,'Visible','on');
 

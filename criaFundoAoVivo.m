@@ -31,7 +31,7 @@ end
 %disp('aaeee');
 delete(videoLive);
 fundo = sframe/numFrames;
-imwrite(uint8(fundo), 'live.jpeg');
+imwrite(uint8(fundo), './live/live.jpeg');
 %imshow(uint8(fundo));
 fundo = uint8(fundo);
 %close(videoFundo);
