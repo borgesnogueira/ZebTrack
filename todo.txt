@@ -3,7 +3,11 @@
 
 - Dividir experimento salvo em vários
 
-- definir se duas trajetorias sao parecidas
+- Salvar todos os dados em excel (estatisticas referentes as areas)
 
-- salvar todos os dados em excel
+- Mostrar opções de camera quando o ususario escolher live tracking
+
+- Calcular matriz de variancia V no live tracking
+
+- Estatisticas sobre rastreamento de grupo
 
