@@ -21,6 +21,8 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
                                                        , colorida, cor, tipfilt ...
                                                        , INTENSO)
     
+    %variáveis que preciso para o funcionamento do código mas que não faz
+    %sentido passar como parâmetros.
     dicax = -1;
     dicay = -1;
     
@@ -80,19 +82,22 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
                                                                         , caixa, l, c, frames_video(:,:,:,i));
         end
         
-        %parte que trata das médias.
-        frameHSV = rgb2hsv(frames_video(:,:,:,i));
-        %convertendo o wframe e logical(wframe) para separar as areas em regiões pretas e brancas
-        %só faço isso pra pegar exatamente as areas dos peixes.
-        wframe_log = logical(wframe);
+        %aqui começa a parte que trata do cáculo das médias
         
+        frameHSV = rgb2hsv(frames_video(:,:,:,i));  %converte o i-ésimo frame(frame atual) para HSV;
+        wframe_log = logical(wframe);   %convertendo o wframe e logical(wframe) para separar as areas em regiões pretas e brancas
+                                        %só faço isso pra pegar exatamente as areas dos peixes.
+                                        
+        %OBS: Somente conseguimos dizer que o k-ésimo elemento do loop é o k-ésimo peixe em todas as situações porque antes de
+        %rodar esse loop, as funções extractnblobs() e associateeuclid() fora executadas!
+                                        
         %percorrendo de k=1 até o numero de animais (podemos ter mais de um blob por frame)
         for k=1:1:nanimais %blob individual do frame
-               sizeOfBlob = 0; %number of pixels/blob;
-             disp(caixa(k,:))
-            for m=floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3) )   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
-                for n=floor(caixa(k, 2)):1:floor( caixa(k, 2) + caixa(k,4) )                                %(goes from 'y0' to 'y0 + height')
-                    if(detectado(k))
+            sizeOfBlob = 0; %number of pixels/blob;
+            %disp(caixa(k,:))      PRA DEBUGAR DPS
+            for m = floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3) )   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
+                for n=floor(caixa(k, 2)):1:floor( caixa(k, 2) + caixa(k,4) ) %(goes from 'y0' to 'y0 + height')
+                    if(detectado(k))        %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?)
                         if(wframe_log(m,n) == 1 && frameHSV(m,n,3) >= INTENSO) %testando para o vermelho aqui.
                             mediaFrameIndividual = mediaFrameIndividual + frameHSV(m,n,1);
                             sizeOfBlob = sizeOfBlob + 1;
