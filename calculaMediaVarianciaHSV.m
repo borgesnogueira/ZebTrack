@@ -10,7 +10,7 @@
 %avi = aviobj2 do track.m (o input e não o output nessa função!);
 %wframe = working frame (double e em greyscale);
 %frames_video(i) = frame do track.m;
-%INTENSO = intervalo que dita o valor do V de HSV, ou seja, dita o limite para que as cores sejam mais 'intensas';
+%INTENSIDADE = intervalo que dita o valor do V de HSV, ou seja, dita o limite para que as cores sejam mais 'intensas';
 %V = Vrm do track.m;
 
 
@@ -19,7 +19,7 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
                                                        , Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo ...
                                                        , caixa, l, c ...
                                                        , colorida, cor, tipfilt ...
-                                                       , INTENSO)
+                                                       , INTENSIDADE)
     
     %variáveis que preciso para o funcionamento do código mas que não faz
     %sentido passar como parâmetros.
@@ -34,11 +34,10 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
     frames_video = read(video, [frame_inicial, frame_final]);                                %cria um vetor com todos os frames entre frame_incial e frame_final.
                                                                                              %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);
     
-    %variáveis de controle do for, média e variância.
+    %VARIÁVEIS DE CONTROLE DO FOR: MÉDIA E VARIÂNCIA.
     length_frames_video = (frame_final - frame_inicial) + 1;                                 %Necessário para a implementação do for (o +1 é pra incluir o primeiro termo!)
     
-    mediaTOTAL = [];
-    mediaBlobsEmFrame = 0;
+    mediaTOTAL = zeros(nanimais, length_frames_video); %aloco somente um espaço do V (HSV) para cada animal e frames_video espaços (a progressão temporal de cada animal)
     mediaFrameIndividual = 0; %(Em 1 peixe e muda em cada loop).
     
         
@@ -79,7 +78,7 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
             
             %OLHAR POR PX E PY
             [px, py, detectado, caixa] = associateeuclid(nanimais, ndetect, pxant, pyant, cx, cy, radius, boundingbox, detectado, dicax, dicay ...
-                                                                        , caixa, l, c, frames_video(:,:,:,i));
+                                                         , caixa, l, c, frames_video(:,:,:,i));
         end
         
         %aqui começa a parte que trata do cáculo das médias
@@ -97,8 +96,8 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
             %disp(caixa(k,:))      PRA DEBUGAR DPS
             for m = floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3) )   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
                 for n=floor(caixa(k, 2)):1:floor( caixa(k, 2) + caixa(k,4) ) %(goes from 'y0' to 'y0 + height')
-                    if(detectado(k))        %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?)
-                        if(wframe_log(m,n) == 1 && frameHSV(m,n,3) >= INTENSO) %testando para o vermelho aqui.
+                    if(detectado(k))        %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )
+                        if(wframe_log(m,n) == 1 && frameHSV(m,n,3) >= INTENSIDADE) %testando para o vermelho aqui.
                             mediaFrameIndividual = mediaFrameIndividual + frameHSV(m,n,1);
                             sizeOfBlob = sizeOfBlob + 1;
                         end
@@ -107,7 +106,9 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
             end
             
             mediaFrameIndividual =  mediaFrameIndividual/sizeOfBlob;
-            mediaBlobsEmFrame = mediaBlobsEmFrame + mediaFrameIndividual;
+            mediaTOTAL(k, i) = mediaFrameIndividual; % (media do k-ésimo animal no i-ésimo frame)
+            
+            %mediaBlobsEmFrame = mediaBlobsEmFrame + mediaFrameIndividual;(EXCLUIR DEPOIS AQUI -> NÃO FAZ MAIS SENTIDO)
             
             %zerando as variáveis de controle
             sizeOfBlob = 0;
@@ -115,18 +116,20 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
         
         end
         
-        mediaBlobsEmFrame = mediaBlobsEmFrame/ndetect;
-        mediaTOTAL(i) = mediaBlobsEmFrame;
-        
-        %zerando as variáveis de média locais
-        mediaBlobsEmFrame = 0;
         pxant=px;
         pyant=py;
+        
     end
     
-    media = mean(mediaTOTAL);  %MEDIA FINAL CALCULADA
-    variancia = var(mediaTOTAL); %VARIÂNCIA FINAL CALCULADA
+    %aloco previamente por questões de velocidade
+    media = zeros(nanimais);
+    variancia = zeros(nanimais)
     
+    %cálculo dos outputs da função.
+    for k=1:1:nanimais
+        media(k) = mean(mediaTOTAL(k, 1:end));  %MEDIA FINAL CALCULADA: do primeiro ao último frame para o k-ésimo animal.
+        variancia(k) = var(mediaTOTAL(k, 1:end)); %VARIÂNCIA FINAL CALCULADA: do primeiro ao último frame para o k-ésimo animal.
+    end
     
 end
     
