@@ -385,14 +385,9 @@ i=quadroini;
                                                , caixa, l, c ...
                                                , colorida, cor, tipfilt ...
                                                , INTENSO);
-   
-    disp('Informações sobre a média e variância:')
-    disp('Informações sobre a média:')
-    disp(media) 
-    
-    disp('Informações sobre a variância:')
-    disp(variancia)
 
+   %gerando uma figura com a cor variando com sua variancia.
+   mostra_cores_dos_peixes(media, variancia);
 
 %end
 %FIM DOS TESTES DE ARIEL
