@@ -372,25 +372,31 @@ i=quadroini;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %TESTES DE ARIEL
 if(trackIndividuals)
-INTENSO = 0.5;
-tempo_inicial = 1;
-tempo_final = 20;
+    INTENSO = 0.5;
+    tempo_inicial = 1;
+    tempo_final = 20;
 
-if ~exist('caixa','var')    %não tenho a mínima ideia de onde a caixa possa vir a ter surgido.
-    caixa = ones(nanimais,4);
+    if ~exist('caixa','var')    %não tenho a mínima ideia de onde a caixa possa vir a ter surgido.
+        caixa = ones(nanimais,4);
+    end
+
+    [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tempo_final ...
+                                               , wbackg, Vrm, nanimais, mascara, minpix, maxpix, threshold, aviobj2, criavideodiff, tipsubfundo ...
+                                               , caixa, l, c ...
+                                               , colorida, cor, tipfilt ...
+                                               , INTENSO);
+   
+   disp('Informações sobre a média e variância:')
+   disp('Informações sobre a média:')
+   disp(media)
+   disp('Informações sobre a variância:')
+   disp(variancia)
+
+
 end
-
-[media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tempo_final ...
-                                           , wbackg, Vrm, nanimais, mascara, minpix, maxpix, threshold, aviobj2, criavideodiff, tipsubfundo ...
-                                           , caixa, l, c ...
-                                           , colorida, cor, tipfilt ...
-                                           , INTENSO);
-                                       
-                                       
-
 %FIM DOS TESTES DE ARIEL
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-end
+
 
 if liveTracking
     videoLive = videoinput('winvideo');
