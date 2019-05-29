@@ -374,7 +374,7 @@ i=quadroini;
 %if(trackIndividuals)
     INTENSO = 0.5;
     tempo_inicial = 1;
-    tempo_final = 20;
+    tempo_final = 10;
 
     if ~exist('caixa','var')    %não tenho a mínima ideia de onde a caixa possa vir a ter surgido.
         caixa = ones(nanimais,4);
@@ -388,10 +388,10 @@ i=quadroini;
    
     disp('Informações sobre a média e variância:')
     disp('Informações sobre a média:')
-    disp(length(media)) 
+    disp(media) 
     
     disp('Informações sobre a variância:')
-    disp(length(variancia))
+    disp(variancia)
 
 
 %end
@@ -437,7 +437,7 @@ while i<=quadrofim
         
         %faz a diferenca so na area de interesse e extrai o centro de massas
         %das regioes (blobs) maiores que minpix
-        [cx,cy,radius,boundingbox,ndetect,aviobj2,imdif]=extractnblobs(wframe,wbackg,Vrm,nanimais,mascara,minpix,maxpix,threshold,aviobj2,criavideodiff,tipsubfundo);
+        [cx,cy,radius,boundingbox,ndetect,aviobj2,imdif] = extractnblobs(wframe,wbackg,Vrm,nanimais,mascara,minpix,maxpix,threshold,aviobj2,criavideodiff,tipsubfundo);
         
         if threshadaptativo
             if ndetect < nanimais && threshold > 2 %ficara no minimo com 2
@@ -468,7 +468,6 @@ while i<=quadrofim
     
     
     if cont >1
-        
         
         if  tipfilt == 1
             %previsao do filtro de kalman
