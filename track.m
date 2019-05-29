@@ -371,7 +371,7 @@ i=quadroini;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %TESTES DE ARIEL
-if(trackIndividuals)
+%if(trackIndividuals)
     INTENSO = 0.5;
     tempo_inicial = 1;
     tempo_final = 20;
@@ -386,14 +386,15 @@ if(trackIndividuals)
                                                , colorida, cor, tipfilt ...
                                                , INTENSO);
    
-   disp('Informações sobre a média e variância:')
-   disp('Informações sobre a média:')
-   disp(media)
-   disp('Informações sobre a variância:')
-   disp(variancia)
+    disp('Informações sobre a média e variância:')
+    disp('Informações sobre a média:')
+    disp(length(media)) 
+    
+    disp('Informações sobre a variância:')
+    disp(length(variancia))
 
 
-end
+%end
 %FIM DOS TESTES DE ARIEL
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
