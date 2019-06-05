@@ -78,7 +78,7 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
        
         %OLHAR POR PX E PY
         [px, py, detectado, caixa] = associateeuclid(nanimais, ndetect, pxant, pyant, cx, cy, radius, boundingbox, detectado, dicax, dicay ...
-                                                         , caixa, l, c, frames_video(:,:,:,i));
+                                                     , caixa, l, c, frames_video(:,:,:,i));
     
         %aqui começa a parte que trata do cáculo das médias
         
@@ -91,6 +91,7 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
                                         
         %percorrendo de k=1 até o numero de animais (podemos ter mais de um blob por frame)
         for k=1:1:nanimais %blob individual do frame
+
             sizeOfBlob = 0; %number of pixels/blob;
     
             for m = floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3) )   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
@@ -140,7 +141,10 @@ end
 
 
 function frames_video = geraVetor_frames_video(video, frame_inicial, frame_final)
-    frames_video = read(video, [frame_inicial frame_final]);
+    %frames_video = read(video, [frame_inicial frame_final]);   
+    for i=frame_inicial:frame_final
+        frames_video(i - frame_inicial + 1) = read(video, i);
+    end
 end
 
 

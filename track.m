@@ -75,7 +75,7 @@
 
 
 function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento] = track(mostraresnatela,quadroini,quadrofim,fotos,video,pixelcm,nanimais,procframe...
-    ,corte,areas,areasexc,criavideores,viddiff,thresh,filt,handles,fundodinamico,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,cameralenta,trackmouse,liveTracking,trackIndividuals,pinicial)
+    ,corte,areas,areasexc,criavideores,viddiff,thresh,filt,handles,fundodinamico,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,cameralenta,trackmouse,liveTracking,trackindividuals,pinicial)
 
 %CONSTANTES A SEREM AJUSTADAS:
 
@@ -146,7 +146,7 @@ if ~exist('liveTracking','var')
 end
 
 if ~exist('trackindividuals','var')
-    trackIndividuals = 0;
+    trackindividuals = 0;
 end
 
 %numero de QUADROS por SEGUNDO do video
@@ -371,7 +371,7 @@ i=quadroini;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %TESTES DE ARIEL
-%if(trackIndividuals)
+if(trackindividuals)
     INTENSO = 0.5;
     tempo_inicial = 1;
     tempo_final = 10;
@@ -389,7 +389,7 @@ i=quadroini;
    %gerando uma figura com a cor variando com sua variancia.
    mostra_cores_dos_peixes(media, variancia);
 
-%end
+end
 %FIM DOS TESTES DE ARIEL
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -479,8 +479,11 @@ while i<=quadrofim
         end
         
         
-        if(trackIndividuals)
-            [px(:,cont),py(:,cont),detectado,caixa] = associatefudera(nanimais,ndetect,px(:,cont-1),py(:,cont-1),cx,cy,radius,boundingbox,detectado,dicax,dicay,caixa,l,c,frame);
+        if(trackindividuals)
+            %adicionaremos associatefudera depois!
+            %[px(:,cont),py(:,cont),detectado,caixa] = associatefudera(nanimais,ndetect,px(:,cont-1),py(:,cont-1),cx,cy,radius,boundingbox,detectado,dicax,dicay,caixa,l,c,frame);
+            [px(:,cont),py(:,cont),detectado,caixa] = associateeuclid(nanimais,ndetect,px(:,cont-1),py(:,cont-1),cx,cy,radius,boundingbox,detectado,dicax,dicay,caixa,l,c,frame);
+
         else
             [px(:,cont),py(:,cont),detectado,caixa] = associateeuclid(nanimais,ndetect,px(:,cont-1),py(:,cont-1),cx,cy,radius,boundingbox,detectado,dicax,dicay,caixa,l,c,frame);
         end
