@@ -3621,7 +3621,7 @@ axes(handles.axes3);
 imshow(p);
 drawnow;
 handles.waibarfundo.visivel('on');
-fundo = criaFundoAoVivo(handles.waibarfundo);
+[fundo, V] = criaFundoAoVivo(handles.waibarfundo);
 
 %passando a referÃªncia do objeto videoinput para o handles
 handles.videoLive = videoLive;
@@ -3636,7 +3636,7 @@ handles.frameini=1;
 handles.framefim=20;
 
 %liga o fundo dinâmico por padrão
-%set(handles.fundodinamico,'Value',true);   %descomentar quando a criacao
+set(handles.fundodinamico,'Value',true);   %descomentar quando a criacao
 %de fundo estiver criand o V certinho
 
 set(handles.apclick,'Enable','off')
@@ -3663,7 +3663,7 @@ set(handles.axes4,'Color','w','XTick',[],'YTick',[],'XColor','w','YColor','w');
 handles.c = c;
 handles.l = l;
 handles.fundo = fundo;
-%handles.V = V;
+handles.V = V;
 axes(handles.axes3);
 fundohandle = imshow(fundo);
 set(fundohandle,'ButtonDownFcn', @axes3_ButtonDownFcn);

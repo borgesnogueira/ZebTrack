@@ -400,9 +400,13 @@ for ne=1:n
             
         end
     end
-    
+    %Pré alocando os arrays para o cálculo das métricas de coesão de grupo
+    varx = zeros(1, length(t));
+    vary = zeros(1, length(t));
+    meanx = zeros(1, length(t));
+    meany = zeros(1, length(t));
     if e(1).groupInfo
-        for i =1:length(t)
+        for i=1:length(t)
             %variances
             varx(i) = var(posicao{:}.x(i));
             vary(i) = var(posicao{:}.y(i));
@@ -412,20 +416,14 @@ for ne=1:n
                         
             %distance
             for j=1:nanimais
-               dist(j,i) = norm([posicao{j}.x(i)-meanx(i) posicao{j}.y(i)-meany(i)] );
+               dist(j,i) = norm([posicao{j}.x(i)-meanx(i) posicao{j}.y(i)-meany(i)]);
             end
             meandist(i) = mean(dist(:,i));
-            
         end
-        
-        f1 = figure;
-        plot(t,varx)
-        f2 = figure;
-        plot(t,vary)
-        vartotal = vx.*vy;
-        f3 = figure;
-        plot(t,vartotal)
-        
+        variancia_media_x = mean(varx);
+        variancia_media_y = mean(vary);
+        vartotal = variancia_media_x*variancia_media_y;
+        disp(['Coefficient of group cohesion:' vartotal]);
         if e(1).report
            snapnow
            close(f1);
@@ -433,8 +431,7 @@ for ne=1:n
         end
             
     end
-    
-    
+    distanimaloneprocentro = zeros(1, 1000000);
     if e(1).groupInfoVsanimalOne
         for i =1:length(t)
             %variances
@@ -449,22 +446,11 @@ for ne=1:n
                dist(j,i) = norm([posicao{j}.x(i)-meanx(i) posicao{j}.y(i)-meany(i)] );
             end
             meandist(i) = mean(dist(:,i));
-            
             %Vs animal one
             %verificar se presta
             distanimaloneprocentro(i) = norm([meanx(i) - posicao{1}.x(i)  meany(i) - posicao{1}.y(i)]);
-            
         end
-        
-        
-        f1 = figure;
-        plot(t,varx)
-        f2 = figure;
-        plot(t,vary)
-        vartotal = vx.*vy;
-        f3 = figure;
-        plot(t,vartotal)
-        
+        disp(['Coefficient of group cohesion(Choosen one Vs Group): ' var(distanimaldistanimaloneprocentro)]);
         if e(1).report
            snapnow
            close(f1);
@@ -472,8 +458,6 @@ for ne=1:n
         end
             
     end
-    
-    
     if ~e(1).report && ne~=n 
          fprintf('\n\n');
          disp('Press any key to see the results of the next experiment (or Ctrl+C to stop showing results, in case you saved it in another format)')

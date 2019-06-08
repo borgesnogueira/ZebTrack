@@ -134,7 +134,7 @@ else
 end
 
 if ~exist('fundodinamico','var')
-    fundodinamico = 0;
+    fundodinamico = false;
 end
 
 if ~exist('tipfilt','var')
@@ -148,21 +148,12 @@ end
 if ~exist('trackindividuals','var')
     trackindividuals = 0;
 end
-
+V = zeros(handles.l,handles.c);
 %numero de QUADROS por SEGUNDO do video
-
-
-
 if liveTracking
     fps = 1;
-    
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%% POR ENQUANTO
-    
     tipsubfundo=0;
-    V = zeros(handles.l,handles.c);
-    
-    
+    V = handles.V;
 else
     fps = video.FrameRate;
 end

@@ -400,11 +400,10 @@ for ne=1:n
             
         end
     end
-    
     if e(1).groupInfo
         for i =1:length(t)
             %variances
-            varx(i) = var(posicao{2:end}.x(i));
+            varx(i) = var(posicao{:}.x(i));
             vary(i) = var(posicao{:}.y(i));
             %centroid
             meanx(i) = mean(posicao{:}.x(i));
@@ -414,9 +413,48 @@ for ne=1:n
             for j=1:nanimais
                dist(j,i) = norm([posicao{j}.x(i)-meanx(i) posicao{j}.y(i)-meany(i)] );
             end
-            meandist(i) = mean(dist(:,i);
+            meandist(i) = mean(dist(:,i));
             
         end
+        
+        f1 = figure;
+        plot(t,varx)
+        f2 = figure;
+        plot(t,vary)
+        vartotal = vx.*vy;
+        f3 = figure;
+        plot(t,vartotal)
+        
+        if e(1).report
+           snapnow
+           close(f1);
+           close(f2);
+        end
+            
+    end
+    vx(1) = 0;
+    vy(1) = 0;
+    if e(1).groupInfoVsanimalOne
+        for i=1:length(t)
+            %variances
+            vx(i) = var(posicao{2:end}.x(i));
+            vy(i) = var(posicao{2:end}.y(i));
+            %centroid
+            meanx(i) = mean(posicao{2:end}.x(i));
+            meany(i) = mean(posicao{2:end}.y(i));
+                        
+            %distance
+            for j=2:nanimais
+               dist(j,i) = norm([posicao{j}.x(i)-meanx(i) posicao{j}.y(i)-meany(i)] );
+            end
+            meandist(i) = mean(dist(:,i));
+            
+            %Vs animal one
+            %verificar se presta
+            distanimaloneprocentro(i) = norm([meanx(i) - posicao{1}.x(i)  meany(i) - posicao{1}.y(i)]);
+            
+        end
+        
         
         f1 = figure;
         plot(t,varx)
