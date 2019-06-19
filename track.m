@@ -373,8 +373,14 @@ i=quadroini;
 %TESTES DE ARIEL
 if(trackindividuals)
     INTENSO = 0.5;
-    tempo_inicial = 1;
-    tempo_final = 10;
+    
+%     testados:
+%     539 inicial e 544 final
+%     inicial 325 e final 327
+%     inicial 678 e final 679
+%     inicial 685 e final 679
+    tempo_inicial = 168;
+    tempo_final = 169;
 
     if ~exist('caixa','var')    %não tenho a mínima ideia de onde a caixa possa vir a ter surgido.
         caixa = ones(nanimais,4);

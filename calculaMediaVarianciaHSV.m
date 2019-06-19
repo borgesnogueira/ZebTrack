@@ -31,11 +31,11 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
     
     [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os índices final e inicial para a calibração.
     
-    frames_video = read(video, [frame_inicial, frame_final]);                                %cria um vetor com todos os frames entre frame_incial e frame_final.
+    frames_video = read(video, floor([frame_inicial, frame_final]));                                %cria um vetor com todos os frames entre frame_incial e frame_final.
                                                                                              %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);
     
     %VARIÁVEIS DE CONTROLE DO FOR: MÉDIA E VARIÂNCIA.
-    length_frames_video = (frame_final - frame_inicial) + 1;                                 %Necessário para a implementação do for (o +1 é pra incluir o primeiro termo!)
+    length_frames_video = (floor(frame_final) - floor(frame_inicial)) + 1;                                 %Necessário para a implementação do for (o +1 é pra incluir o primeiro termo!)
     
     mediaTOTAL = zeros(nanimais, length_frames_video); %aloco somente um espaço do V (HSV) para cada animal e frames_video espaços (a progressão temporal de cada animal)
     mediaFrameIndividual = 0; %(Em 1 peixe e muda em cada loop).
@@ -88,17 +88,30 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
                                         
         %OBS: Somente conseguimos dizer que o k-ésimo elemento do loop é o k-ésimo peixe em todas as situações porque antes de
         %rodar esse loop, as funções extractnblobs() e associateeuclid() fora executadas!
-                                        
+        
+        [altura, largura, ~] = size(frameHSV);
+        
         %percorrendo de k=1 até o numero de animais (podemos ter mais de um blob por frame)
         for k=1:1:nanimais %blob individual do frame
 
             sizeOfBlob = 0; %number of pixels/blob;
-    
+            
             for m = floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3) )   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
-                for n=floor(caixa(k, 2)):1:floor( caixa(k, 2) + caixa(k,4) ) %(goes from 'y0' to 'y0 + height')
+                
+                m = min(m, altura);
+                
+                for n = floor(caixa(k, 2)):1:floor( caixa(k, 2) + caixa(k,4) ) %(goes from 'y0' to 'y0 + height')
+                    
+                    n = min(n, altura);
+%                     disp([num2str(k),num2str(k),num2str(k),num2str(k),num2str(k),'-esimo animal:'])
+%                     disp(['x0 = ',num2str(caixa(k,1))])
+%                     disp(['x0+w = ',num2str(caixa(k,1)+caixa(k,3))])
+%                     disp(['y0 = ',num2str(caixa(k,2))])
+%                     disp(['y0+h = ',num2str(caixa(k,2)+caixa(k,4))])
                     if(detectado(k))        %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
                         if(wframe_log(m,n) == 1 && frameHSV(m,n,3) >= INTENSIDADE) %testando para o vermelho aqui.
                             mediaFrameIndividual = mediaFrameIndividual + frameHSV(m,n,1);
+%                             disp(['cor H do HSV do ',num2str(k),'-esimo animal é:',num2str(frameHSV(m,n,1))])
                             sizeOfBlob = sizeOfBlob + 1;
                         end
                     end
@@ -126,6 +139,8 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
     for k=1:1:nanimais
         media(k) = nanmean(mediaTOTAL(k, 1:end));  %MEDIA FINAL CALCULADA: do primeiro ao último frame para o k-ésimo animal.
         variancia(k) = nanvar(mediaTOTAL(k, 1:end)); %VARIÂNCIA FINAL CALCULADA: do primeiro ao último frame para o k-ésimo animal.
+        disp(['media do ',num2str(k),'º peixe: ',num2str(media(k))])
+        disp(['variancia do ',num2str(k),'º peixe: ',num2str(variancia(k))])
     end
     
 end
@@ -141,7 +156,7 @@ end
 
 
 function frames_video = geraVetor_frames_video(video, frame_inicial, frame_final)
-    %frames_video = read(video, [frame_inicial frame_final]);   
+%     frames_video = read(video, floor([frame_inicial frame_final]));   
     for i=frame_inicial:frame_final
         frames_video(i - frame_inicial + 1) = read(video, i);
     end
