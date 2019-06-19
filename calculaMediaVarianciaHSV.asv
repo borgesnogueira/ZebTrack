@@ -111,10 +111,10 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
                 for n = floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3) ) %(goes from 'y0' to 'y0 + height')
                     
                     if(detectado(k))        %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
-                        if(wframe_log(m,n) == 0 && frameHSV(m,n,3) >= INTENSIDADE) %testando para o vermelho aqui.
+                        if(wframe_log(m,n) == 1 && frameHSV(m,n,3) >= INTENSIDADE) %testando para o vermelho aqui.
                             mediaFrameIndividual = mediaFrameIndividual + frameHSV(m,n,1);
                             
-                            debug_imagem(m - floor(caixa(k,2)) + 1, n - floor(caixa(k,1)) + 1, 2) = 255;
+                            debug_imagem(m - ,n - ,2) = 255;
 %                             disp(['cor H do HSV do ',num2str(k),'-esimo animal é:',num2str(frameHSV(m,n,1))])
                             sizeOfBlob = sizeOfBlob + 1;
                         end
