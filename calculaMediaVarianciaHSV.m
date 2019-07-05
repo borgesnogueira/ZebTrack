@@ -95,28 +95,33 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
         for k=1:1:nanimais %blob individual do frame
 
             sizeOfBlob = 0; %number of pixels/blob;
-%             
-%             disp([num2str(k),num2str(k),num2str(k),num2str(k),num2str(k),'-esimo animal:'])
-%             disp(['x0 = ',num2str(caixa(k,1))])
-%             disp(['x0+w = ',num2str(caixa(k,1)+caixa(k,3))])
-%             disp(['y0 = ',num2str(caixa(k,2))])
-%             disp(['y0+h = ',num2str(caixa(k,2)+caixa(k,4))])
-%             disp(['size wframe = ',num2str(size(wframe))])
+        
+            %disp([num2str(k),num2str(k),num2str(k),num2str(k),num2str(k),'-esimo animal:'])
+            %disp(['x0 = ',num2str(caixa(k,1))])
+            %disp(['x0+w = ',num2str(caixa(k,1)+caixa(k,3))])
+            %disp(['y0 = ',num2str(caixa(k,2))])
+            %disp(['y0+h = ',num2str(caixa(k,2)+caixa(k,4))])
+            %disp(['size wframe = ',num2str(size(wframe))])
             
-            debug_imagem = frames_video( floor(caixa(k, 2)):1:floor( caixa(k, 2) + caixa(k,4) ), floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3) ), :, i);
+            debug_imagem = frames_video(floor(caixa(k, 2)):1:floor( caixa(k, 2) + caixa(k,4)), floor(caixa(k, 1)):1:floor(caixa(k, 1) + caixa(k,3) ), :, i);
 
             
-            for m = floor(caixa(k, 2)):1:floor( caixa(k, 2) + caixa(k,4) )   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
+            for m = floor(caixa(k, 2)):1:floor(caixa(k, 2) + caixa(k,4))   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
                 
-                for n = floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3) ) %(goes from 'y0' to 'y0 + height')
+                for n = floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3)) %(goes from 'y0' to 'y0 + height')
                     
-                    if(detectado(k))        %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
-                        if(wframe_log(m,n) == 0 && frameHSV(m,n,3) >= INTENSIDADE) %testando para o vermelho aqui.
+                    if(detectado(k))
+                        %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
+                        if(wframe_log(m,n) ~= 0 && frameHSV(m,n,1) >= 0.5 && frameHSV(m,n,2) >= 0.5)
+                            
                             mediaFrameIndividual = mediaFrameIndividual + frameHSV(m,n,1);
                             
+                            disp('****************** TELA DE DEBUG *******************');
                             debug_imagem(m - floor(caixa(k,2)) + 1, n - floor(caixa(k,1)) + 1, 2) = 255;
-%                             disp(['cor H do HSV do ',num2str(k),'-esimo animal é:',num2str(frameHSV(m,n,1))])
+                            disp(['valor HSV do pixel do ',num2str(k),'-esimo animal é H:',num2str(frameHSV(m,n,1)), ', S:',num2str(frameHSV(m,n,2)), ', V:', num2str(frameHSV(m,n,3))])
+                            
                             sizeOfBlob = sizeOfBlob + 1;
+                            
                         end
                     end
                 end
@@ -126,7 +131,6 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
             
             mediaFrameIndividual =  mediaFrameIndividual/sizeOfBlob;
             mediaTOTAL(k, i) = mediaFrameIndividual; % (media do k-ésimo animal no i-ésimo frame)
-            
             %zerando as variáveis de controle
             mediaFrameIndividual = 0;
         
@@ -139,7 +143,7 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
     
     %aloco previamente por questões de velocidade
     media = zeros(1, nanimais);
-    variancia = zeros(1, nanimais)
+    variancia = zeros(1, nanimais);
     
     %cálculo dos outputs da função.
     for k=1:1:nanimais

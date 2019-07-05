@@ -363,7 +363,7 @@ i=quadroini;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %TESTES DE ARIEL
 if(trackindividuals)
-    INTENSO = 0.5;
+    INTENSO = 0.4;
     
 %     testados:
 %     539 inicial e 544 final
