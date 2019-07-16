@@ -3608,6 +3608,23 @@ function pushbuttonLive_Tracking_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbuttonLive_Tracking (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+%------------------------checkbox-----------------------
+% Create a figure window:
+
+hardwareInfo = imaqhwinfo('winvideo');
+
+fig = uifigure('Position',[100 100 229 276]);
+
+bg = uibuttongroup('Parent',fig,...
+    'Position',[56 77 123 85]);
+
+for i=1:length(hardwareInfo.DeviceIDs)
+    hi = imaqhwinfo('winvideo', [i]);
+    rb1 = uiradiobutton(bg,'Position',[10 (60+(i*5)) 120 15]);
+    rb1.Text = hi.DefaultFormat;
+end
+
+%-------------------------------------------------------
 % Setando a flag do live tracking
 handles.live = true;
 handles.video = [];
@@ -3691,11 +3708,10 @@ guidata(hObject, handles);
 visualizar_Callback(hObject, eventdata, guidata(hObject))
 
 
-
 handles=guidata(hObject);
 guidata(hObject,handles);
-
 guidata(hObject,handles);
+
 
 % --- Executes on button press in pushbuttonTrack_Ind.
 function pushbuttonTrack_Ind_Callback(hObject, eventdata, handles)
