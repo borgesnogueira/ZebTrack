@@ -400,71 +400,75 @@ for ne=1:n
             
         end
     end
-    %Pré alocando os arrays para o cálculo das métricas de coesão de grupo
-    meandist = zeros(1, length(t));
-    dist = zeros(nanimais, length(t));
-    if e(1).groupInfo || true
-        meanx = mean(posicao{2:end}.x);
-        meany = mean(posicao{2:end}.y);
-        
-        varx = var(posicao{2:end}.x);
-        vary = var(posicao{2:end}.y);
-        
-        for i=1:length(t)
-                        
-            %distance
-            for j=1:nanimais
-               dist(j,i) = norm([posicao{j}.x(i)-meanx posicao{j}.y(i)-meany]);
+    
+    %Group statistcs
+    if nanimais > 1
+        %Pré alocando os arrays para o cálculo das métricas de coesão de grupo
+        meandist = zeros(1, length(t));
+        dist = zeros(nanimais, length(t));
+        if e(1).groupInfo || true
+            meanx = mean(posicao{2:end}.x);
+            meany = mean(posicao{2:end}.y);
+
+            varx = var(posicao{2:end}.x);
+            vary = var(posicao{2:end}.y);
+
+            for i=1:length(t)
+
+                %distance
+                for j=1:nanimais
+                   dist(j,i) = norm([posicao{j}.x(i)-meanx posicao{j}.y(i)-meany]);
+                end
+                meandist(i) = mean(dist(:,i));
+                %disp(['n-ésima variaçao em x: ' num2str(varx(i))]);
+                %disp(['n-ésima posição em x: ' num2str(var(posicao{2:end}.x(i)))]);
             end
-            meandist(i) = mean(dist(:,i));
-            %disp(['n-ésima variaçao em x: ' num2str(varx(i))]);
-            %disp(['n-ésima posição em x: ' num2str(var(posicao{2:end}.x(i)))]);
-        end
-        variancia_media_x = mean(varx);
-        variancia_media_y = mean(vary);
-        vartotal = var(posicao{2:end}.x) * var(posicao{2:end}.y);
-        disp(['Mean distance: ' num2str(mean(meandist)) ' cm'])
-        disp(['Coefficient of group cohesion: ' num2str(vartotal)]);
-        if e(1).report
-           snapnow
-           close(f1);
-           close(f2);
-        end
-            
-    end
-    distanimaloneprocentro = zeros(1, length(t));
-    meandist = zeros(1, length(t));
-    dist = zeros(nanimais, length(t));
-    if e(1).groupInfoVsanimalOne || true
-        varx = var(posicao{2:end}.x);
-        vary = var(posicao{2:end}.y);
-        
-        meanx = mean(posicao{2:end}.x);
-        meany = mean(posicao{2:end}.y);
-        for i =1:length(t)
-            %distance
-            for j=2:nanimais
-               dist(j,i) = norm([posicao{j}.x(i)-meanx posicao{j}.y(i)-meany] );
+            variancia_media_x = mean(varx);
+            variancia_media_y = mean(vary);
+            vartotal = var(posicao{2:end}.x) * var(posicao{2:end}.y);
+            %disp(['Mean distance: ' num2str(mean(meandist)) ' cm'])
+            disp(['Coefficient of group cohesion: ' num2str(vartotal)]);
+            if e(1).report
+               snapnow
+               close(f1);
+               close(f2);
             end
-            meandist(i) = mean(dist(:,i));
-            %Vs animal one
-            %verificar se presta
-            distanimaloneprocentro(i) = norm([meanx-posicao{1}.x(i) meany-posicao{1}.y(i)]);
+
         end
-        disp(['Coefficient of group cohesion(Choosen one Vs Group): ' num2str(var(distanimaloneprocentro))]);
-        if e(1).report
-           snapnow
-           close(f1);
-           close(f2);
+        distanimaloneprocentro = zeros(1, length(t));
+        meandist = zeros(1, length(t));
+        dist = zeros(nanimais, length(t));
+        if e(1).groupInfoVsanimalOne || true
+            varx = var(posicao{2:end}.x);
+            vary = var(posicao{2:end}.y);
+
+            meanx = mean(posicao{2:end}.x);
+            meany = mean(posicao{2:end}.y);
+            for i =1:length(t)
+                %distance
+                for j=2:nanimais
+                   dist(j,i) = norm([posicao{j}.x(i)-meanx posicao{j}.y(i)-meany] );
+                end
+                meandist(i) = mean(dist(:,i));
+                %Vs animal one
+                %verificar se presta
+                distanimaloneprocentro(i) = norm([meanx-posicao{1}.x(i) meany-posicao{1}.y(i)]);
+            end
+            disp(['Mean distance from animal 1 to the centroid of the group: ' num2str(mean(distanimaloneprocentro))]);
+            disp(['Variance of mean distance from animal 1 to the centroid of the group: ' num2str(var(distanimaloneprocentro))]);
+            if e(1).report
+               snapnow
+               close(f1);
+               close(f2);
+            end
+
         end
-            
+        if ~e(1).report && ne~=n 
+             fprintf('\n\n');
+             disp('Press any key to see the results of the next experiment (or Ctrl+C to stop showing results, in case you saved it in another format)')
+             pause
+        end
     end
-    if ~e(1).report && ne~=n 
-         fprintf('\n\n');
-         disp('Press any key to see the results of the next experiment (or Ctrl+C to stop showing results, in case you saved it in another format)')
-         pause
-    end
-     
     
     
 end %do for de cada experimento

@@ -141,10 +141,10 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
                                      %n = floor(caixa(k, 1))
                                   %end
                             %else
-                                %pixel_hue = frameHSV(m,n,1)
-                             %if quad_usado == 14 && frameHSV(m,n,1) >= 0.75
-                                %pixel_hue = frameHSV(m,n,1) - 1
-                                mediaFrameIndividual = mediaFrameIndividual + pixel_hue;
+                            
+                            %if quad_usado = 14 && frameHSV(m,n,1) >= 0.75
+                                %
+                                mediaFrameIndividual = mediaFrameIndividual + frameHSV(m,n,1);
 
                                 disp('****************** TELA DE DEBUG *******************');
                                 debug_imagem(m - floor(caixa(k,2)) + 1, n - floor(caixa(k,1)) + 1, 2) = 255;
@@ -160,8 +160,6 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
             figure, imshow(uint8(debug_imagem));
             
             mediaFrameIndividual =  mediaFrameIndividual/sizeOfBlob;
-            %if quad_usado == 14 && mediaFrameIndividual < 0
-            %   mediaFrameIndividual = mediaFrameIndividual + 1
             mediaTOTAL(k, i) = mediaFrameIndividual; % (media do k-ésimo animal no i-ésimo frame)
             %zerando as variáveis de controle
             mediaFrameIndividual = 0;

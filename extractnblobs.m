@@ -30,7 +30,7 @@
 
 
 
-function [cc,cr,radius,boundingbox,ndetect,avi,foremm] = extractnblobs(Imwork,Imback,V,n,mascara,minpix,maxpix,tol,avi,criavideo,tipsubfundo)
+function [cc,cr,radius,boundingbox,ndetect,avi,foremm, fore] = extractnblobs(Imwork,Imback,V,n,mascara,minpix,maxpix,tol,avi,criavideo,tipsubfundo)
 
 cc=0;
 cr=0;
