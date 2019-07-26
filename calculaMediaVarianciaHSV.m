@@ -26,8 +26,8 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
     dicax = -1;
     dicay = -1;
     
-    pxant=zeros(1,nanimais);
-    pyant=zeros(1,nanimais);
+    pxant = zeros(1,nanimais);
+    pyant = zeros(1,nanimais);
     
     [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os índices final e inicial para a calibração.
     
@@ -83,24 +83,22 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
         %aqui começa a parte que trata do cáculo das médias
         
         frameHSV = rgb2hsv(frames_video(:,:,:,i));  %converte o i-ésimo frame(frame atual) para HSV;
-        %imshow(wframe_log);
-        
-        %wframe_log(:,:)
                    
         %OBS: Somente conseguimos dizer que o k-ésimo elemento do loop é o k-ésimo peixe em todas as situações porque antes de
         %rodar esse loop, as funções extractnblobs() e associateeuclid() fora executadas!
         
         [altura, largura, ~] = size(frameHSV);
         
-        
-        %amostrando = 1;
-        %conta_amostrando = 0;
-        %quad14 = 0;
-        %quad23 = 0;
-        
         %percorrendo de k=1 até o numero de animais (podemos ter mais de um blob por frame)
         for k=1:1:nanimais %blob individual do frame
-
+            
+            %variáveis para o tratamento da descontinuidade das cores no sistema HSV.
+            amostrando = 1; %flag que garante uma pequena amostragem dos píxeis
+            conta_amostrando = 0;
+            quad14 = 0;
+            quad23 = 0;
+            quad_usado = 0;
+            
             sizeOfBlob = 0; %number of pixels/blob;
         
             %disp([num2str(k),num2str(k),num2str(k),num2str(k),num2str(k),'-esimo animal:'])
@@ -110,11 +108,16 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
             %disp(['y0+h = ',num2str(caixa(k,2)+caixa(k,4))])
             %disp(['size wframe = ',num2str(size(wframe))])
             
-            debug_imagem = frames_video(floor(caixa(k, 2)):1:floor( caixa(k, 2) + caixa(k,4)), floor(caixa(k, 1)):1:floor(caixa(k, 1) + caixa(k,3) ), :, i);
-    
-            for m = floor(caixa(k, 2)):1:floor(caixa(k, 2) + caixa(k,4))   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
+            %debug_imagem = frames_video(floor(caixa(k, 2)):1:floor( caixa(k, 2) + caixa(k,4)), floor(caixa(k, 1)):1:floor(caixa(k, 1) + caixa(k,3) ), :, i);
+            
+            %PERCORRENDO A BOUNDING BOX
+            m = floor(caixa(k, 2)); %reiniciando a coordenada m
+            while m <= floor(caixa(k, 2) + caixa(k,4))
+            %for m = floor(caixa(k, 2)):1:floor(caixa(k, 2) + caixa(k,4))   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
                 
-                for n = floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3)) %(goes from 'y0' to 'y0 + height')
+                n = floor(caixa(k, 1)); %reiniciando a coordenada n
+                while n <= floor(caixa(k, 1) + caixa(k,3))
+                %for n = floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3)) %(goes from 'y0' to 'y0 + height')
                     
                     if(detectado(k))
                         %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
@@ -123,55 +126,70 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
                             %Após isso definiremos o espaço onde vamos trabalhar e resetamos o rastreio com o quadrante predominante
                             %Transformação T[h] = h - 1 
                             
-                            %if amostrando
-                                %conta_amostrando = conta_amostrando + 1;
-                                %if frameHSV(m,n,1) >= 0.25 && frameHSV(m,n,1) <= 0.75
-                                    %quad23 = quad23 + 1;
-                                 %else 
-                                    %quad14 = quad14 + 1;
-                                 %end
-                                %if conta_amostrando > 50
-                                    %amostrando = 0
-                                    %if quad23 > quad14
-                                        %quad_usado = 23
-                                     %else
-                                        %quad_usado = 14
-                                     %end
-                                     %m = floor(caixa(k, 2))
-                                     %n = floor(caixa(k, 1))
-                                  %end
-                            %else
-                                %pixel_hue = frameHSV(m,n,1)
-                             %if quad_usado == 14 && frameHSV(m,n,1) >= 0.75
-                                %pixel_hue = frameHSV(m,n,1) - 1
+                            if amostrando
+                                conta_amostrando = conta_amostrando + 1;
+
+                                if frameHSV(m,n,1) >= 0.25 && frameHSV(m,n,1) <= 0.75 %intervalo das cores
+                                    quad23 = quad23 + 1;    %dois quadrantes do lado esquerdo (tons de verde e azul)
+                                else 
+                                    quad14 = quad14 + 1;    %dois quadrantes do lado direito (tons de vermelho e amarelo(?)
+                                end
+                                
+                                %definindo com que quadrante trabalhar e resetando a flag
+                                if conta_amostrando > 50
+                                    amostrando = 0;
+                                    
+                                    if quad23 > quad14
+                                        quad_usado = 23;
+                                    else
+                                        quad_usado = 14;
+                                    end
+                                        %voltamos para a execução normal do código
+                                        m = floor(caixa(k, 2));
+                                        n = floor(caixa(k, 1));
+                                end
+                                
+                            else
+%                                 if quad_usado == 14 && frameHSV(m,n,1) >= 0.75 %quando a cor for o high-red
+%                                     pixel_hue = frameHSV(m,n,1) - 1;
+%                                     mediaFrameIndividual = mediaFrameIndividual + pixel_hue;
+% 
+%                                     disp('****************** TELA DE DEBUG *******************');
+%                                     debug_imagem(m - floor(caixa(k,2)) + 1, n - floor(caixa(k,1)) + 1, 2) = 255;
+%                                     disp(['valor HSV do pixel do ',num2str(k),'-esimo animal é H:',num2str(frameHSV(m,n,1)), ', S:',num2str(frameHSV(m,n,2)), ', V:', num2str(frameHSV(m,n,3))])
+% 
+%                                     sizeOfBlob = sizeOfBlob + 1;
+%                                 end
+%                                 disp(['valor HSV do pixel do ',num2str(k),'-esimo animal é H:',num2str(frameHSV(m,n,1)), ', S:',num2str(frameHSV(m,n,2)), ', V:', num2str(frameHSV(m,n,3))])
+                               
+                                pixel_hue = transformada_HSV( frameHSV(m,n,1), quad_usado);
                                 mediaFrameIndividual = mediaFrameIndividual + pixel_hue;
-
-                                disp('****************** TELA DE DEBUG *******************');
-                                debug_imagem(m - floor(caixa(k,2)) + 1, n - floor(caixa(k,1)) + 1, 2) = 255;
-                                disp(['valor HSV do pixel do ',num2str(k),'-esimo animal é H:',num2str(frameHSV(m,n,1)), ', S:',num2str(frameHSV(m,n,2)), ', V:', num2str(frameHSV(m,n,3))])
-
                                 sizeOfBlob = sizeOfBlob + 1;
-                            %end
+                            end
+                   
                         end
                     end
+                    
+                    n = n + 1; %incrementa a coordenada n
+                
                 end
+                
+                pxant = px;
+                pyant = py;
+                
+                m = m + 1; %incrementa a coordenada m
             end
             
-            figure, imshow(uint8(debug_imagem));
-            
+            %a média deve ser calculada depois de percorrer toda aquela bounding box para o k-ésimo animal
             mediaFrameIndividual =  mediaFrameIndividual/sizeOfBlob;
-            %if quad_usado == 14 && mediaFrameIndividual < 0
-            %   mediaFrameIndividual = mediaFrameIndividual + 1
             mediaTOTAL(k, i) = mediaFrameIndividual; % (media do k-ésimo animal no i-ésimo frame)
+            
             %zerando as variáveis de controle
             mediaFrameIndividual = 0;
-        
+            
         end
-        
-        pxant = px;
-        pyant = py;
-        
-    end
+
+    end 
     
     %aloco previamente por questões de velocidade
     media = zeros(1, nanimais);
@@ -181,14 +199,18 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
     for k=1:1:nanimais
         media(k) = nanmean(mediaTOTAL(k, 1:end));  %MEDIA FINAL CALCULADA: do primeiro ao último frame para o k-ésimo animal.
         variancia(k) = nanvar(mediaTOTAL(k, 1:end)); %VARIÂNCIA FINAL CALCULADA: do primeiro ao último frame para o k-ésimo animal.
-        disp(['media do ',num2str(k),'º peixe: ',num2str(media(k))])
-        disp(['variancia do ',num2str(k),'º peixe: ',num2str(variancia(k))])
+%         disp(['media do ',num2str(k),'º peixe: ',num2str(media(k))])
+%         disp(['variancia do ',num2str(k),'º peixe: ',num2str(variancia(k))])
     end
     
+    %tratamento final
+    for k=1:1:nanimais
+       if media(k)>=0.25 && media(k)<=0.75 && media(k)<0
+          media(k) = media(k) + 1; 
+       end
+    end
+        
 end
-    
-    
-
 
 %Função para converter meu tempo inicial e final em termos dos frames correspondentes.
 function [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video)
@@ -202,6 +224,29 @@ function frames_video = geraVetor_frames_video(video, frame_inicial, frame_final
     for i=frame_inicial:frame_final
         frames_video(i - frame_inicial + 1) = read(video, i);
     end
+end
+
+
+function H_novo = transformada_HSV(H, quadrante_usado)
+    if quadrante_usado == 23
+        H_novo = H;
+    elseif quadrante_usado == 14
+        if H >= 0.75
+            H_novo = H - 1;
+        else
+            H_novo = H;       %se quadrante_usado == 14, então, aqui, necessariamente 0 <= H <= 0.25 (low-red)
+        end
+    end
+end
+
+
+function H_re_novo = transformadaInv_HSV(H, quadrante_usado)
+    if quadrante_usado == 14 && H < 0
+        H_re_novo = H + 1;
+    else
+        H_re_novo = H;
+    end
+        
 end
 
 
