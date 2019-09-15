@@ -19,8 +19,8 @@
 function [pxn,pyn,detectado,caixa] = associateeuclid(nanimais, ndetect, pxa, pya, cx, cy, radius, boundingbox, detectado, dicax, dicay, caixa, l, c, frame)
 
                     %No uso da função associate pxn/pxa representam as variáveis px e py, que
-pxn = pxa;          %guardam as posições em x e y dos frames ao longo dos quadros iniciais e
-pyn = pya;          %final.
+pxn = pxa;          %guardam as posições em x e y dos frames ao longo dos quadros Novo e
+pyn = pya;          %Anterior.
 
 %se nenhum blob for achado minha função termina
 if ndetect==0
@@ -66,8 +66,8 @@ if ndetect < nanimais
         %o blob vai ter sua distância comparada com a de TODOS os animais.
         for k=1:nanimais
             dist = sqrt( (pxa(k) - cx(j))^2 + (pya(k) - cy(j))^2 );     %calcula a distância euclidiana.
-                                                                    %cx/cy correspondente ao 'c'entro de massa do blob,
-                                                                    %já pxa/pya a posição atual do animal k!
+                                                                        %cx/cy correspondente ao 'c'entro de massa do blob,
+                                                                        %já pxa/pya a posição atual do animal k!
             if (dist < mindist) && (detectado(k) == 0)      %pra que a distância do blob seja associada com o do k-ésimo animal, antes, precisa-se ter um k-ésimo animal detectado
                 mindist = dist;
                 maisproximo = k;

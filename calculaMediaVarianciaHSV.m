@@ -20,6 +20,8 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
                                                        , caixa, l, c ...
                                                        , colorida, cor, tipfilt ...
                                                        , INTENSIDADE)
+    %ainda não se entrou em um consenso para um bom valor para a
+    %intensidade, por isso, os valores abaixo foram pré-setados.
     
     %variáveis que preciso para o funcionamento do código mas que não faz
     %sentido passar como parâmetros.
@@ -86,8 +88,6 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
                    
         %OBS: Somente conseguimos dizer que o k-ésimo elemento do loop é o k-ésimo peixe em todas as situações porque antes de
         %rodar esse loop, as funções extractnblobs() e associateeuclid() fora executadas!
-        
-        [altura, largura, ~] = size(frameHSV);
         
         %percorrendo de k=1 até o numero de animais (podemos ter mais de um blob por frame)
         for k=1:1:nanimais %blob individual do frame
