@@ -100,24 +100,13 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
             quad_usado = 0;
             
             sizeOfBlob = 0; %number of pixels/blob;
-        
-            %disp([num2str(k),num2str(k),num2str(k),num2str(k),num2str(k),'-esimo animal:'])
-            %disp(['x0 = ',num2str(caixa(k,1))])
-            %disp(['x0+w = ',num2str(caixa(k,1)+caixa(k,3))])
-            %disp(['y0 = ',num2str(caixa(k,2))])
-            %disp(['y0+h = ',num2str(caixa(k,2)+caixa(k,4))])
-            %disp(['size wframe = ',num2str(size(wframe))])
-            
-            %debug_imagem = frames_video(floor(caixa(k, 2)):1:floor( caixa(k, 2) + caixa(k,4)), floor(caixa(k, 1)):1:floor(caixa(k, 1) + caixa(k,3) ), :, i);
             
             %PERCORRENDO A BOUNDING BOX
             m = floor(caixa(k, 2)); %reiniciando a coordenada m
             while m <= floor(caixa(k, 2) + caixa(k,4))
-            %for m = floor(caixa(k, 2)):1:floor(caixa(k, 2) + caixa(k,4))   %1 = x0, 2=y0, 3=width, 4=height; (goes from 'x0' to 'x0 + widith')
                 
                 n = floor(caixa(k, 1)); %reiniciando a coordenada n
                 while n <= floor(caixa(k, 1) + caixa(k,3))
-                %for n = floor(caixa(k, 1)):1:floor( caixa(k, 1) + caixa(k,3)) %(goes from 'y0' to 'y0 + height')
                     
                     if(detectado(k))
                         %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
@@ -150,18 +139,6 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
                                 end
                                 
                             else
-%                                 if quad_usado == 14 && frameHSV(m,n,1) >= 0.75 %quando a cor for o high-red
-%                                     pixel_hue = frameHSV(m,n,1) - 1;
-%                                     mediaFrameIndividual = mediaFrameIndividual + pixel_hue;
-% 
-%                                     disp('****************** TELA DE DEBUG *******************');
-%                                     debug_imagem(m - floor(caixa(k,2)) + 1, n - floor(caixa(k,1)) + 1, 2) = 255;
-%                                     disp(['valor HSV do pixel do ',num2str(k),'-esimo animal é H:',num2str(frameHSV(m,n,1)), ', S:',num2str(frameHSV(m,n,2)), ', V:', num2str(frameHSV(m,n,3))])
-% 
-%                                     sizeOfBlob = sizeOfBlob + 1;
-%                                 end
-%                                 disp(['valor HSV do pixel do ',num2str(k),'-esimo animal é H:',num2str(frameHSV(m,n,1)), ', S:',num2str(frameHSV(m,n,2)), ', V:', num2str(frameHSV(m,n,3))])
-                               
                                 pixel_hue = transformada_HSV( frameHSV(m,n,1), quad_usado);
                                 mediaFrameIndividual = mediaFrameIndividual + pixel_hue;
                                 sizeOfBlob = sizeOfBlob + 1;
@@ -199,8 +176,6 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
     for k=1:1:nanimais
         media(k) = nanmean(mediaTOTAL(k, 1:end));  %MEDIA FINAL CALCULADA: do primeiro ao último frame para o k-ésimo animal.
         variancia(k) = nanvar(mediaTOTAL(k, 1:end)); %VARIÂNCIA FINAL CALCULADA: do primeiro ao último frame para o k-ésimo animal.
-%         disp(['media do ',num2str(k),'º peixe: ',num2str(media(k))])
-%         disp(['variancia do ',num2str(k),'º peixe: ',num2str(variancia(k))])
     end
     
     %tratamento final
