@@ -77,7 +77,16 @@ function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascar
 
     %percorrendo de k=1 até o numero de animais (podemos ter mais de um blob por frame)
     for k=1:1:nanimais %blob individual do frame
-
+        
+        
+        
+        %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+        debug_imagem = frame(floor(caixa(k, 2))+1:1:floor( caixa(k, 2) + caixa(k,4)), floor(caixa(k, 1)):1:floor(caixa(k, 1) + caixa(k,3) ), :);
+        %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
+        
+        
+        
+        
         %variáveis para o tratamento da descontinuidade das cores no sistema HSV.
         amostrando = 1; %flag que garante uma pequena amostragem dos píxeis
         conta_amostrando = 0;
@@ -125,6 +134,12 @@ function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascar
 
                         else
                             pixel_hue = transformada_HSV( frameHSV(m,n,1), quad_usado);
+                         
+                            %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                            
+                            debug_imagem(m - floor(caixa(k,2)) + 1, n - floor(caixa(k,1)) + 1, 2) = 255;
+                            %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                            
+                            
                             
                             %se meu pixel for um NaN, ao somar a mediaFrameIndividual ele transformara o valor contido em NaN, que não é o que queremos
                             if ~(isnan(pixel_hue))
@@ -143,7 +158,16 @@ function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascar
             
             m = m + 1; %incrementa a coordenada m
         end
-
+        
+        
+        %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        figure, imshow(debug_imagem)
+        %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        
+        
+        
+        
         %a média deve ser calculada depois de percorrer toda aquela bounding box para o k-ésimo animal
         mediaFrameIndividual =  mediaFrameIndividual/sizeOfBlob;
         cor_atual(k) = mediaFrameIndividual; % (media do k-ésimo animal no i-ésimo frame)
