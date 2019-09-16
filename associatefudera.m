@@ -8,11 +8,11 @@
 % depois, trabalhar em cima dos casos em que temos mais blobs que animais ou menos blobs que animais. O que importa, é que no final, associamos, em ambos os caso,
 % as posições dos animais com a dos blobs (a relação é sempre animal(i)<-blob(j) ):
 %     PRIMEIRO CASO(peixe mais próximo com o j-ésimo blob)
-%       (i) pxn(maisproximo) = cx(j);
-%       (ii)pyn(maisproximo) = cy(j);
+%       (i) px_novo(maisproximo) = cx(j);
+%       (ii)py_novo(maisproximo) = cy(j);
 %     SEGUNDO CASO(k-ésimo peixe com o blob mais próximo)
-%       (i)pxn(k) = cx(maisproximo);           
-%       (ii)pyn(k) = cy(maisproximo);
+%       (i)px_novo(k) = cx(maisproximo);           
+%       (ii)py_novo(k) = cy(maisproximo);
 %       
 % Finalmente, para animais não detectados, matemos a sua posição atual!
 
@@ -26,14 +26,14 @@
 %-> vetor_variancia_peixes = vetor que armazena os valores das variâncias das cores de cada peixe
 %       OBS: o tamanho dos três vetores acima É IGUAL.
 
-function [pxn, pyn, detectado, caixa] = associatefudera(nanimais, num_blobs_detected, px_anterior, py_anterior, cx, cy, radius, ...
+function [px_novo, py_novo, detectado, caixa] = associatefudera(nanimais, num_blobs_detected, px_anterior, py_anterior, cx, cy, radius, ...
                                                         boundingbox, detectado, dicax, dicay, caixa, l, c, frame, ...
                                                         cor_atual_peixes, vetor_media_peixes, vetor_variancia_peixes, ...
                                                         alpha)
                                                     
-                        %No uso da função associate pxn/px_anterior representam as variáveis px e py, que
-    pxn = px_anterior;          %guardam as posições em x e y dos frames ao longo dos quadros Novo e
-    pyn = py_anterior;          %Anterior.
+                        %No uso da função associate px_novo/px_anterior representam as variáveis px e py, que
+    px_novo = px_anterior;          %guardam as posições em x e y dos frames ao longo dos quadros Novo e
+    py_novo = py_anterior;          %Anterior.
 
     %se nenhum blob for achado minha função termina
     if num_blobs_detected == 0
@@ -63,6 +63,9 @@ function [pxn, pyn, detectado, caixa] = associatefudera(nanimais, num_blobs_dete
 
     end
     
+    %tratamento quando entra uma cor atual que é um NaN
+    alpha_tratado = alpha;  %alpha_tratado vai mudar se cor_atual_peixes(i) for um NaN! (a gente passa a trabalhar só com distâncias euclidianas)
+  
     
     %INICIO PROPRIAMENTE DITO DA FUNÇÃO
 
@@ -78,12 +81,21 @@ function [pxn, pyn, detectado, caixa] = associatefudera(nanimais, num_blobs_dete
 
             %o blob vai ter sua distância comparada com a de TODOS os animais.
             for k=1:nanimais
+     
+                %tratamento de alpha
+                if isnan(cor_atual_peixes(k))
+                    alpha_tratado = 1;
+                    dist_cor = 0;   %não faz sentido usar a distância no espaço de cores nessas condições;
+                else
+                    alpha_tratado = alpha;
+                    dist_cor = calcula_Mahalanobis(cor_atual_peixes(k), vetor_media_peixes(k), vetor_variancia_peixes(k)); %calcula a distância em um espaço de cores
+                end
+                
                 %cx/cy correspondente ao 'c'entro de massa do blob,
                 %já px_anterior/py_anterior a posição anterior do animal k!
                 dist_euclidiana = sqrt( (px_anterior(k) - cx(j))^2 + (py_anterior(k) - cy(j))^2 );     %calcula a distância euclidiana.
-                dist_cor = calcula_Mahalanobis(cor_atual_peixes(k), vetor_media_peixes(k), vetor_variancia_peixes(k)); %calcula a distância em um espaço de cores 
                 
-                dist = alpha*dist_euclidiana + (1 - alpha)*dist_cor;    %distância ponderada
+                dist = alpha_tratado*dist_euclidiana + (1 - alpha_tratado)*dist_cor;    %distância ponderada
                 
                 if (dist < mindist) && (detectado(k) == 0)      %pra que a distância do blob seja associada com o do k-ésimo animal, antes, precisa-se ter um k-ésimo animal detectado
                     mindist = dist;
@@ -93,8 +105,8 @@ function [pxn, pyn, detectado, caixa] = associatefudera(nanimais, num_blobs_dete
             end
 
             if maisproximo ~= -1                    %só descubro depois de verificar pra todos os peixes no for anterior
-                pxn(maisproximo) = cx(j);           %Associando o centro de massa do blob com a posição do animal
-                pyn(maisproximo) = cy(j);
+                px_novo(maisproximo) = cx(j);           %Associando o centro de massa do blob com a posição do animal
+                py_novo(maisproximo) = cy(j);
 
                 detectado(maisproximo) = 1;         %Aqui digo que foi detectado um blob correspondente ao k-ésimo animal(?)
                 caixa(maisproximo,1:4) = boundingbox(j,:);  %a caixa do peixe vem da bounding box do blob
@@ -111,13 +123,21 @@ function [pxn, pyn, detectado, caixa] = associatefudera(nanimais, num_blobs_dete
         for k=1:nanimais
             maisproximo = -1;
             mindist = l^2 + c^2;
-
+            
+            %tratamento de alpha
+            if isnan(cor_atual_peixes(k))
+                alpha_tratado = 1;
+                dist_cor = 0;   %não faz sentido usar a distância no espaço de cores nessas condições;
+            else
+                alpha_tratado = alpha;
+                dist_cor = calcula_Mahalanobis(cor_atual_peixes(k), vetor_media_peixes(k), vetor_variancia_peixes(k)); %calcula a distância em um espaço de cores
+            end
+            
             for j=1:num_blobs_detected
                 dist_euclidiana = sqrt( (px_anterior(k) - cx(j))^2 + (py_anterior(k) - cy(j))^2 );     %calcula a distância euclidiana entre o centro de massa 
                                                                                                        %do blob e a posição atual do peixe.
-                dist_cor = calcula_Mahalanobis(cor_atual_peixes(k), vetor_media_peixes(k), vetor_variancia_peixes(k));
                 
-                dist = alpha*dist_euclidiana + (1 - alpha)*dist_cor;    %distância ponderada
+                dist = alpha_tratado*dist_euclidiana + (1 - alpha_tratado)*dist_cor;    %distância ponderada
                 
                 if (dist < mindist) && (blobassociado(j)==0)                %blobassociado(j)==0 é para saber se já encontramos o devido peixe correspondente ao blob j
                     mindist = dist;
@@ -127,8 +147,8 @@ function [pxn, pyn, detectado, caixa] = associatefudera(nanimais, num_blobs_dete
             end
 
             if maisproximo ~= -1    %só não haverão blobs mais próximos de animais caso não seja detectado nenhum blob naquele frame!
-                pxn(k) = cx(maisproximo);
-                pyn(k) = cy(maisproximo);
+                px_novo(k) = cx(maisproximo);
+                py_novo(k) = cy(maisproximo);
 
                 blobassociado(maisproximo) = 1;
                 detectado(k) = 1;

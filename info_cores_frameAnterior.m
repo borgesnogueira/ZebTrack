@@ -65,8 +65,8 @@ function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascar
     end
 
     %OLHAR POR PX E PY
-    [px, py, detectado, caixa] = associateeuclid(nanimais, ndetect, pxant, pyant, cx, cy, radius, boundingbox, detectado, dicax, dicay ...
-                                                 , caixa, l, c, frame);
+    [ ~ , ~ , detectado, caixa] = associateeuclid(nanimais, ndetect, pxant, pyant, cx, cy, radius, boundingbox, detectado, dicax, dicay ...
+                                                 ,caixa, l, c, frame);
 
     %aqui começa a parte que trata do cáculo das médias
 
@@ -88,12 +88,11 @@ function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascar
         sizeOfBlob = 0; %number of pixels/blob;
 
         %PERCORRENDO A BOUNDING BOX
-        m = floor(caixa(k, 2)); %reiniciando a coordenada m
+        m = floor(caixa(k, 2))+1; %reiniciando a coordenada m
         while m <= floor(caixa(k, 2) + caixa(k,4))
 
             n = floor(caixa(k, 1)); %reiniciando a coordenada n
             while n <= floor(caixa(k, 1) + caixa(k,3))
-
                 if(detectado(k))
                     %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
                     if(wframe_log(m,n) == 1 &&  frameHSV(m,n,2) >= 0.5 && frameHSV(m,n,3) >= 0.15)
@@ -126,7 +125,12 @@ function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascar
 
                         else
                             pixel_hue = transformada_HSV( frameHSV(m,n,1), quad_usado);
-                            mediaFrameIndividual = mediaFrameIndividual + pixel_hue;
+                            
+                            %se meu pixel for um NaN, ao somar a mediaFrameIndividual ele transformara o valor contido em NaN, que não é o que queremos
+                            if ~(isnan(pixel_hue))
+                                mediaFrameIndividual = mediaFrameIndividual + pixel_hue;
+                            end
+                            
                             sizeOfBlob = sizeOfBlob + 1;
                         end
 
@@ -154,12 +158,22 @@ function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascar
        if cor_atual(k)>=0.25 && cor_atual(k)<=0.75 && cor_atual(k)<0
           cor_atual(k) = cor_atual(k) + 1; 
        end
-    end
+%        disp(['------------ H(peixe ',num2str(k),') = ', num2str(cor_atual(k))])
+    end  
     
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %POTENCIAL PROBLEMA: acharmos como cor atual, Nan (ANALISAR DEPOIS)
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+end
+
+
+function H_novo = transformada_HSV(H, quadrante_usado)
+    if quadrante_usado == 23
+        H_novo = H;
+    elseif quadrante_usado == 14
+        if H >= 0.75
+            H_novo = H - 1;
+        else
+            H_novo = H;       %se quadrante_usado == 14, então, aqui, necessariamente 0 <= H <= 0.25 (low-red)
+        end
+    end
 end
 
