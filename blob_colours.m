@@ -49,30 +49,29 @@ function cor_atual = blob_colours(frame, l, c ...
         
         
         %PERCORRENDO A BOUNDING BOX
-        m = floor(boundingbox(k, 2)); %reiniciando a coordenada m
-        m = int32(max(m,1));
-        if isa(m, 'double')
-            disp(['m antes = ',class(m)])
-        end
+        m = round(boundingbox(k, 2));
+        m = max(m, 1); %reiniciando a coordenada m
+        m = min(m, l);
         
         while m <= floor(boundingbox(k, 2) + boundingbox(k,4))
-            if isa(m, 'double')
-                disp(['m depois = ',class(m)])
-            end
-                
-            n = floor(boundingbox(k, 1)); %reiniciando a coordenada n
-            n = int32(max(n,1));
             
-            if isa(n, 'double')
-                disp(['n antes = ',class(n)])
-            end
+            n = round(boundingbox(k, 1));
+            n = max(n, 1); %reiniciando a coordenada n
+            n = min(n, c);
+            
+            disp(['m = ', num2str(m)])
             
             while n <= floor(boundingbox(k, 1) + boundingbox(k,3))
-                    if isa(n, 'double')
-                        disp(['n antes = ',class(n)])
+                    disp(['n = ', num2str(n)])
+                    
+                    try 
+                        %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
+                        controlando = wframe_log(m,n) == 1;
+                    catch
+                       disp(['m = ', num2str(), '; n = ', num2str(n)]) 
                     end
-                    %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
-                    if(wframe_log(m,n) == 1 &&  frameHSV(m,n,2) >= 0.5 && frameHSV(m,n,3) >= 0.15)
+                    
+                    if(controlando &&  frameHSV(m,n,2) >= 0.5 && frameHSV(m,n,3) >= 0.15)
                         %Amostrar alguns pixels, utilizar uma flag para selecionar os pixels e contamos quantos pixels pertencem a cada quadrante
                         %Após isso definiremos o espaço onde vamos trabalhar e resetamos o rastreio com o quadrante predominante
                         %Transformação T[h] = h - 1 
@@ -95,9 +94,15 @@ function cor_atual = blob_colours(frame, l, c ...
                                 else
                                     quad_usado = 14;
                                 end
-                                    %voltamos para a execução normal do código
-                                    m = floor(boundingbox(k, 2));
-                                    n = floor(boundingbox(k, 1));
+                                
+                                %voltamos para a execução normal do código
+                                m = round(boundingbox(k, 2));
+                                m = max(m, 1); %reiniciando a coordenada m
+                                m = min(m, l);
+                                
+                                n = round(boundingbox(k, 1));
+                                n = max(n, 1); %reiniciando a coordenada n
+                                n = min(n, c);
                             end
 
                         else
@@ -122,13 +127,12 @@ function cor_atual = blob_colours(frame, l, c ...
 
                 n = n + 1; %incrementa a coordenada n
                 n = int32(n);
-%                 disp(['valor de n ',num2str(n)])
 
             end
             
             m = m + 1; %incrementa a coordenada m
             m = int32(m);
-%             disp(['valor de m ',num2str(m)])
+            
         end
         
         

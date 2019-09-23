@@ -405,6 +405,8 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
 
     ti=tic;
     while i<=quadrofim
+        
+        disp(['frame atual: ', num2str(i)])
 
         %variavel global para informar o frame atual para o gui
         numframeatual = i;
@@ -481,18 +483,14 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
                 vetor_cores_atuais = blob_colours(frame, l, c, ...
                                                   cx, cy, radius, boundingbox, ndetect, imdif, ...
                                                   INTENSO);
-                mostra_cores_dos_peixes(vetor_cores_atuais, 0);
                 
                 %definindo um valor para alpha:
-                alpha_distancia = 0.2;    %20% para a distância euclidiana e 80% para a distância no espaço de cores.
+                alpha_distancia = 0;    %20% para a distância euclidiana e 80% para a distância no espaço de cores.
                 
                 [px(:,cont),py(:,cont),detectado,caixa] = associatefudera(nanimais, ndetect, px(:,cont-1), py(:,cont-1), cx, cy, radius,...
                                                                           boundingbox, detectado, dicax, dicay, caixa, l, c, frame, ...
                                                                           vetor_cores_atuais, media, variancia, ...
                                                                           alpha_distancia);
-                [px(:,cont), py(:,cont), detectado, caixa] = associateeuclid(nanimais, ndetect, px(:,cont-1), py(:,cont-1), cx, cy, radius, ...
-                                                                             boundingbox, detectado, dicax, dicay, ...
-                                                                             caixa, l, c, frame);
 
             else
                 [px(:,cont) ,py(:,cont), detectado, caixa] = associateeuclid(nanimais, ndetect, px(:,cont-1), py(:,cont-1), cx, cy, radius, ...
