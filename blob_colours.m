@@ -4,69 +4,17 @@
 %cores dos pixeis.
 
 %OBS:
-%tol = threshrold na track.m, que serve para a subtração de fundo;
-%Imback = wbackg do track.m;
-%criavideo = criavideodiff do track.m;
-%avi = aviobj2 do track.m (o input e não o output nessa função!);
-%wframe = working frame (double e em greyscale);
 %frame = frame do track.m;
 %INTENSIDADE = intervalo que dita o valor do V de HSV, ou seja, dita o limite para que as cores sejam mais 'intensas';
-%V = Vrm do track.m;
 
-function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo ...
-                                              , caixa, l, c ...
-                                              , colorida, cor, tipfilt ...
-                                              , INTENSIDADE)
+function cor_atual = blob_colours(frame, l, c ...
+                                  , cx, cy, radius, boundingbox, ndetect, wframe_log...
+                                  , INTENSIDADE)
                                           
-        
-    %variáveis que preciso para o funcionamento do código mas que não faz
-    %sentido passar como parâmetros.
-    dicax = -1;
-    dicay = -1;
-    
-    pxant = zeros(1,nanimais);
-    pyant = zeros(1,nanimais);
-                              
+
     %VARIÁVEIS DE CONTROLE DA FUNÇÃO: o vetor de cores atuais e a media das cores num frame
-    cor_atual = zeros(nanimais); %vetor com quantidade de espaços correspondentes as cores de cada animal.
+    cor_atual = zeros(ndetect); %vetor com quantidade de espaços correspondentes as cores de cada animal.
     mediaFrameIndividual = 0; %(Em 1 peixe e muda em cada loop).
-
-    %converte pra tons de cinza e double pra trabalhar
-    if colorida || (cor == 1)
-        wframe = double(frame);
-    else
-        wframe  = double(rgb2gray(frame));
-    end
-
-
-    %faz a diferenca so na area de interesse e extrai o centro de massas
-    %das regioes (blobs) maiores que minpix
-    [cx, cy, radius, boundingbox, ndetect, ~ , ~ , wframe_log] = extractnblobs(wframe, Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo);
-
-    %vetor que irá decorar cada animal que ja foi associado a um blob
-    detectado = zeros(nanimais);
-
-    if pxant(1) ~= 0 %global variable;
-
-        if  tipfilt == 1
-            %previsao do filtro de kalman
-            for j=1:nanimais
-                pdecorada = [pxant(j); pyant(j)];
-                predita = A*[pdecorada;v(:,j)] + Bu;
-                %garantir que esta dentro da imagem
-                predita(1) = min(max(predita(1),1),c);
-                predita(2) = min(max(predita(2),1),l);
-                pxant(j) = predita(1);
-                pyant(j) = predita(2);
-                v(:,j) = predita(3:4);
-            end
-        end
-
-    end
-
-    %OLHAR POR PX E PY
-    [ ~ , ~ , detectado, caixa] = associateeuclid(nanimais, ndetect, pxant, pyant, cx, cy, radius, boundingbox, detectado, dicax, dicay ...
-                                                 ,caixa, l, c, frame);
 
     %aqui começa a parte que trata do cáculo das médias
 
@@ -76,12 +24,12 @@ function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascar
     %rodar esse loop, as funções extractnblobs() e associateeuclid() fora executadas!
 
     %percorrendo de k=1 até o numero de animais (podemos ter mais de um blob por frame)
-    for k=1:1:nanimais %blob individual do frame
+    for k=1:1:ndetect %blob individual do frame
         
         
         
         %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-        debug_imagem = frame(floor(caixa(k, 2))+1:1:floor( caixa(k, 2) + caixa(k,4)), floor(caixa(k, 1)):1:floor(caixa(k, 1) + caixa(k,3) ), :);
+%         debug_imagem = frame(floor(boundingbox(k, 2)):1:floor( boundingbox(k, 2) + boundingbox(k,4)), floor(boundingbox(k, 1)):1:floor(boundingbox(k, 1) + boundingbox(k,3) ), :);
         %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
         
         
@@ -95,14 +43,34 @@ function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascar
         quad_usado = 0;
 
         sizeOfBlob = 0; %number of pixels/blob;
-
+        
+        
+        disp(['boundingbox:', num2str(boundingbox(k,:))]);
+        
+        
         %PERCORRENDO A BOUNDING BOX
-        m = floor(caixa(k, 2))+1; %reiniciando a coordenada m
-        while m <= floor(caixa(k, 2) + caixa(k,4))
-
-            n = floor(caixa(k, 1)); %reiniciando a coordenada n
-            while n <= floor(caixa(k, 1) + caixa(k,3))
-                if(detectado(k))
+        m = floor(boundingbox(k, 2)); %reiniciando a coordenada m
+        m = int32(max(m,1));
+        if isa(m, 'double')
+            disp(['m antes = ',class(m)])
+        end
+        
+        while m <= floor(boundingbox(k, 2) + boundingbox(k,4))
+            if isa(m, 'double')
+                disp(['m depois = ',class(m)])
+            end
+                
+            n = floor(boundingbox(k, 1)); %reiniciando a coordenada n
+            n = int32(max(n,1));
+            
+            if isa(n, 'double')
+                disp(['n antes = ',class(n)])
+            end
+            
+            while n <= floor(boundingbox(k, 1) + boundingbox(k,3))
+                    if isa(n, 'double')
+                        disp(['n antes = ',class(n)])
+                    end
                     %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
                     if(wframe_log(m,n) == 1 &&  frameHSV(m,n,2) >= 0.5 && frameHSV(m,n,3) >= 0.15)
                         %Amostrar alguns pixels, utilizar uma flag para selecionar os pixels e contamos quantos pixels pertencem a cada quadrante
@@ -128,15 +96,15 @@ function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascar
                                     quad_usado = 14;
                                 end
                                     %voltamos para a execução normal do código
-                                    m = floor(caixa(k, 2));
-                                    n = floor(caixa(k, 1));
+                                    m = floor(boundingbox(k, 2));
+                                    n = floor(boundingbox(k, 1));
                             end
 
                         else
                             pixel_hue = transformada_HSV( frameHSV(m,n,1), quad_usado);
                          
                             %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                            
-                            debug_imagem(m - floor(caixa(k,2)) + 1, n - floor(caixa(k,1)) + 1, 2) = 255;
+%                             debug_imagem(m - floor(boundingbox(k,2)) + 1, n - floor(boundingbox(k,1)) + 1, 2) = 255;
                             %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                             
                             
@@ -150,18 +118,22 @@ function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascar
                         end
 
                     end
-                end
+  
 
                 n = n + 1; %incrementa a coordenada n
+                n = int32(n);
+%                 disp(['valor de n ',num2str(n)])
 
             end
             
             m = m + 1; %incrementa a coordenada m
+            m = int32(m);
+%             disp(['valor de m ',num2str(m)])
         end
         
         
         %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        figure, imshow(debug_imagem)
+%         figure, imshow(debug_imagem)
         %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
         
@@ -178,7 +150,7 @@ function cor_atual = info_cores_frameAnterior(frame, Imback, V, nanimais, mascar
     end
         
     %tratamento final
-    for k=1:1:nanimais
+    for k=1:1:ndetect
        if cor_atual(k)>=0.25 && cor_atual(k)<=0.75 && cor_atual(k)<0
           cor_atual(k) = cor_atual(k) + 1; 
        end

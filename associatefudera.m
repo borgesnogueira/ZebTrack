@@ -21,14 +21,14 @@
 %-> caixa = recebe uma bounding box de um dado blob quando realizada a associação adequada (do k-esimo peixe e com 4 coordenadas, ou seja, k x 4)
 %-> cx/cy = posições atuais do CENTRO DE MASSA do blob
 %-> px_anterior/py_anterior = posições atuais do peixe(anteriores)
-%-> cor_atual_peixes = vetor que armazena os valores escalares das cores atuais dos peixes
+%-> cor_atual_blobs = vetor que armazena os valores escalares das cores atuais dos peixes
 %-> vetor_media_peixes = vetor que armazena os valores das cores médias de cada peixe
 %-> vetor_variancia_peixes = vetor que armazena os valores das variâncias das cores de cada peixe
 %       OBS: o tamanho dos três vetores acima É IGUAL.
 
 function [px_novo, py_novo, detectado, caixa] = associatefudera(nanimais, num_blobs_detected, px_anterior, py_anterior, cx, cy, radius, ...
                                                         boundingbox, detectado, dicax, dicay, caixa, l, c, frame, ...
-                                                        cor_atual_peixes, vetor_media_peixes, vetor_variancia_peixes, ...
+                                                        cor_atual_blobs, vetor_media_peixes, vetor_variancia_peixes, ...
                                                         alpha)
                                                     
                         %No uso da função associate px_novo/px_anterior representam as variáveis px e py, que
@@ -64,7 +64,7 @@ function [px_novo, py_novo, detectado, caixa] = associatefudera(nanimais, num_bl
     end
     
     %tratamento quando entra uma cor atual que é um NaN
-    alpha_tratado = alpha;  %alpha_tratado vai mudar se cor_atual_peixes(i) for um NaN! (a gente passa a trabalhar só com distâncias euclidianas)
+    alpha_tratado = alpha;  %alpha_tratado vai mudar se cor_atual_blobs(i) for um NaN! (a gente passa a trabalhar só com distâncias euclidianas)
   
     
     %INICIO PROPRIAMENTE DITO DA FUNÇÃO
@@ -77,18 +77,18 @@ function [px_novo, py_novo, detectado, caixa] = associatefudera(nanimais, num_bl
         for j=1:num_blobs_detected %percorre os blobs
 
             maisproximo = -1;       %Flag para o caso de não houverem animais mais próximos
-            mindist = l^2 + c^2;
-
+            primeiravez = true;
+            
             %o blob vai ter sua distância comparada com a de TODOS os animais.
             for k=1:nanimais
      
                 %tratamento de alpha
-                if isnan(cor_atual_peixes(k))
+                if isnan(cor_atual_blobs(k))
                     alpha_tratado = 1;
                     dist_cor = 0;   %não faz sentido usar a distância no espaço de cores nessas condições;
                 else
                     alpha_tratado = alpha;
-                    dist_cor = calcula_Mahalanobis(cor_atual_peixes(k), vetor_media_peixes(k), vetor_variancia_peixes(k)); %calcula a distância em um espaço de cores
+                    dist_cor = calcula_Mahalanobis(cor_atual_blobs(j), vetor_media_peixes(k), vetor_variancia_peixes(k)); %calcula a distância em um espaço de cores
                 end
                 
                 %cx/cy correspondente ao 'c'entro de massa do blob,
@@ -97,7 +97,12 @@ function [px_novo, py_novo, detectado, caixa] = associatefudera(nanimais, num_bl
                 
                 dist = alpha_tratado*dist_euclidiana + (1 - alpha_tratado)*dist_cor;    %distância ponderada
                 
-                if (dist < mindist) && (detectado(k) == 0)      %pra que a distância do blob seja associada com o do k-ésimo animal, antes, precisa-se ter um k-ésimo animal detectado
+                if primeiravez && detectado(k) == 0
+                   primeiravez = false;
+                   mindist = dist;
+                end
+                
+                if (dist <= mindist) && (detectado(k) == 0)      %pra que a distância do blob seja associada com o do k-ésimo animal, antes, precisa-se ter um k-ésimo animal detectado
                     mindist = dist;
                     maisproximo = k;
                 end
@@ -122,15 +127,15 @@ function [px_novo, py_novo, detectado, caixa] = associatefudera(nanimais, num_bl
         %para cada animal, associa o blob mais proximo
         for k=1:nanimais
             maisproximo = -1;
-            mindist = l^2 + c^2;
+            primeiravez = true;
             
             %tratamento de alpha
-            if isnan(cor_atual_peixes(k))
+            if isnan(cor_atual_blobs(k))
                 alpha_tratado = 1;
                 dist_cor = 0;   %não faz sentido usar a distância no espaço de cores nessas condições;
             else
                 alpha_tratado = alpha;
-                dist_cor = calcula_Mahalanobis(cor_atual_peixes(k), vetor_media_peixes(k), vetor_variancia_peixes(k)); %calcula a distância em um espaço de cores
+                dist_cor = calcula_Mahalanobis(cor_atual_blobs(k), vetor_media_peixes(k), vetor_variancia_peixes(k)); %calcula a distância em um espaço de cores
             end
             
             for j=1:num_blobs_detected
@@ -139,7 +144,12 @@ function [px_novo, py_novo, detectado, caixa] = associatefudera(nanimais, num_bl
                 
                 dist = alpha_tratado*dist_euclidiana + (1 - alpha_tratado)*dist_cor;    %distância ponderada
                 
-                if (dist < mindist) && (blobassociado(j)==0)                %blobassociado(j)==0 é para saber se já encontramos o devido peixe correspondente ao blob j
+                if primeiravez && detectado(j) == 0
+                    primeiravez = false;
+                    mindist = dist;
+                end
+                
+                if (dist <= mindist) && (blobassociado(j)==0)                %blobassociado(j)==0 é para saber se já encontramos o devido peixe correspondente ao blob j
                     mindist = dist;
                     maisproximo = j;
                 end
@@ -163,5 +173,5 @@ function [px_novo, py_novo, detectado, caixa] = associatefudera(nanimais, num_bl
 end
 
 function  distanciaMahalanobis = calcula_Mahalanobis(valor_cor_atual, media, variancia)
-    distanciaMahalanobis = (valor_cor_atual - media)/variancia;
+    distanciaMahalanobis = abs((valor_cor_atual - media))/variancia;
 end
