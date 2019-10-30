@@ -204,8 +204,7 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
     disp('entrei aqui alguma vez (antes for-animals)')
     %tratamento final
     for k=1:1:nanimais
-       if media(k)>=0.25 && media(k)<=0.75 && media(k)<0
-          disp('entrei aqui alguma vez?')
+       if media(k)<0
           media(k) = media(k) + 1; 
        end
     end

@@ -61,7 +61,6 @@ for j=1:ndetect
     end
 end
 
-
 for j=1:ndetect
     for k=j:nanimais
         
