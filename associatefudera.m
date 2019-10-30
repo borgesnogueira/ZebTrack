@@ -27,9 +27,9 @@
 %       OBS: o tamanho dos três vetores acima É IGUAL.
 
 function [px_novo, py_novo, detectado, caixa] = associatefudera(nanimais, num_blobs_detected, px_anterior, py_anterior, cx, cy, radius, ...
-                                                        boundingbox, detectado, dicax, dicay, caixa, l, c, frame, ...
-                                                        cor_atual_blobs, vetor_media_peixes, vetor_variancia_peixes, ...
-                                                        alpha)
+                                                                boundingbox, detectado, dicax, dicay, caixa, l, c, frame, ...
+                                                                cor_atual_blobs, vetor_media_peixes, vetor_variancia_peixes, ...
+                                                                alpha)
                                                     
                         %No uso da função associate px_novo/px_anterior representam as variáveis px e py, que
     px_novo = px_anterior;          %guardam as posições em x e y dos frames ao longo dos quadros Novo e
@@ -40,7 +40,8 @@ function [px_novo, py_novo, detectado, caixa] = associatefudera(nanimais, num_bl
         return
     end
 
-    %verifica a dica (caso em que a pessoa que está fazendo o rastreio julgar necessário assinalar o local em que o peixe está)
+    %verifica se houveram dicas. Se houve (caso do if) a posição anterior
+    %para o animal mais proximo, vira a posição da dica.
     if dicax ~=-1 && dicay ~=-1
 
         %acha o animal mais proximo da dica
@@ -51,7 +52,7 @@ function [px_novo, py_novo, detectado, caixa] = associatefudera(nanimais, num_bl
 
             if dist < mindist           %atualizar a mindist para a distancia entre os pontos e as dicas
                 mindist = dist;
-                maisproximod = k;       %pego o indice do animal mais proximo(?)
+                maisproximod = k;       %pego o indice do animal mais proximo
             end
 
         end

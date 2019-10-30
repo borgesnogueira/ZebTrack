@@ -45,7 +45,7 @@ function cor_atual = blob_colours(frame, l, c ...
         sizeOfBlob = 0; %number of pixels/blob;
         
         
-        disp(['boundingbox:', num2str(boundingbox(k,:))]);
+%         disp(['boundingbox:', num2str(boundingbox(k,:))]);
         
         
         %PERCORRENDO A BOUNDING BOX
@@ -59,10 +59,8 @@ function cor_atual = blob_colours(frame, l, c ...
             n = max(n, 1); %reiniciando a coordenada n
             n = min(n, c);
             
-            disp(['m = ', num2str(m)])
-            
             while n <= floor(boundingbox(k, 1) + boundingbox(k,3))
-                    disp(['n = ', num2str(n)])
+%                     disp(['m = ', num2str(m), ';    n = ', num2str(n)])
                     
                     try 
                         %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
