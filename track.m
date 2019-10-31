@@ -498,7 +498,9 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
                                                                              caixa, l, c, frame);
             end
 
-
+            %zera as dicas
+            dicax = -1;
+            dicay = -1;
 
             %salva as imagens e mascaras dos peixes achados
             %              for j=1:nanimais
