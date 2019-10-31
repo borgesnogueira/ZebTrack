@@ -62,12 +62,13 @@ end
 
 %enquanto tiver aniamis nao associados ou elementos a serem procurados na
 %matriz md
-while ~isempty(find(detectado==0)) && ~isempty(find(md~=(l^2 + c^2)));
+while ~isempty(find(detectado==0, 1)) && ~isempty(find(md~=(l^2 + c^2), 1))
     %acha o minimo atual
     [blob,animal]=find(md==min(min(md)));
-    md(blob,:) = ones(1,nanimais)*(l^2 + c^2); %bota um valor alto para nao ser mais o minimo. nma verdade pode botar na linha inteira, ja que esse blob ja foi associado
-    
+       
     if ~detectado(animal) %associa o peixe c ao blob l, se ele ainda nao foi associado a algum blob
+        md(blob,:) = ones(1,nanimais)*(l^2 + c^2); %bota um valor alto para nao ser mais o minimo na linha e coluna inteira, ja que esse blob e animal serão associados
+        md(:,animal) = ones(ndetect,1)*(l^2 + c^2);
         detectado(animal) = 1;
         pxn(animal) = cx(blob);           %Associando o centro de massa do blob com a posição do animal
         pyn(animal) = cy(blob);
