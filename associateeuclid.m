@@ -53,12 +53,24 @@ end
 
 %INICIO PROPRIAMENTE DITO DA FUNÇÃO ASSOCIATE
 
+
+%calcular as cores de cada blob (se tiver), e checar se a cor de algum blob se parece
+%com algum label ( |cor| < media +-3sigma )
+%se achar, decorar que tal animal e tal blob foi associado
+%detectado(k) = 1
+%blobdetect(j) = 1
+%se dois blobs "gostarem" do mesmo label, na da pra ninguem
+
+
 md = ones(ndetect,nanimais)*(l^2 + c^2);
 for j=1:ndetect %blob j
+    %preencher com os maximos as linhas e colunas de quem ja foi associado
     for k=1:nanimais %animal k
         md(j,k) = sqrt( (pxa(k) - cx(j))^2 + (pya(k) - cy(j))^2 ); 
     end
 end
+
+
 
 %enquanto tiver aniamis nao associados ou elementos a serem procurados na
 %matriz md
