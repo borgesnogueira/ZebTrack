@@ -457,7 +457,7 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
 
 
         %vetor que irá decorar cada animal que ja foi associado a um blob
-        detectado=zeros(nanimais);
+        detectado=zeros(1,nanimais);
 
 
 

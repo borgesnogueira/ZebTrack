@@ -53,7 +53,7 @@ end
 
 %INICIO PROPRIAMENTE DITO DA FUNÇÃO ASSOCIATE
 
-blobdetectado = zeros(1,ndetect);
+blobdetectado = zeros(ndetect);
 
 %calcular as cores de cada blob (se tiver), e checar se a cor de algum blob se parece
 %com algum label ( |cor| < media +-3sigma )
@@ -74,17 +74,16 @@ end
 
 
 %enquanto tiver aniamis nao associados ou blobs nao associados
-while ~isempty(find(detectado==0, 1)) && ~isempty(find(blobdetectado==0, 1))
+while ~isempty(find(detectado==0, 1)) && ~isempty(find(md~=(l^2 + c^2), 1))
     %acha o minimo atual
     %[blob,animal]=find(md==min(min(md)));
     [value,ind] = min(md(:));
     [blob,animal] = ind2sub(size(md),ind);
        
-    if ~detectado(animal) && ~blobdetectado(blob) %associa o animal ao blob se eles estiverem livres
+    if ~detectado(animal) && ~blobdetectado(blob) %associa o peixe c ao blob l, se ele ainda nao foi associado a algum blob
         md(blob,:) = ones(1,nanimais)*(l^2 + c^2); %bota um valor alto para nao ser mais o minimo na linha e coluna inteira, ja que esse blob e animal serão associados
         md(:,animal) = ones(ndetect,1)*(l^2 + c^2);
         detectado(animal) = 1;
-        blobdetectado(blob) = 1;
         pxn(animal) = cx(blob);           %Associando o centro de massa do blob com a posição do animal
         pyn(animal) = cy(blob);
         caixa(animal,1:4) = boundingbox(blob,:);
