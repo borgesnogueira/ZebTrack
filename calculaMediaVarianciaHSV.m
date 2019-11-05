@@ -58,7 +58,7 @@ function [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tem
         [cx, cy, radius, boundingbox, ndetect, ~,~ ,wframe_log] = extractnblobs(wframe, Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo);
     
         %vetor que irá decorar cada animal que ja foi associado a um blob
-        detectado = zeros(nanimais);
+        detectado = zeros(1,nanimais);
     
         if pxant(1) ~= 0 %global variable;
 
