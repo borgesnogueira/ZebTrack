@@ -326,6 +326,12 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
     nareasexc = length(areasexc);
 
     distperc = zeros(1,nanimais); %distancia percorrida por cada animal
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % listagem de passagem por areas
+    % por mtxslv
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if tipfilt == 1
         % Kalman filter para cada animal
