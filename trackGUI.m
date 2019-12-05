@@ -30,7 +30,7 @@ function varargout = trackGUI(varargin)
 
 % Edit the above text to modify the response to help trackGUI
 
-% Last Modified by GUIDE v2.5 13-Mar-2019 16:17:07
+% Last Modified by GUIDE v2.5 05-Dec-2019 14:47:02
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1995,6 +1995,7 @@ handles.e(1).backgplot = get(handles.backgplot,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
 handles.e(1).heat_map = get(handles.HeatMap,'Value');
+handles.e(1).areasequence = get(handles.areasequence,'Value');
 handles.e(1).groupInfo = false;
 handles.e(1).groupInfoVsanimalOne = false;
 
@@ -2997,6 +2998,7 @@ handles.e(1).backgplot = get(handles.backgplot,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
 handles.e(1).heat_map = get(handles.HeatMap,'Value');
+handles.e(1).areasequence = get(handles.areasequence,'Value');
 handles.e(1).groupInfo = false;
 handles.e(1).groupInfoVsanimalOne = false;
 
@@ -3727,3 +3729,12 @@ function checkboxTrack_Ind_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 guidata(hObject,handles);
 % Hint: get(hObject,'Value') returns toggle state of checkboxTrack_Ind
+
+
+% --- Executes on button press in areasequence.
+function areasequence_Callback(hObject, eventdata, handles)
+% hObject    handle to areasequence (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of areasequence

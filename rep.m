@@ -402,7 +402,7 @@ for ne=1:n
     end
     
     %Group statistcs
-    if nanimais > 1
+    if nanimais > 1  %so faz as estatisticas de grupo se for mais de um animal
         %Pré alocando os arrays para o cálculo das métricas de coesão de grupo
         meandist = zeros(1, length(t));
         dist = zeros(nanimais, length(t));
@@ -470,5 +470,11 @@ for ne=1:n
         end
     end
     
+    if e(1).areasequence
+        disp('uhu!');
+       %codigo do mateus 
+        
+        
+    end
     
 end %do for de cada experimento
