@@ -1061,6 +1061,7 @@ handles.e(1).backgplot = get(handles.backgplot,'Value');
 handles.e(1).angularvelocity = get(handles.angularvelocity,'Value');
 handles.e(1).angularvelocitythreshold = get(handles.angvelthres,'Value');
 handles.e(1).heat_map = get(handles.HeatMap,'Value');
+handles.e(1).areasequence = get(handles.areasequence,'Value');
 handles.e(1).groupInfo = false;
 handles.e(1).groupInfoVsanimalOne = false;
 guidata(hObject, handles);
