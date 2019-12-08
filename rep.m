@@ -471,10 +471,37 @@ for ne=1:n
     end
     
     if e(1).areasequence
+        % data receives e(1).tempoareas and its shape
+        data = e(1).tempoareas
+        [lines, cells] = size(data)
+
+        % In the first step, let's build a pair of vectors
+        % which elements are the ti and tf elements, at the current step
+        ti_vector = []
+        tf_vector = []
+
+        for i = 1:cells
+            ti_vector(i) = data{1,i}.ti(1)
+            tf_vector(i) = data{1,i}.tf(1)
+        end
+
+        % finding the lowest value and its position
+        [low_value, pos] = min(ti_vector);
+        
+        % Preparing the sentence to print
+        title = ['Area ', num2str(pos),' :']
+        first_sentence = ['Came in at ', num2str(low_value)]
+        last_sentence =  ['Left at ', num2str(tf_vector(pos))]
+        
+        % Erasing the just-found elements
+        data{1,pos}.ti = data{1,pos}.ti(2:end)
+        data{1,pos}.tf = data{1,pos}.tf(2:end)
         disp('uhu!');
-       %codigo do mateus 
-        
-        
+        disp('ииииииииииииииииии')
+        disp(title)
+        disp(first_sentence)
+        disp(last_sentence)        
+        %codigo do mateus         
     end
     
 end %do for de cada experimento
