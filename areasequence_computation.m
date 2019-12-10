@@ -17,6 +17,13 @@ end
 % while the ti_vector not full of intmax, keep the loop going 
 while not(isempty(ti_vector(ti_vector<intmax)))
 	
+    %testing loop, remove later
+    disp('data: ')
+    for i=1:cells
+        disp(data{1,i})
+    end
+    % testing loop, remove later
+    
 	% In the first step, let's build a pair of vectors
 	% which elements are the ti and tf elements, at the current step
 	ti_vector = [];
@@ -24,7 +31,7 @@ while not(isempty(ti_vector(ti_vector<intmax)))
 	
 	for i = 1:cells
         disp(i);
-		ti_vector(i) = data{1,i}.ti(1);
+		ti_vector(i) = data{1,i}.ti(1)
 		tf_vector(i) = data{1,i}.tf(1);
 	end
 
@@ -43,7 +50,14 @@ while not(isempty(ti_vector(ti_vector<intmax)))
     
 	% is the ti_vector 1x1 or not?
 	[a,b] = size(ti_vector);
-
+    
+    %debugging only, remove later
+    disp('a = ')
+    disp(a)
+    disp('b = ')
+    disp(b)
+    %debugging only, remove later
+    
 	if b ~= 1
 		% Erasing the just-found elements 
 		data{1,pos}.ti = data{1,pos}.ti(2:end);
