@@ -33,15 +33,20 @@ while not(isempty(ti_vector(ti_vector<intmax)))
     % finding the lowest value and its position
     [low_value, pos] = min(ti_vector);
     
-    % Preparing the sentence to print
-    title = ['Area ', num2str(pos),' :'];
-    first_sentence = ['    Came in at ', num2str(low_value)];
-    last_sentence =  ['    Left at ', num2str(tf_vector(pos))];
-    
-    % printing...
-    disp(title);
-    disp(first_sentence);
-    disp(last_sentence);
+    % the following condition is written in order to correct
+    % the unknown, so far, behaviour of the algorithm
+    % of finding an intmax as "low_value"
+    if low_value ~= intmax
+        % Preparing the sentence to print
+        title = ['Area ', num2str(pos),' :'];
+        first_sentence = ['    Came in at ', num2str(low_value)];
+        last_sentence =  ['    Left at ', num2str(tf_vector(pos))];
+        
+        % printing...
+        disp(title);
+        disp(first_sentence);
+        disp(last_sentence);
+    end
     
     % is the ti_vector 1x1 or not?
     [a,b] = size(data{1,pos}.ti);
