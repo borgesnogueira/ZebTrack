@@ -19,6 +19,12 @@ while not(isempty(ti_vector(ti_vector<intmax)))
     if isempty(ti_vector(ti_vector<intmax))
         disp('is empty, yeah!! Im in the beginning')
     end
+    %testing loop, remove later
+%     disp('data: ')
+%     for i=1:cells
+%         disp(data{1,i})
+%     end
+    % testing loop, remove later
     
     % In the first step, let's build a pair of vectors
     % which elements are the ti and tf elements, at the current step
@@ -26,6 +32,7 @@ while not(isempty(ti_vector(ti_vector<intmax)))
     tf_vector = [];
     
     for i = 1:cells
+        %disp(i);
         ti_vector(i) = data{1,i}.ti(1);
         tf_vector(i) = data{1,i}.tf(1);
     end
@@ -35,8 +42,8 @@ while not(isempty(ti_vector(ti_vector<intmax)))
     
     % Preparing the sentence to print
     title = ['Area ', num2str(pos),' :'];
-    first_sentence = ['    Came in at ', num2str(low_value)];
-    last_sentence =  ['    Left at ', num2str(tf_vector(pos))];
+    first_sentence = ['Came in at ', num2str(low_value)];
+    last_sentence =  ['Left at ', num2str(tf_vector(pos))];
     
     % printing...
     disp(title);
@@ -54,6 +61,10 @@ while not(isempty(ti_vector(ti_vector<intmax)))
         % Do not erase, just put intmax in it
         data{1,pos}.ti = intmax;
         data{1,pos}.tf = intmax;
+    end
+    
+    if isempty(ti_vector(ti_vector<intmax))
+        disp('is empty, yeah!! Im in the end')
     end
     
 end
