@@ -20,10 +20,10 @@ while not(isempty(ti_vector(ti_vector<intmax)))
         disp('is empty, yeah!! Im in the beginning')
     end
     %testing loop, remove later
-    disp('data: ')
-    for i=1:cells
-        disp(data{1,i})
-    end
+%     disp('data: ')
+%     for i=1:cells
+%         disp(data{1,i})
+%     end
     % testing loop, remove later
     
     % In the first step, let's build a pair of vectors
@@ -32,8 +32,8 @@ while not(isempty(ti_vector(ti_vector<intmax)))
     tf_vector = [];
     
     for i = 1:cells
-        disp(i);
-        ti_vector(i) = data{1,i}.ti(1)
+        %disp(i);
+        ti_vector(i) = data{1,i}.ti(1);
         tf_vector(i) = data{1,i}.tf(1);
     end
     
@@ -54,10 +54,10 @@ while not(isempty(ti_vector(ti_vector<intmax)))
     [a,b] = size(data{1,pos}.ti);
     
     %debugging only, remove later
-    disp('a = ')
-    disp(a)
-    disp('b = ')
-    disp(b)
+%     disp('a = ')
+%     disp(a)
+%     disp('b = ')
+%     disp(b)
     %debugging only, remove later
     
     if b ~= 1
@@ -70,6 +70,10 @@ while not(isempty(ti_vector(ti_vector<intmax)))
         data{1,pos}.tf = intmax;
         disp('intmaxed!!!!!')
     end
+    
+    %debugging only, remove later
+    disp(ti_vector);
+    %debugging only, remove later
     
     if isempty(ti_vector(ti_vector<intmax))
         disp('is empty, yeah!! Im in the end')
