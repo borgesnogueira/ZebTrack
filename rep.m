@@ -471,7 +471,7 @@ for ne=1:n
     end
     
     if e(1).areasequence
-        disp('katon! Goukakyu no jutsu!')
+        areasequence_computation(e(1).tempoareas)
     end
     
 end %do for de cada experimento
