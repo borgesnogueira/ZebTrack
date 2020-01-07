@@ -36,7 +36,8 @@ while not(isempty(ti_vector(ti_vector<intmax)))
     % the following condition is written in order to correct
     % the unknown, so far, behaviour of the algorithm
     % of finding an intmax as "low_value"
-    if low_value ~= intmax
+
+    if low_value ~= intmax & ~(low_value==0 & tf_vector(pos)==0) 
         % Preparing the sentence to print
         title = ['Area ', num2str(pos),' :'];
         first_sentence = ['    Came in at ', num2str(low_value)];
