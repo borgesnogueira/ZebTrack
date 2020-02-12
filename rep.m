@@ -137,6 +137,8 @@ for ne=1:n
                          disp('      Animal did not enter the area');
                      end
                 end
+                %%CODIGO DE ASSIS AQUI
+                
             end
         end
     end
@@ -470,8 +472,8 @@ for ne=1:n
         end
     end
     
-    if e(1).areasequence
-        areasequence_computation(e(1).tempoareas)
+    if e(ne).areasequence
+        areasequence_computation(e(ne).tempoareas)
     end
     
 end %do for de cada experimento
