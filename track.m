@@ -412,7 +412,7 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
     ti=tic;
     while i<=quadrofim
         
-        disp(['frame atual: ', num2str(i)])
+        %disp(['frame atual: ', num2str(i)])
 
         %variavel global para informar o frame atual para o gui
         numframeatual = i;

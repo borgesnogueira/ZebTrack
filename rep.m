@@ -472,8 +472,8 @@ for ne=1:n
         end
     end
     
-    if e(ne).areasequence
-        areasequence_computation(e(ne).tempoareas)
+    if e(1).areasequence
+        areasequence_computation(tempoareas)
     end
     
 end %do for de cada experimento
