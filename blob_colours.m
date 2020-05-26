@@ -1,6 +1,6 @@
-%Esta funcão é usada somente dentro do algoritmo de associação no momento
-%em que se vai calcular a distância dentro de um espaço de cores. Para que
-%isso aconteça, deve-se antes, calcular o valor da cor atual (média das
+%Esta funcÃ£o Ã© usada somente dentro do algoritmo de associaÃ§Ã£o no momento
+%em que se vai calcular a distÃ¢ncia dentro de um espaÃ§o de cores. Para que
+%isso aconteÃ§a, deve-se antes, calcular o valor da cor atual (mÃ©dia das
 %cores dos pixeis.
 
 %OBS:
@@ -12,18 +12,18 @@ function cor_atual = blob_colours(frame, l, c ...
                                   , INTENSIDADE)
                                           
 
-    %VARIÁVEIS DE CONTROLE DA FUNÇÃO: o vetor de cores atuais e a media das cores num frame
-    cor_atual = zeros(ndetect); %vetor com quantidade de espaços correspondentes as cores de cada animal.
+    %VARIÃVEIS DE CONTROLE DA FUNÃ‡ÃƒO: o vetor de cores atuais e a media das cores num frame
+    cor_atual = zeros(ndetect); %vetor com quantidade de espaÃ§os correspondentes as cores de cada animal.
     mediaFrameIndividual = 0; %(Em 1 peixe e muda em cada loop).
 
-    %aqui começa a parte que trata do cáculo das médias
+    %aqui comeÃ§a a parte que trata do cÃ¡culo das mÃ©dias
 
-    frameHSV = rgb2hsv(frame);  %converte o i-ésimo frame(frame atual) para HSV;
+    frameHSV = rgb2hsv(frame);  %converte o i-Ã©simo frame(frame atual) para HSV;
 
-    %OBS: Somente conseguimos dizer que o k-ésimo elemento do loop é o k-ésimo peixe em todas as situações porque antes de
-    %rodar esse loop, as funções extractnblobs() e associateeuclid() fora executadas!
+    %OBS: Somente conseguimos dizer que o k-Ã©simo elemento do loop Ã© o k-Ã©simo peixe em todas as situaÃ§Ãµes porque antes de
+    %rodar esse loop, as funÃ§Ãµes extractnblobs() e associateeuclid() fora executadas!
 
-    %percorrendo de k=1 até o numero de animais (podemos ter mais de um blob por frame)
+    %percorrendo de k=1 atÃ© o numero de animais (podemos ter mais de um blob por frame)
     for k=1:1:ndetect %blob individual do frame
         
         
@@ -35,8 +35,8 @@ function cor_atual = blob_colours(frame, l, c ...
         
         
         
-        %variáveis para o tratamento da descontinuidade das cores no sistema HSV.
-        amostrando = 1; %flag que garante uma pequena amostragem dos píxeis
+        %variÃ¡veis para o tratamento da descontinuidade das cores no sistema HSV.
+        amostrando = 1; %flag que garante uma pequena amostragem dos pÃ­xeis
         conta_amostrando = 0;
         quad14 = 0;
         quad23 = 0;
@@ -63,7 +63,7 @@ function cor_atual = blob_colours(frame, l, c ...
 %                     disp(['m = ', num2str(m), ';    n = ', num2str(n)])
                     
                     try 
-                        %detectado(:) é a condição em 0's e 1's de ter um peixe ou não associado ao k-ésimo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
+                        %detectado(:) Ã© a condiÃ§Ã£o em 0's e 1's de ter um peixe ou nÃ£o associado ao k-Ã©simo blob(?) (VEM DO ASSOCIATEEUCLID() )                    
                         controlando = wframe_log(m,n) == 1;
                     catch
                        disp(['m = ', num2str(), '; n = ', num2str(n)]) 
@@ -71,8 +71,8 @@ function cor_atual = blob_colours(frame, l, c ...
                     
                     if(controlando &&  frameHSV(m,n,2) >= 0.5 && frameHSV(m,n,3) >= 0.15)
                         %Amostrar alguns pixels, utilizar uma flag para selecionar os pixels e contamos quantos pixels pertencem a cada quadrante
-                        %Após isso definiremos o espaço onde vamos trabalhar e resetamos o rastreio com o quadrante predominante
-                        %Transformação T[h] = h - 1 
+                        %ApÃ³s isso definiremos o espaÃ§o onde vamos trabalhar e resetamos o rastreio com o quadrante predominante
+                        %TransformaÃ§Ã£o T[h] = h - 1 
 
                         if amostrando
                             conta_amostrando = conta_amostrando + 1;
@@ -93,7 +93,7 @@ function cor_atual = blob_colours(frame, l, c ...
                                     quad_usado = 14;
                                 end
                                 
-                                %voltamos para a execução normal do código
+                                %voltamos para a execuÃ§Ã£o normal do cÃ³digo
                                 m = round(boundingbox(k, 2));
                                 m = max(m, 1); %reiniciando a coordenada m
                                 m = min(m, l);
@@ -112,7 +112,7 @@ function cor_atual = blob_colours(frame, l, c ...
                             
                             
                             
-                            %se meu pixel for um NaN, ao somar a mediaFrameIndividual ele transformara o valor contido em NaN, que não é o que queremos
+                            %se meu pixel for um NaN, ao somar a mediaFrameIndividual ele transformara o valor contido em NaN, que nÃ£o Ã© o que queremos
                             if ~(isnan(pixel_hue))
                                 mediaFrameIndividual = mediaFrameIndividual + pixel_hue;
                             end
@@ -142,22 +142,22 @@ function cor_atual = blob_colours(frame, l, c ...
         
         
         
-        %a média deve ser calculada depois de percorrer toda aquela bounding box para o k-ésimo animal
+        %a mÃ©dia deve ser calculada depois de percorrer toda aquela bounding box para o k-Ã©simo animal
         mediaFrameIndividual =  mediaFrameIndividual/sizeOfBlob;
-        cor_atual(k) = mediaFrameIndividual; % (media do k-ésimo animal no i-ésimo frame)
+        cor_atual(k) = mediaFrameIndividual; % (media do k-Ã©simo animal no i-Ã©simo frame)
         
-        %zerando as variáveis de controle
+        %zerando as variÃ¡veis de controle
         mediaFrameIndividual = 0;
             
     end
-        
-    %tratamento final
+    
+           
     for k=1:1:ndetect
-       if cor_atual(k)>=0.25 && cor_atual(k)<=0.75 && cor_atual(k)<0
-          cor_atual(k) = cor_atual(k) + 1; 
-       end
-%        disp(['------------ H(peixe ',num2str(k),') = ', num2str(cor_atual(k))])
-    end  
+           if cor_atual(k)>=0.25 && cor_atual(k)<=0.75  || cor_atual(k)<0
+              cor_atual(k) = cor_atual(k) + 1; 
+           end
+    %        disp(['------------ H(peixe ',num2str(k),') = ', num2str(cor_atual(k))])
+        end  
     
 
 end
@@ -170,7 +170,7 @@ function H_novo = transformada_HSV(H, quadrante_usado)
         if H >= 0.75
             H_novo = H - 1;
         else
-            H_novo = H;       %se quadrante_usado == 14, então, aqui, necessariamente 0 <= H <= 0.25 (low-red)
+            H_novo = H;       %se quadrante_usado == 14, entÃ£o, aqui, necessariamente 0 <= H <= 0.25 (low-red)
         end
     end
 end
