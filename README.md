@@ -1,3 +1,3 @@
 # ZebTrack
-Software de rastreio de animais em matlab.
+Animal Tracking software in matlab.
 
