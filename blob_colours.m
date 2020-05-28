@@ -12,8 +12,8 @@ function cor_atual = blob_colours(frame, l, c ...
                                   , INTENSIDADE)
                                           
 
-    %VARIÁVEIS DE CONTROLE DA FUNÇÃO: o vetor de cores atuais e a media das cores num frame
-    cor_atual = zeros(ndetect); %vetor com quantidade de espaços correspondentes as cores de cada animal.
+    %VARI�?VEIS DE CONTROLE DA FUNÇÃO: o vetor de cores atuais e a media das cores num frame
+    cor_atual = zeros(1,ndetect); %vetor com quantidade de espaços correspondentes as cores de cada animal.
     mediaFrameIndividual = 0; %(Em 1 peixe e muda em cada loop).
 
     %aqui começa a parte que trata do cáculo das médias
