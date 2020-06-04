@@ -73,11 +73,9 @@ function [px_novo, py_novo, detectado, caixa] = associatefudera(nanimais, num_bl
     
     %se foram achados menos blobs que animais ( [-]blobs e [+] animais )
     if num_blobs_detected < nanimais
-        disp('xazam')
                                         %para cada blob, acha o animal mais proximo e associa o seu centro
                                         %de massa a posicao atual deste animal
         for j=1:num_blobs_detected %percorre os blobs
-                disp('karai')
             maisproximo = -1;       %Flag para o caso de não houverem animais mais próximos
             primeiravez = true;
             
