@@ -143,7 +143,7 @@ function cor_atual = blob_colours(frame, l, c ...
         
         
         %a média deve ser calculada depois de percorrer toda aquela bounding box para o k-ésimo animal
-        mediaFrameIndividual =  mediaFrameIndividual/sizeOfBlob;
+        mediaFrameIndividual =  mediaFrameIndividual/(sizeOfBlob+1); %somei 1 pra evitar divis�o por 0.
         cor_atual(k) = mediaFrameIndividual; % (media do k-ésimo animal no i-ésimo frame)
         
         %zerando as variáveis de controle
