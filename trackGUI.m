@@ -711,8 +711,10 @@ if ~handles.live
 else
     procf=1;
 end
+%generate difference video
 criavideores = get(handles.resvideo,'Value'); 
 mostradiff = get(handles.checkbox2,'Value');
+%several configurations
 tipsubfundo = get(handles.radiosfe,'Value');
 thresh = round(get(handles.slider3,'Value'));
 filt = get(handles.slider4,'Value');
@@ -723,9 +725,33 @@ velmin = str2double(get(handles.vminima,'String'));
 tempmin = str2double(get(handles.tminparado,'String')); 
 tempminparado = str2double(get(handles.tmindormindo,'String'));
 camlent = str2double(get(handles.cameralenta,'String'));
+%track mouse 
 trackmouse = get(handles.trackmouse,'Value');
+%live tracking
 liveTracking = handles.live;
+%track individuals
 trackindividuals = get(handles.checkboxTrack_Ind,'Value');
+%actions to external hardware
+actions.nactions = handles.nactions;
+if actions.nactions>0
+    ind = get(handles.serialports,'Value');
+    str = get(handles.serialports,'String');
+    tmp = str(ind);
+    actions.serialport = tmp{1};
+    
+    ind = get(handles.popupmenu2,'Value');
+    str = get(handles.popupmenu2,'String');
+     tmp = str(ind);
+    actions.serialspeed = str2num(tmp{1});
+     
+     for i=1:actions.nactions
+         %3*handles.nactions:3*handles.nactions+2
+       eval("actions.condition(i) =   get(handles.popupmenu" + num2str(3*i) + ",'Value');" );
+       eval("actions.area(i) =   get(handles.popupmenu" + num2str(3*i+1) + ",'Value');" );
+       eval("actions.command(i) =   get(handles.popupmenu" + num2str(3*i+2) + ",'Value');" );
+     end
+end
+
 set(handles.run,'Visible','off');
 set(handles.abortar,'Visible','on');
 set(handles.pause,'Enable','on');
@@ -770,13 +796,13 @@ if get(handles.splitexperiment,'Value')
         guidata(hObject, handles);
         if i==1
             [handles.e(i).t,handles.e(i).posicao,handles.e(i).velocidade,handles.e(i).parado,handles.e(i).dormindo,handles.e(i).tempoareas,handles.e(i).distperc,handles.e(i).comportamento]=...
-            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals);
+            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals,actions);
         else
             pinicial.x(:,1) = px(:,end);
             pinicial.y(:,1) = py(:,end);
 
             [handles.e(i).t,handles.e(i).posicao,handles.e(i).velocidade,handles.e(i).parado,handles.e(i).dormindo,handles.e(i).tempoareas,handles.e(i).distperc,handles.e(i).comportamento]=...
-            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals,pinicial);
+            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals,actions,pinicial);
         end
         
         if abort
@@ -786,7 +812,7 @@ if get(handles.splitexperiment,'Value')
     
 else
     [handles.e.t,handles.e.posicao,handles.e.velocidade,handles.e.parado,handles.e.dormindo,handles.e.tempoareas,handles.e.distperc,handles.e.comportamento]=...
-    track(visu,fini,ffim,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals);
+    track(visu,fini,ffim,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals,actions);
     handles.e.areaproc=handles.areaproc;
     handles.e.pxcm = pxcm;
     handles.e.figdimensions.l = handles.l;

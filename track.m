@@ -69,13 +69,14 @@
 %   webcam
 %   trackindividuals: utiliza um banco de features para idendificar cada
 %   animal no caso de rastreamento 
+%   actions: conjunto de ações para envio para hardware externo
 %   pinicial: posição inicial do peixe
 
 
 
 
 function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento] = track(mostraresnatela,quadroini,quadrofim,fotos,video,pixelcm,nanimais,procframe...
-    ,corte,areas,areasexc,criavideores,viddiff,thresh,filt,handles,fundodinamico,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,cameralenta,trackmouse,liveTracking,trackindividuals,pinicial)
+    ,corte,areas,areasexc,criavideores,viddiff,thresh,filt,handles,fundodinamico,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,cameralenta,trackmouse,liveTracking,trackindividuals,actions,pinicial)
 
     %CONSTANTES A SEREM AJUSTADAS:
 
@@ -408,6 +409,21 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
         %serÃ¡ usado para criaÃ§Ã£o do fundo
         start(videoLive);
     end
+    
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %comandos para hadware externo
+    if actions.nactions>0
+        %fecha todas as abertas atualmente
+        fclose(instrfind);
+        %conecta na porta serial
+        serialcom = serial(actions.serialport, 'BaudRate',actions.serialspeed);
+        try
+            fopen(serialcom);
+        catch
+            disp("Could not connect to serial device");
+        end
+    end
 
     ti=tic;
     while i<=quadrofim
@@ -737,20 +753,24 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
                 if inpolygon(px(j,cont),py(j,cont),areas(k).x,areas(k).y)
                     dentro = 1;
                     alguemdentro(k)=1;
+                     factions(3,k,j,actions,serialcom);
                 else
                     dentro = 0;
+                    factions(4,k,j,actions,serialcom);
                 end
                 %se estava fora e entrou agora
                 if ~dentroarea(j,k) && dentro
                     dentroarea(j,k) = 1;
                     contareas(j,k) = contareas(j,k) + 1;
                     tempoareas{j,k}.ti(contareas(j,k)) = t(cont);
+                    factions(1,k,j,actions,serialcom);
                 end
 
                 %se estava dentro e saiu agora
                 if dentroarea(j,k) && ~dentro
                     dentroarea(j,k) = 0;
                     tempoareas{j,k}.tf(contareas(j,k)) = t(cont);
+                    factions(2,k,j,actions,serialcom);
                 end
             end
         end
@@ -952,7 +972,7 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
     if liveTracking
         delete(videoLive);
     end
-
+    fclose(serialcom);
 
     %verifica se tinha gente parado que ficou parado até o final do
     %rastreamento
