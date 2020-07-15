@@ -13,7 +13,7 @@ avg_vector = cell(ndetect,1) %cell array com quantidade de espaços corresponden
 %hold on;
 
 for k=1:1:ndetect %iterar sobre cada blob
-    rectangle('Position',boundingbox(k,:));
+    %rectangle('Position',boundingbox(k,:));
     
     frame_retalho = imcrop(frame, boundingbox(k,:));
     imdif_retalho = imcrop(wframe_log, boundingbox(k,:));
