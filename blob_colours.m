@@ -25,7 +25,7 @@ function cor_atual = blob_colours(frame, l, c ...
 
     %percorrendo de k=1 até o numero de animais (podemos ter mais de um blob por frame)
     for k=1:1:ndetect %blob individual do frame
-        
+        disp('estou loopando em k')
         
         
         %%%%%%%%%%%%%%%%%%%debuggando so debobs%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -140,10 +140,12 @@ function cor_atual = blob_colours(frame, l, c ...
         
         
         
+        disp(['sizeOfBlob =',num2str(sizeOfBlob)])
+        disp(['mediaFrameIndividual =',num2str(mediaFrameIndividual)])
         
         
         %a média deve ser calculada depois de percorrer toda aquela bounding box para o k-ésimo animal
-        mediaFrameIndividual =  mediaFrameIndividual/(sizeOfBlob+1); %somei 1 pra evitar divis�o por 0.
+        mediaFrameIndividual =  mediaFrameIndividual/(sizeOfBlob); 
         cor_atual(k) = mediaFrameIndividual; % (media do k-ésimo animal no i-ésimo frame)
         
         %zerando as variáveis de controle
