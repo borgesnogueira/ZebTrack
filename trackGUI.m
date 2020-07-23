@@ -116,7 +116,7 @@ movegui(hObject,'center')
 handles.nactions = 0;
 %esconder todas as caixas de acoes
 for i=3:3*10+2
-   eval("set(handles.popupmenu" + num2str(i) + ",'Visible','off');");
+   eval(['set(handles.popupmenu' num2str(i) ',''Visible'',''off'');']);
 end
 % Update handles structure
 guidata(hObject, handles);
@@ -746,9 +746,9 @@ if actions.nactions>0
      
      for i=1:actions.nactions
          %3*handles.nactions:3*handles.nactions+2
-       eval("actions.condition(i) =   get(handles.popupmenu" + num2str(3*i) + ",'Value');" );
-       eval("actions.area(i) =   get(handles.popupmenu" + num2str(3*i+1) + ",'Value');" );
-       eval("actions.command(i) =   get(handles.popupmenu" + num2str(3*i+2) + ",'Value');" );
+       eval('actions.condition(i) =   get(handles.popupmenu' + num2str(3*i) + ',''Value'');' );
+       eval('actions.area(i) =   get(handles.popupmenu' + num2str(3*i+1) + ',''Value'');' );
+       eval('actions.command(i) =   get(handles.popupmenu' + num2str(3*i+2) + ',''Value'');' );
      end
 end
 
@@ -3793,7 +3793,7 @@ set(handles.uipanel9,'Visible','off');
 set(handles.uipanel7,'Visible','off');
 set(handles.uipanel10,'Visible','off');
 set(handles.uipanel21,'Visible','off');
-temp_cellstr = cellstr(seriallist("all"));
+temp_cellstr = cellstr(seriallist('all'));
 set(handles.serialports,'String',temp_cellstr);
 guidata(hObject,handles);
 
@@ -3892,13 +3892,13 @@ if handles.nactions<10
         for i =1:n
             temp_cellstr{i} = num2str(i);
         end
-         eval("set(handles.popupmenu" +  num2str(3*handles.nactions+1) + ",'String',temp_cellstr);");
+         eval(['set(handles.popupmenu' num2str(3*handles.nactions+1) ',''String'',temp_cellstr);'])
         %fazer aparecer as caixas
         for i=3*handles.nactions:3*handles.nactions+2
-           eval("set(handles.popupmenu" + num2str(i) + ",'Visible','on');");
+           eval(['set(handles.popupmenu' num2str(i) ',''Visible'',''on'');']);
         end
     else
-        warndlg("Create some areas of interest first!")
+        warndlg('Create some areas of interest first!')
     end
 end
 guidata(hObject,handles);
@@ -3910,7 +3910,7 @@ function pushbutton30_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 if handles.nactions>0
     for i=3*handles.nactions:3*handles.nactions+2
-       eval("set(handles.popupmenu" + num2str(i) + ",'Visible','off');");
+       eval(['set(handles.popupmenu' num2str(i) ',''Visible'',''off'');']);
     end
     handles.nactions = handles.nactions - 1;
 end
