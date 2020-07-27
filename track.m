@@ -389,7 +389,6 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
                                                    , caixa, l, c ...
                                                    , colorida, cor, tipfilt ...
                                                    , INTENSO);
-                                              
        %gerando uma figura com a cor variando com sua variancia.
        mostra_cores_dos_peixes(media, variancia);
 
