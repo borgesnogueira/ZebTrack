@@ -3,7 +3,12 @@ function [media, variancia] = calcula_media_variancia_hsv_2(video, tempo_inicial
                                                        , caixa, l, c ...
                                                        , colorida, cor, tipfilt ...
                                                        , INTENSIDADE)
-                                                   
+
+    
+    [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os índices final e inicial para a calibração.
+    
+    frames_video = read(video, floor([frame_inicial, frame_final]));                         %cria um vetor com todos os frames entre frame_incial e frame_final.
+                                                                                             %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);                                                   
 end
 
 
