@@ -25,6 +25,7 @@ for i = 1:numFrames
     M2 = M2 + f.^2;
     waitbar.setvalue(i/numFrames);
     drawnow
+    pause(1/4)
 end
 delete(videoLive);
 fundo = sframe/numFrames;
