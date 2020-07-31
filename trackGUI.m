@@ -3793,7 +3793,7 @@ set(handles.uipanel9,'Visible','off');
 set(handles.uipanel7,'Visible','off');
 set(handles.uipanel10,'Visible','off');
 set(handles.uipanel21,'Visible','off');
-ls = instrgwinfo('serial');
+ls = instrhwinfo('serial');
 temp_cellstr = ls.AvailableSerialPorts';
 set(handles.serialports,'String',temp_cellstr);
 guidata(hObject,handles);
