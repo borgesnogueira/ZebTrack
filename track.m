@@ -971,9 +971,7 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
     if liveTracking
         delete(videoLive);
     end
-     if actions.nactions>0
-        fclose(serialcom);
-     end
+    fclose(serialcom);
 
     %verifica se tinha gente parado que ficou parado até o final do
     %rastreamento
