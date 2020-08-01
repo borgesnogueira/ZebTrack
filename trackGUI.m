@@ -746,9 +746,9 @@ if actions.nactions>0
      
      for i=1:actions.nactions
          %3*handles.nactions:3*handles.nactions+2
-       eval('actions.condition(i) =   get(handles.popupmenu' + num2str(3*i) + ',''Value'');' );
-       eval('actions.area(i) =   get(handles.popupmenu' + num2str(3*i+1) + ',''Value'');' );
-       eval('actions.command(i) =   get(handles.popupmenu' + num2str(3*i+2) + ',''Value'');' );
+       eval(['actions.condition(i) =   get(handles.popupmenu' num2str(3*i) ',''Value'');' ]);
+       eval(['actions.area(i) =   get(handles.popupmenu' num2str(3*i+1) ',''Value'');' ]);
+       eval(['actions.command(i) =   get(handles.popupmenu' num2str(3*i+2) ',''Value'');'] );
      end
 end
 
