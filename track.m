@@ -414,7 +414,9 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
     %comandos para hadware externo
     if actions.nactions>0
         %fecha todas as abertas atualmente
-        fclose(instrfind);
+        if ~isempty(instrfind)
+            fclose(instrfind);
+        end
         %conecta na porta serial
         serialcom = serial(actions.serialport, 'BaudRate',actions.serialspeed);
         try
