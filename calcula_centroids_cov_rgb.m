@@ -1,5 +1,5 @@
 %{
-Para esse cÛdigo, estou deliberadamente ignorando a dica (dicax,dicay)
+Para esse c√≥digo, estou deliberadamente ignorando a dica (dicax,dicay)
 %}
 
 function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inicial, tempo_final ...
@@ -8,11 +8,11 @@ function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inic
                                                        , value_threshold, saturation_threshold, how_many_replicates)
 
     
-    [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os Ìndices final e inicial para a calibraÁ„o.
+    [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os √≠ndices final e inicial para a calibra√ß√£o.
     new_video = VideoReader([video.Path,'\',video.Name]); % preciso criar um novo VideoReader pra evitar um bug  
     frames_video = read(new_video, floor([frame_inicial, frame_final]));                         %cria um vetor com todos os frames entre frame_incial e frame_final.
-                                                                                             %Lembrando que para acessar o i-Èsimo frame, uso a notaÁ„o frames_video(:,:,:,i);                                                   
-    length_frames_video = (floor(frame_final) - floor(frame_inicial)) + 1;                   %Necess·rio para a implementaÁ„o do for (o +1 È pra incluir o primeiro termo!)    
+                                                                                             %Lembrando que para acessar o i-√©simo frame, uso a nota√ß√£o frames_video(:,:,:,i);                                                   
+    length_frames_video = (floor(frame_final) - floor(frame_inicial)) + 1;                   %Necess√°rio para a implementa√ß√£o do for (o +1 √© pra incluir o primeiro termo!)    
     avg_vector_pra_cada_frame = [];
     
     for i=1:1:length_frames_video
@@ -28,7 +28,7 @@ function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inic
         avg_vector_pra_cada_frame = [avg_vector_pra_cada_frame; cell2mat( blob_colours_2(frames_video(:,:,:,i),boundingbox,ndetect,wframe_log,value_threshold,saturation_threshold) )]; % 0.15, 0.5        
     end    
     
-    [idx,centroids] = kmeans(avg_vector_pra_cada_frame, 2,'Replicates',how_many_replicates); % I recommend 5
+    [idx,centroids] = kmeans(avg_vector_pra_cada_frame, nanimais,'Replicates',how_many_replicates); % I recommend 5
 
     unique_idx = unique(idx);
     cov_matrices = {}; % matrix of variations
@@ -39,7 +39,7 @@ function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inic
 end
 
 
-%FunÁ„o para converter meu tempo inicial e final em termos dos frames correspondentes.
+%Fun√ß√£o para converter meu tempo inicial e final em termos dos frames correspondentes.
 function [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video)
     frame_inicial = video.FrameRate*tempo_inicial;
     frame_final = video.FrameRate*tempo_final;  
