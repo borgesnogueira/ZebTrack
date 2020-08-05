@@ -2,7 +2,7 @@
 Para esse código, estou deliberadamente ignorando a dica (dicax,dicay)
 %}
 
-function [media, variancia] = calcula_media_variancia_hsv_2(video, tempo_inicial, tempo_final ...
+function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inicial, tempo_final ...
                                                        , Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo ...
                                                        , colorida, cor ...
                                                        , value_threshold, saturation_threshold, how_many_replicates)
@@ -28,13 +28,13 @@ function [media, variancia] = calcula_media_variancia_hsv_2(video, tempo_inicial
         avg_vector_pra_cada_frame = [avg_vector_pra_cada_frame; cell2mat( blob_colours_2(frames_video(:,:,:,i),boundingbox,ndetect,wframe_log,value_threshold,saturation_threshold) )]; % 0.15, 0.5        
     end    
     
-    [idx,media] = kmeans(avg_vector_pra_cada_frame, 2,'Replicates',how_many_replicates); % I recommend 5
+    [idx,centroids] = kmeans(avg_vector_pra_cada_frame, 2,'Replicates',how_many_replicates); % I recommend 5
 
     unique_idx = unique(idx);
-    variancia = {}; % matrix of variations
+    cov_matrices = {}; % matrix of variations
 
     for index = 1:1:nanimais
-       variancia{index} = cov(avg_vector_pra_cada_frame(idx==unique_idx(index),:));
+       cov_matrices{index} = cov(avg_vector_pra_cada_frame(idx==unique_idx(index),:));
     end   
 end
 
