@@ -31,10 +31,10 @@ function [media, variancia] = calcula_media_variancia_hsv_2(video, tempo_inicial
     [idx,media] = kmeans(avg_vector_pra_cada_frame, 2,'Replicates',how_many_replicates); % I recommend 5
 
     unique_idx = unique(idx);
-    variancia = []; % matrix of variations
+    variancia = {}; % matrix of variations
 
     for index = 1:1:nanimais
-       variancia = [variancia; var(avg_vector_pra_cada_frame(idx==unique_idx(index),:))];
+       variancia{index} = cov(avg_vector_pra_cada_frame(idx==unique_idx(index),:));
     end   
 end
 
