@@ -442,40 +442,36 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
            frame = read(video,floor(i));
         end
 
-        if pmousex==-1 && pmousey==-1
-
-            %converte pra tons de cinza e double pra trabalhar
-            if colorida || (cor == 1)
-                wframe = double(frame);
-            else
-                wframe = double(rgb2gray(frame));
-            end
+        %converte pra tons de cinza e double pra trabalhar
+        if colorida || (cor == 1)
+            wframe = double(frame);
+        else
+            wframe = double(rgb2gray(frame));
+        end
 
 
-            %faz a diferenca so na area de interesse e extrai o centro de massas
-            %das regioes (blobs) maiores que minpix
-            [cx,cy,radius,boundingbox,ndetect,aviobj2,imdif] = extractnblobs(wframe,wbackg,Vrm,nanimais,mascara,minpix,maxpix,threshold,aviobj2,criavideodiff,tipsubfundo);
+        %faz a diferenca so na area de interesse e extrai o centro de massas
+        %das regioes (blobs) maiores que minpix
+        [cx,cy,radius,boundingbox,ndetect,aviobj2,imdif] = extractnblobs(wframe,wbackg,Vrm,nanimais,mascara,minpix,maxpix,threshold,aviobj2,criavideodiff,tipsubfundo);
 
-            if threshadaptativo
-                if ndetect < nanimais && threshold > 2 %ficara no minimo com 2
-                    threshold = threshold - 1;
-                    if ndetect == 1 %evita achar um blob gigante que ocupa mais da metade da imagem
-                        if radius(1)^2*pi < l*c/2
-                            threshold = threshold + 5;
-                        end
+        if threshadaptativo
+            if ndetect < nanimais && threshold > 2 %ficara no minimo com 2
+                threshold = threshold - 1;
+                if ndetect == 1 %evita achar um blob gigante que ocupa mais da metade da imagem
+                    if radius(1)^2*pi < l*c/2
+                        threshold = threshold + 5;
                     end
-                elseif ndetect > nanimais && threshold < 50
-                    threshold = threshold + 1;
                 end
-                %mostra na barra de trheshold no ambiente grafico
-                set(handles.slider3,'Value',threshold);
-                set(handles.threshold,'String',num2str(threshold));
-
-            else
-                %pega o valor em tempo real
-                threshold = round(get(handles.slider3,'Value'));
+            elseif ndetect > nanimais && threshold < 50
+                threshold = threshold + 1;
             end
+            %mostra na barra de trheshold no ambiente grafico
+            set(handles.slider3,'Value',threshold);
+            set(handles.threshold,'String',num2str(threshold));
 
+        else
+            %pega o valor em tempo real
+            threshold = round(get(handles.slider3,'Value'));
         end
 
 
