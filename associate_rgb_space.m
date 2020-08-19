@@ -1,4 +1,4 @@
-function centroids_index = associate_rgb_space(bc2_avg_vector,centroids)
+function points_index = associate_rgb_space(bc2_avg_vector,centroids)
     %{
     v1 = [1 2 3]; v2 = [1 2 0];
     dist = sqrt(sum((v1-v2).^2))
@@ -15,12 +15,18 @@ function centroids_index = associate_rgb_space(bc2_avg_vector,centroids)
     o primeiro elemento do vetor centroids_index é 2.
     %}
     
-    [how_many_elements,~] = size(bc2_avg_vector);
-    centroids_index = zeros(how_many_elements,1);
     mat_bc2_avg_v = cell2mat(bc2_avg_vector);
-    
-    D = pdist2(mat_bc2_avg_v, centroids,'Euclidean','Smallest',1);
-    
-    disp(D);
-    
+    D = pdist2(mat_bc2_avg_v, centroids); 
+    [~,I] = min(D');
+    points_index = I';
+
+%{
+    if we use the code as:
+    D = pdist2(mat_bc2_avg_v, centroids); 
+    Then we can be sure that the columns are related to the centroids.
+    What does it mean? Each line refers to a point to be labeled. If, for
+    a line, the second column has smaller value the first column, then the
+    point is closer to the second cluster. This point should be labeled
+    '2'.
+%}       
 end
