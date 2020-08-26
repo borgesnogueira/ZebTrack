@@ -4,7 +4,7 @@ note que existem nanimais. Isso que define a quantidade de centroides
 (existem, por definição, a mesma quantidade de centróides que de animais).
 Ao mesmo tempo, a quantidade de blobs é uma característica do frame em
 questão.
-Logo, é possível definir duas matrizes, ambas de formato qtd_blobs x
+Logo, é possível definir duas matrizes de distancia, ambas de formato qtd_blobs x
 nanimais (qtd_centroids), tanto no espaço de cores quanto no espaço da imagem.
 Como definir essas matrizes?
 Vale saber que [cx cy] são os centróides dos blobs.
@@ -32,10 +32,19 @@ daí basta somar:
     D_cores = pdist2(mat_bc2_avg_v, centroids);
     
     centroides_boundingbox = [cx' cy'];
-    pontos_imagem = [px_ant py_ant];
-    D_imagem = pdist2(centroides_boundingbox, pontos_imagem);
-    pxn = 3
-    pyn = 2
-    disp(D_cores);
-    disp(D_imagem);
+    pontos_anteriores_imagem = [px_ant py_ant];
+    D_imagem = pdist2(centroides_boundingbox, pontos_anteriores_imagem);
+   % disp(D_cores);
+    D = D_cores + D_imagem;
+   % disp(D);
+    %disp(centroides_boundingbox);
+    %disp(pontos_anteriores_imagem);
+    [~,I] = min(D,[],1);
+    centroides_escolhidos = centroides_boundingbox(I,:);
+    pxn = centroides_escolhidos(:,1);
+    pyn = centroides_escolhidos(:,2);
+    %disp(centroides_boundingbox(I,:));
+    %disp(['positions = ' num2str(I)]);
+    %disp(D);
+    disp(centroides_boundingbox);
 end
