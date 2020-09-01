@@ -31,7 +31,7 @@ daí basta somar:
     mat_bc2_avg_v = cell2mat(bc2_avg_vector);
     D_cores = pdist2(mat_bc2_avg_v, centroids);
     
-    centroides_boundingbox = [cx cy];
+    centroides_boundingbox = [cx' cy'];
     pontos_anteriores_imagem = [px_ant py_ant];
     D_imagem = pdist2(centroides_boundingbox, pontos_anteriores_imagem);
    % disp(D_cores);
