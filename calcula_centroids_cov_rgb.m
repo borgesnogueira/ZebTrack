@@ -27,9 +27,9 @@ function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inic
         
         avg_vector_pra_cada_frame = [avg_vector_pra_cada_frame; cell2mat( blob_colours_2(frames_video(:,:,:,i),boundingbox,ndetect,wframe_log,value_threshold,saturation_threshold) )]; % 0.15, 0.5        
     end    
-    
+   
     [idx,centroids] = kmeans(avg_vector_pra_cada_frame, nanimais,'Replicates',how_many_replicates); % I recommend 5
-
+    
     unique_idx = unique(idx);
     cov_matrices = {}; % matrix of variations
 
