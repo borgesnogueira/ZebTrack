@@ -3760,6 +3760,16 @@ function pushbuttonTrack_Ind_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbuttonTrack_Ind (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% colocar calcula_centroids_cov_rgb.m aqui dentro
+% guidata(hObject, handles);
+%{
+handles.frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1;
+handles.framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
+
+handles.waibarfundo.visivel('on');
+[fundo,V] = criafundo(handles.directoryname,handles.filenameSemExtensao,handles.video,handles.frameini,handles.framefim,str2double(get(handles.fundoframe,'String')),handles.waibarfundo);
+%}
 guidata(hObject,handles);
 
 % --- Executes on button press in checkboxTrack_Ind.
