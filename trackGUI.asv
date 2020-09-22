@@ -731,14 +731,6 @@ trackmouse = get(handles.trackmouse,'Value');
 liveTracking = handles.live;
 %track individuals
 trackindividuals = get(handles.checkboxTrack_Ind,'Value');
-if trackindividuals 
-    try
-    centroids = handles.centroids;
-    cov_matrices = handles.cov_matrices;
-    catch
-        msgbox('Generate Feature Dataset First! ','Erro','error');
-    end
-end
 %actions to external hardware
 actions.nactions = handles.nactions;
 if actions.nactions>0
@@ -802,15 +794,17 @@ if get(handles.splitexperiment,'Value')
         handles.frameini = finitemp;
         handles.framefim = ffimtemp;
         guidata(hObject, handles);
+        handles.centroids, 
+handles.cov_matrices = cov_matrices;
         if i==1
             [handles.e(i).t,handles.e(i).posicao,handles.e(i).velocidade,handles.e(i).parado,handles.e(i).dormindo,handles.e(i).tempoareas,handles.e(i).distperc,handles.e(i).comportamento]=...
-            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals, centroids, cov_matrices, actions);
+            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals,actions);
         else
             pinicial.x(:,1) = px(:,end);
             pinicial.y(:,1) = py(:,end);
 
             [handles.e(i).t,handles.e(i).posicao,handles.e(i).velocidade,handles.e(i).parado,handles.e(i).dormindo,handles.e(i).tempoareas,handles.e(i).distperc,handles.e(i).comportamento]=...
-            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals, centroids, cov_matrices, actions,pinicial);
+            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals,actions,pinicial);
         end
         
         if abort
@@ -820,7 +814,7 @@ if get(handles.splitexperiment,'Value')
     
 else
     [handles.e.t,handles.e.posicao,handles.e.velocidade,handles.e.parado,handles.e.dormindo,handles.e.tempoareas,handles.e.distperc,handles.e.comportamento]=...
-    track(visu,fini,ffim,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals, centroids, cov_matrices, actions);
+    track(visu,fini,ffim,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals,actions);
     handles.e.areaproc=handles.areaproc;
     handles.e.pxcm = pxcm;
     handles.e.figdimensions.l = handles.l;
@@ -3779,29 +3773,25 @@ filt = get(handles.slider4,'Value');
 tipfilt = get(handles.radiofk,'Value');
 subcor = get(handles.subtracaocolorida,'Value');
 
-mascara = calculamascara(handles.areaproc,handles.areaexc,double(rgb2gray(handles.fundo)));
+mascara = calculamascara(handles.areaproc,handles.areaexc,handles.fundo);
 minpix = 2;
 maxpix = 0; %se o tamanho maximo for zero, fica sendo 50% da imagem
 avi=0;
 criavideores=0;
- value_threshold = 0.15;
- saturation_threshold = 0.5;
- how_many_replicates = 5;
 
 handles.waibarfundo.visivel('on');
 [centroids, cov_matrices] = calcula_centroids_cov_rgb(handles.video, frameini, framefim ...
                                                        , handles.fundo, handles.V, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
-                                                       , subcor, value_threshold, saturation_threshold, how_many_replicates,handles.waibarfundo);
+                                                       , subcor, value_threshold, saturation_threshold, how_many_replicates,handle.waibarfundo);
 
 
 handles.waibarfundo.visivel('off');
 handles.waibarfundo.setvalue(0);
 handles.centroids = centroids;
 handles.cov_matrices = cov_matrices;
-centroids %mostrar cores achadas no console
 
 %ajeitar o codigo. do jeito que esta nao ira funcionar
-%mostra_cores_dos_peixes(centoids, cov_matrices)
+mostra_cores_dos_peixes(centoids, cov_matrices)
 
 guidata(hObject,handles);
 

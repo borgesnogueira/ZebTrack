@@ -2,13 +2,18 @@
 Para esse código, estou deliberadamente ignorando a dica (dicax,dicay)
 %}
 
-function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inicial, tempo_final ...
+function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, frame_inicial, frame_final ...
                                                        , Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo ...
-                                                       , colorida, cor ...
-                                                       , value_threshold, saturation_threshold, how_many_replicates)
+                                                       , colorida, value_threshold, saturation_threshold, how_many_replicates,waibar)
 
-    
-    [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os índices final e inicial para a calibração.
+       %converte pra tons de cinza e double pra trabalhar
+        if colorida 
+                   Imback = double(Imback);
+        else
+                   Imback = double(rgb2gray(Imback));
+        end                                                   
+            
+    %[frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os índices final e inicial para a calibração.
     new_video = VideoReader([video.Path,'\',video.Name]); % preciso criar um novo VideoReader pra evitar um bug  
     frames_video = read(new_video, floor([frame_inicial, frame_final]));                         %cria um vetor com todos os frames entre frame_incial e frame_final.
                                                                                              %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);                                                   
@@ -17,15 +22,21 @@ function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inic
     
     for i=1:1:length_frames_video
         %converte pra tons de cinza e double pra trabalhar
-        if colorida || (cor == 1)
+        if colorida 
             wframe = double(frames_video(:,:,:,i));
         else
             wframe  = double(rgb2gray(frames_video(:,:,:,i)));
         end
+    
+        
+    
         
         [~, ~, ~, boundingbox, ndetect, ~,~ ,wframe_log] = extractnblobs(wframe, Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo);
         
         avg_vector_pra_cada_frame = [avg_vector_pra_cada_frame; cell2mat( blob_colours_2(frames_video(:,:,:,i),boundingbox,ndetect,wframe_log,value_threshold,saturation_threshold) )]; % 0.15, 0.5        
+        
+         waibar.setvalue(i/length_frames_video);
+        drawnow
     end    
    
     [idx,centroids] = kmeans(avg_vector_pra_cada_frame, nanimais,'Replicates',how_many_replicates); % I recommend 5
@@ -36,6 +47,8 @@ function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inic
     for index = 1:1:nanimais
        cov_matrices{index} = cov(avg_vector_pra_cada_frame(idx==unique_idx(index),:));
     end   
+    
+   
 end
 
 

@@ -69,8 +69,8 @@
 %   webcam
 %   trackindividuals: flag para utilizar um banco de features para idendificar cada
 %   animal 
-%   labels = vetor de caracteristicas de cada animal
-%  labels_cov = matriz de covariancia dos labels
+%   lables = vetor de caracteristicas de cada animal
+%  lables_cov = matriz de covariancia dos labels
 %   actions: conjunto de ações para envio para hardware externo
 %   pinicial: posição inicial do peixe
 
@@ -78,7 +78,7 @@
 
 
 function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento] = track(mostraresnatela,quadroini,quadrofim,fotos,video,pixelcm,nanimais,procframe...
-    ,corte,areas,areasexc,criavideores,viddiff,thresh,filt,handles,fundodinamico,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,cameralenta,trackmouse,liveTracking,trackindividuals,labels,labels_cov,actions,pinicial)
+    ,corte,areas,areasexc,criavideores,viddiff,thresh,filt,handles,fundodinamico,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,cameralenta,trackmouse,liveTracking,trackindividuals,lables,lables_cov,actions,pinicial)
 
     %CONSTANTES A SEREM AJUSTADAS:
 
@@ -369,9 +369,36 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
     i=quadroini;
     %for i=quadroini:procframe:quadrofim
 
-    centroides = labels;
-    cov_matrix = labels_cov;
- 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %TESTES DE ARIEL
+    if(trackindividuals)
+        INTENSO = 0.4;
+
+    %     testados:
+    %     539 inicial e 544 final
+    %     inicial 325 e final 327
+    %     inicial 678 e final 679
+    %     inicial 685 e final 679
+        tempo_inicial = 168;
+        tempo_final = 169;
+
+        if ~exist('caixa','var')    %não tenho a mínima ideia de onde a caixa possa vir a ter surgido.
+            caixa = ones(nanimais,4);
+        end
+
+        [media, variancia] = calculaMediaVarianciaHSV(video, tempo_inicial, tempo_final ...
+                                                   , wbackg, Vrm, nanimais, mascara, minpix, maxpix, threshold, aviobj2, criavideodiff, tipsubfundo ...
+                                                   , caixa, l, c ...
+                                                   , colorida, cor, tipfilt ...
+                                                   , INTENSO);
+       %gerando uma figura com a cor variando com sua variancia.
+       mostra_cores_dos_peixes(media, variancia);
+
+    end
+    %FIM DOS TESTES DE ARIEL
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
     if liveTracking
         videoLive = videoinput('winvideo');
         triggerconfig(videoLive, 'manual');
@@ -491,8 +518,8 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
                                                                           vetor_cores_atuais, media, variancia, ...
                                                                           alpha_distancia);
                 %}                                                      
-                %centroides = [72.8047 22.3412 30.9006; 23.3055 25.0995 57.2719]% definir na mão antes de rodar o código                                                      
-                [px(:,cont),py(:,cont)] =  associacao_soma_matrizes(avg_vector,centroides,cx,cy, px(:,cont-1), py(:,cont-1))                                                      
+                centroides = [72.8047 22.3412 30.9006; 23.3055 25.0995 57.2719]% definir na mão antes de rodar o código                                                      
+                [px(:,cont),py(:,cont)] = associate_soma_matrizes(avg_vector,centroides,cx,cy, px(:,cont-1), py(:,cont-1))                                                      
 
             else
                 [px(:,cont) ,py(:,cont), detectado, caixa] = associateeuclid(nanimais, ndetect, px(:,cont-1), py(:,cont-1), cx, cy, radius, ...
