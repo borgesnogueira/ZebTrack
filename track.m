@@ -505,14 +505,19 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
                                                   INTENSO);
                 %}
                 avg_vector = blob_colours_2(frame, boundingbox, ndetect...
-                                                    ,wframe_log, 0.15,0.5) % avg_vector é o novo vetor_cores_atuais
+                                                    ,imdif, 0.15,0.5) % avg_vector é o novo vetor_cores_atuais
                 %definindo um valor para alpha:
                 alpha_distancia = 0;    %20% para a distância euclidiana e 80% para a distância no espaço de cores.
                 
+                
+                %{
                 [px(:,cont),py(:,cont),detectado,caixa] = associatefudera(nanimais, ndetect, px(:,cont-1), py(:,cont-1), cx, cy, radius,...
                                                                           boundingbox, detectado, dicax, dicay, caixa, l, c, frame, ...
                                                                           vetor_cores_atuais, media, variancia, ...
                                                                           alpha_distancia);
+                %}                                                      
+                centroides = [72.8047 22.3412 30.9006; 23.3055 25.0995 57.2719]% definir na mão antes de rodar o código                                                      
+                [px(:,cont),py(:,cont)] = associate_soma_matrizes(avg_vector,centroides,cx,cy, px(:,cont-1), py(:,cont-1))                                                      
 
             else
                 [px(:,cont) ,py(:,cont), detectado, caixa] = associateeuclid(nanimais, ndetect, px(:,cont-1), py(:,cont-1), cx, cy, radius, ...
