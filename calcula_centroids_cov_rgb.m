@@ -13,13 +13,8 @@ function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, frame_inic
                    Imback = double(rgb2gray(Imback));
         end                                                   
             
-    %[frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os índices final e inicial para a calibração.
-    %{
-    new_video = VideoReader([video.Path,'\',video.Name]); % preciso criar um novo VideoReader pra evitar um bug  
-    frames_video = read(new_video, floor([frame_inicial, frame_final]));                         %cria um vetor com todos os frames entre frame_incial e frame_final.
-    %}
                                                                                                  %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);                                                   
-    frames_video = read(video, floor([frame_inicial,frame_final]));                                                                                             
+    frames_video = read(video, floor([frame_inicial,frame_final]));                              %cria um vetor com todos os frames entre frame_incial e frame_final.                                                                
     length_frames_video = (floor(frame_final) - floor(frame_inicial)) + 1;                   %Necessário para a implementação do for (o +1 é pra incluir o primeiro termo!)    
     avg_vector_pra_cada_frame = [];
     
