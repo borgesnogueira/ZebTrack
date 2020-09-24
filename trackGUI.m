@@ -3789,6 +3789,7 @@ criavideores=0;
  how_many_replicates = 5;
 
 handles.waibarfundo.visivel('on');
+%disp(['frameini = ', int2str(frameini), '\nframefinal = ',int2str(framefim )]);
 [centroids, cov_matrices] = calcula_centroids_cov_rgb(handles.video, frameini, framefim ...
                                                        , handles.fundo, handles.V, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
                                                        , subcor, value_threshold, saturation_threshold, how_many_replicates,handles.waibarfundo);
