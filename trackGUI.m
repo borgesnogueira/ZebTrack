@@ -3802,6 +3802,10 @@ centroids %mostrar cores achadas no console
 
 %ajeitar o codigo. do jeito que esta nao ira funcionar
 %mostra_cores_dos_peixes(centoids, cov_matrices)
+for ite=1:1:nanimais
+    image(reshape(centroids(ite,:),[1,1,3]));
+    disp('entrei aqui');
+end
 
 guidata(hObject,handles);
 
