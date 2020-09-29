@@ -24,8 +24,9 @@ for k=1:1:ndetect %iterar sobre cada blob
     how_many_pixels = sum(sum(imdif_retalho.*mask_value,1),2);
     if how_many_pixels ~= 0
         avg_p_i = avg_p_i/how_many_pixels;
+    else
+        disp('no valid pixels found');
     end
-    
     avg_vector{k,1} = avg_p_i;   
     
     %figure; %test only, remove later
