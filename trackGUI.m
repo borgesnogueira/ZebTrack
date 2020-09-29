@@ -3792,7 +3792,7 @@ handles.waibarfundo.visivel('on');
 %disp(['frameini = ', int2str(frameini), '\nframefinal = ',int2str(framefim )]);
 
 %converte pra tons de cinza e double pra trabalhar
-if colorida 
+if subcor 
            Imback = double(handles.fundo);
 else
            Imback = double(rgb2gray(handles.fundo));
