@@ -2,13 +2,31 @@
 Para esse código, estou deliberadamente ignorando a dica (dicax,dicay)
 %}
 
+%{
+colocar o argumento waitbar de volta na chamada da fun��o
+
+descomentar as linhas
+
+      %   waibar.setvalue(i/length_frames_video);
+      %  drawnow
+
+e comentar as linhas
+    new_video = VideoReader([video.Path,'\',video.Name]); % preciso criar um novo VideoReader pra evitar um bug                                                                                               
+
+e trocar new_video por video na linha frames_video = read(new_video , ........)
+
+
+pro c�digo poder rodar dentro do trackGUI
+%}
+
 function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, frame_inicial, frame_final ...
                                                        , Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo ...
-                                                       , colorida, value_threshold, saturation_threshold, how_many_replicates,waibar)
+                                                       , colorida, value_threshold, saturation_threshold, how_many_replicates) %,waibar)
                                              
             
-                                                                                                 %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);                                                   
-    frames_video = read(video, floor([frame_inicial,frame_final]));                              %cria um vetor com todos os frames entre frame_incial e frame_final.                                                                
+    new_video = VideoReader([video.Path,'\',video.Name]); % preciso criar um novo VideoReader pra evitar um bug                                                                                               
+    %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);                                                   
+    frames_video = read(new_video, floor([frame_inicial,frame_final]));                              %cria um vetor com todos os frames entre frame_incial e frame_final.                                                                
     length_frames_video = (floor(frame_final) - floor(frame_inicial)) + 1;                   %Necessário para a implementação do for (o +1 é pra incluir o primeiro termo!)    
     avg_vector_pra_cada_frame = [];
     
@@ -28,8 +46,8 @@ function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, frame_inic
         
         avg_vector_pra_cada_frame = [avg_vector_pra_cada_frame; cell2mat( blob_colours_2(frames_video(:,:,:,i),boundingbox,ndetect,wframe_log,value_threshold,saturation_threshold) )]; % 0.15, 0.5        
         
-         waibar.setvalue(i/length_frames_video);
-        drawnow
+      %   waibar.setvalue(i/length_frames_video);
+      %  drawnow
     end    
    
     [idx,centroids] = kmeans(avg_vector_pra_cada_frame, nanimais,'Replicates',how_many_replicates); % I recommend 5
