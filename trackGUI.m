@@ -3790,8 +3790,16 @@ criavideores=0;
 
 handles.waibarfundo.visivel('on');
 %disp(['frameini = ', int2str(frameini), '\nframefinal = ',int2str(framefim )]);
+
+%converte pra tons de cinza e double pra trabalhar
+if colorida 
+           Imback = double(handles.fundo);
+else
+           Imback = double(rgb2gray(handles.fundo));
+end      
+
 [centroids, cov_matrices] = calcula_centroids_cov_rgb(handles.video, frameini, framefim ...
-                                                       , handles.fundo, handles.V, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
+                                                       , Imback, handles.V, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
                                                        , subcor, value_threshold, saturation_threshold, how_many_replicates,handles.waibarfundo);
 
 

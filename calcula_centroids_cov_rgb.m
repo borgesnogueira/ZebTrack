@@ -5,18 +5,14 @@ Para esse código, estou deliberadamente ignorando a dica (dicax,dicay)
 function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, frame_inicial, frame_final ...
                                                        , Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo ...
                                                        , colorida, value_threshold, saturation_threshold, how_many_replicates,waibar)
-
-       %converte pra tons de cinza e double pra trabalhar
-        if colorida 
-                   Imback = double(Imback);
-        else
-                   Imback = double(rgb2gray(Imback));
-        end                                                   
+                                             
             
                                                                                                  %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);                                                   
     frames_video = read(video, floor([frame_inicial,frame_final]));                              %cria um vetor com todos os frames entre frame_incial e frame_final.                                                                
     length_frames_video = (floor(frame_final) - floor(frame_inicial)) + 1;                   %Necessário para a implementação do for (o +1 é pra incluir o primeiro termo!)    
     avg_vector_pra_cada_frame = [];
+    
+    disp(['there are ', int2str(length_frames_video),' frames']); % test only, remove later
     
     for i=1:1:length_frames_video
         %converte pra tons de cinza e double pra trabalhar
@@ -25,11 +21,10 @@ function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, frame_inic
         else
             wframe  = double(rgb2gray(frames_video(:,:,:,i)));
         end
-    
-        
-    
         
         [~, ~, ~, boundingbox, ndetect, ~,~ ,wframe_log] = extractnblobs(wframe, Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo);
+        
+        disp(['frame= ',int2str(i)]);
         
         avg_vector_pra_cada_frame = [avg_vector_pra_cada_frame; cell2mat( blob_colours_2(frames_video(:,:,:,i),boundingbox,ndetect,wframe_log,value_threshold,saturation_threshold) )]; % 0.15, 0.5        
         
