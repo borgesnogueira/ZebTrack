@@ -3802,7 +3802,14 @@ end
                                                        , Imback, handles.V, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
                                                        , subcor, value_threshold, saturation_threshold, how_many_replicates,handles.waibarfundo);
 
-
+%{
+[centroids, cov_matrices] = calcula_centroids_cov_rgb(handles.video, AQUI_VAI_O_tempo_inicial, AQUI_VAI_O_tempo_final...
+                                                       , Imback, handles.V, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
+                                                       , subcor, FALTA_A_VARIAVEL_COR, ...
+						       , value_threshold, saturation_threshold, how_many_replicates);                                                       
+                                                       %}
+                                                   
+                                                   
 handles.waibarfundo.visivel('off');
 handles.waibarfundo.setvalue(0);
 handles.centroids = centroids;
