@@ -2,39 +2,22 @@
 Para esse código, estou deliberadamente ignorando a dica (dicax,dicay)
 %}
 
-%{
-colocar o argumento waitbar de volta na chamada da fun��o
-
-descomentar as linhas
-
-      %   waibar.setvalue(i/length_frames_video);
-      %  drawnow
-
-e comentar as linhas
-    new_video = VideoReader([video.Path,'\',video.Name]); % preciso criar um novo VideoReader pra evitar um bug                                                                                               
-
-e trocar new_video por video na linha frames_video = read(new_video , ........)
-
-
-pro c�digo poder rodar dentro do trackGUI
-%}
-
-function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, frame_inicial, frame_final ...
+function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inicial, tempo_final ...
                                                        , Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo ...
-                                                       , colorida, value_threshold, saturation_threshold, how_many_replicates) %,waibar)
-                                             
-            
-    new_video = VideoReader([video.Path,'\',video.Name]); % preciso criar um novo VideoReader pra evitar um bug                                                                                               
-    %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);                                                   
-    frames_video = read(new_video, floor([frame_inicial,frame_final]));                              %cria um vetor com todos os frames entre frame_incial e frame_final.                                                                
+                                                       , colorida, cor ...
+                                                       , value_threshold, saturation_threshold, how_many_replicates)
+
+    
+    [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os índices final e inicial para a calibração.
+    new_video = VideoReader([video.Path,'\',video.Name]); % preciso criar um novo VideoReader pra evitar um bug  
+    frames_video = read(new_video, floor([frame_inicial, frame_final]));                         %cria um vetor com todos os frames entre frame_incial e frame_final.
+                                                                                             %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);                                                   
     length_frames_video = (floor(frame_final) - floor(frame_inicial)) + 1;                   %Necessário para a implementação do for (o +1 é pra incluir o primeiro termo!)    
     avg_vector_pra_cada_frame = [];
     
-    disp(['there are ', int2str(length_frames_video),' frames']); % test only, remove later
-    
     for i=1:1:length_frames_video
         %converte pra tons de cinza e double pra trabalhar
-        if colorida 
+        if colorida || (cor == 1)
             wframe = double(frames_video(:,:,:,i));
         else
             wframe  = double(rgb2gray(frames_video(:,:,:,i)));
@@ -42,12 +25,7 @@ function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, frame_inic
         
         [~, ~, ~, boundingbox, ndetect, ~,~ ,wframe_log] = extractnblobs(wframe, Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo);
         
-        disp(['frame= ',int2str(i)]);
-        
         avg_vector_pra_cada_frame = [avg_vector_pra_cada_frame; cell2mat( blob_colours_2(frames_video(:,:,:,i),boundingbox,ndetect,wframe_log,value_threshold,saturation_threshold) )]; % 0.15, 0.5        
-        
-      %   waibar.setvalue(i/length_frames_video);
-      %  drawnow
     end    
    
     [idx,centroids] = kmeans(avg_vector_pra_cada_frame, nanimais,'Replicates',how_many_replicates); % I recommend 5
@@ -58,8 +36,6 @@ function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, frame_inic
     for index = 1:1:nanimais
        cov_matrices{index} = cov(avg_vector_pra_cada_frame(idx==unique_idx(index),:));
     end   
-    
-   
 end
 
 
