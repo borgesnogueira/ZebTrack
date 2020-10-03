@@ -3769,8 +3769,13 @@ function pushbuttonTrack_Ind_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+%{
 frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')))*handles.frameRate + 1;
 framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
+%}
+
+tempoini= (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')));
+tempofini = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')));
 
 nanimais = str2double(get(handles.npeixes,'String'));
 tipsubfundo = get(handles.radiosfe,'Value');
@@ -3787,7 +3792,7 @@ criavideores=0;
  value_threshold = 0.15;
  saturation_threshold = 0.5;
  how_many_replicates = 5;
-
+cor = 3;
 handles.waibarfundo.visivel('on');
 %disp(['frameini = ', int2str(frameini), '\nframefinal = ',int2str(framefim )]);
 
@@ -3797,17 +3802,17 @@ if subcor
 else
            Imback = double(rgb2gray(handles.fundo));
 end      
-
+%{
 [centroids, cov_matrices] = calcula_centroids_cov_rgb(handles.video, frameini, framefim ...
                                                        , Imback, handles.V, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
                                                        , subcor, value_threshold, saturation_threshold, how_many_replicates,handles.waibarfundo);
+%}
 
-%{
-[centroids, cov_matrices] = calcula_centroids_cov_rgb(handles.video, AQUI_VAI_O_tempo_inicial, AQUI_VAI_O_tempo_final...
+[centroids, cov_matrices] = calcula_centroids_cov_rgb(handles.video, tempoini, tempofini ...
                                                        , Imback, handles.V, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
-                                                       , subcor, FALTA_A_VARIAVEL_COR, ...
+                                                       , subcor, cor ...
 						       , value_threshold, saturation_threshold, how_many_replicates);                                                       
-                                                       %}
+                                                       
                                                    
                                                    
 handles.waibarfundo.visivel('off');
