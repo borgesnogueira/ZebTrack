@@ -3774,8 +3774,8 @@ frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handle
 framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 %}
 
-tempoini= (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')));
-tempofini = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')));
+tempoini= 168;%(str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')));
+tempofini = 169;% (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')));
 
 nanimais = str2double(get(handles.npeixes,'String'));
 tipsubfundo = get(handles.radiosfe,'Value');
@@ -3826,6 +3826,8 @@ centroids %mostrar cores achadas no console
 for ite=1:1:nanimais
     figure('Name',['Cor Associada ao Centroide ',int2str(ite)],'NumberTitle','off');
     image(reshape(uint8(centroids(ite,:)),[1,1,3]));
+    disp(['variancia{',int2str(ite),'} = ']);
+    cov_matrices{ite};
 end
 
 guidata(hObject,handles);

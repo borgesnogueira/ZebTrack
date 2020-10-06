@@ -7,7 +7,13 @@ function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inic
                                                        , colorida, cor ...
                                                        , value_threshold, saturation_threshold, how_many_replicates)
 disp(['tempo_inicial = ',int2str(tempo_inicial), ';  tempo_final= ', int2str(tempo_final)]);
-    
+disp([video.name,' , nanimais= ',int2str(nanimais),' , maxpix = ',int2str(maxpix),', minpix= ',int2str(minpix)])
+disp(['tol=', int2str(tol),', avi= ',int2str(avi),'criavideo=', int2str(criavideo),'tipsubfundo= ',int2str(tipsubfundo)]);
+disp(['colorida= ',int2str(colorida),' cor= ',int2str(cor)]);
+figure('Name','Mascara','NumberTitle','off');
+imshow(mascara);
+figure('Name','Imback','NumberTitle','off');
+imshow(Imback);
     [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os índices final e inicial para a calibração.
     new_video = VideoReader([video.Path,'\',video.Name]); % preciso criar um novo VideoReader pra evitar um bug  
     frames_video = read(new_video, floor([frame_inicial, frame_final]));                         %cria um vetor com todos os frames entre frame_incial e frame_final.
