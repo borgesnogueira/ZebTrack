@@ -3820,7 +3820,8 @@ handles.waibarfundo.setvalue(0);
 handles.centroids = centroids;
 handles.cov_matrices = cov_matrices;
 centroids %mostrar cores achadas no console
-
+%Vzin = handles.V;  % usado durante o save, abaixo. Remover depois
+%save('variaveis_que_faltavam_no_debugging','Vzin','mascara'); %remover depois
 %ajeitar o codigo. do jeito que esta nao ira funcionar
 %mostra_cores_dos_peixes(centoids, cov_matrices)
 for ite=1:1:nanimais
