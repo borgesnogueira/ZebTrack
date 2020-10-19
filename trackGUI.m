@@ -3807,9 +3807,9 @@ end
                                                        , Imback, handles.V, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
                                                        , subcor, value_threshold, saturation_threshold, how_many_replicates,handles.waibarfundo);
 %}
-
+load('C:\Users\mateu\Documents\zebtrack\ZebTrack\test_variables_and_results\variaveis_calculaMediaVarianciaHSV.mat','Vrm') %loading Vrm 
 [centroids, cov_matrices] = calcula_centroids_cov_rgb(handles.video, tempoini, tempofini ...
-                                                       , Imback, handles.V, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
+                                                       , Imback, Vrm, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
                                                        , subcor, cor ...
 						       , value_threshold, saturation_threshold, how_many_replicates);                                                       
                                                        
@@ -3820,8 +3820,8 @@ handles.waibarfundo.setvalue(0);
 handles.centroids = centroids;
 handles.cov_matrices = cov_matrices;
 centroids %mostrar cores achadas no console
-%Vzin = handles.V;  % usado durante o save, abaixo. Remover depois
-%save('variaveis_que_faltavam_no_debugging','Vzin','mascara'); %remover depois
+%V_pos = handles.V;  % usado durante o save, abaixo. Remover depois
+%save('V_pos_apagar_coisas_da_pasta_raiz','V_pos','mascara'); %remover depois
 %ajeitar o codigo. do jeito que esta nao ira funcionar
 %mostra_cores_dos_peixes(centoids, cov_matrices)
 for ite=1:1:nanimais
