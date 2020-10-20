@@ -3793,7 +3793,6 @@ criavideores=0;
  saturation_threshold = 0.5;
  how_many_replicates = 5;
 cor = 3;
-handles.waibarfundo.visivel('on');
 %disp(['frameini = ', int2str(frameini), '\nframefinal = ',int2str(framefim )]);
 
 %converte pra tons de cinza e double pra trabalhar
@@ -3802,17 +3801,19 @@ if subcor
 else
            Imback = double(rgb2gray(handles.fundo));
 end      
-%{
-[centroids, cov_matrices] = calcula_centroids_cov_rgb(handles.video, frameini, framefim ...
+
+[centroids, cov_matrices] = calcula_centroids_cov_rgb(handles.video, tempoini, tempofini ...
                                                        , Imback, handles.V, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
-                                                       , subcor, value_threshold, saturation_threshold, how_many_replicates,handles.waibarfundo);
-%}
+                                                       , subcor, cor ...
+						       , value_threshold, saturation_threshold, how_many_replicates, handles); 
+
+%{
 load('C:\Users\mateu\Documents\zebtrack\ZebTrack\test_variables_and_results\variaveis_calculaMediaVarianciaHSV.mat','Vrm') %loading Vrm 
 [centroids, cov_matrices] = calcula_centroids_cov_rgb(handles.video, tempoini, tempofini ...
                                                        , Imback, Vrm, nanimais, mascara, minpix, maxpix, thresh, avi, criavideores, tipsubfundo ...
                                                        , subcor, cor ...
-						       , value_threshold, saturation_threshold, how_many_replicates);                                                       
-                                                       
+						       , value_threshold, saturation_threshold, how_many_replicates, handles);                                                       
+%}                                                       
                                                    
                                                    
 handles.waibarfundo.visivel('off');

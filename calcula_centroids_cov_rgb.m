@@ -5,7 +5,7 @@ Para esse código, estou deliberadamente ignorando a dica (dicax,dicay)
 function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inicial, tempo_final ...
                                                        , Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo ...
                                                        , colorida, cor ...
-                                                       , value_threshold, saturation_threshold, how_many_replicates)
+                                                       , value_threshold, saturation_threshold, how_many_replicates, handles)
 disp(['tempo_inicial = ',int2str(tempo_inicial), ';  tempo_final= ', int2str(tempo_final)]);
 disp([video.name,' , nanimais= ',int2str(nanimais),' , maxpix = ',int2str(maxpix),', minpix= ',int2str(minpix)])
 disp(['tol=', int2str(tol),', avi= ',int2str(avi),'criavideo=', int2str(criavideo),'tipsubfundo= ',int2str(tipsubfundo)]);
@@ -20,7 +20,9 @@ imshow(Imback);
                                                                                              %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);                                                   
     length_frames_video = (floor(frame_final) - floor(frame_inicial)) + 1;                   %Necessário para a implementação do for (o +1 é pra incluir o primeiro termo!)    
     avg_vector_pra_cada_frame = [];
-    
+    [l,c,nc] = size(frames_video(:,:,:,1));
+     vcores = [0 0 1; 1 0 0; 0 1 0; 1 1 1; 1 1 0; 1 0 1; 0 1 1];
+      
     for i=1:1:length_frames_video
         %converte pra tons de cinza e double pra trabalhar
         if colorida || (cor == 1)
@@ -32,7 +34,32 @@ imshow(Imback);
         [~, ~, ~, boundingbox, ndetect, ~,~ ,wframe_log] = extractnblobs(wframe, Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo);
         
         avg_vector_pra_cada_frame = [avg_vector_pra_cada_frame; cell2mat( blob_colours_2(frames_video(:,:,:,i),boundingbox,ndetect,wframe_log,value_threshold,saturation_threshold) )]; % 0.15, 0.5        
+        
+        
+        
+         %plota no GUI
+           
+                set(0,'CurrentFigure',handles.figure1);
+                set(handles.figure1,'CurrentAxes',handles.axes4);
+                hold off
+                imhandle = imshow(frames_video(:,:,:,i));
+                hold on
+
+                for j=1:ndetect
+                    xi = max(1,boundingbox(j,1) - 3);
+                    yi = max(1,boundingbox(j,2) - 3);
+                    xf = min(boundingbox(j,1) + boundingbox(j,3) + 3,c);
+                    yf = min(boundingbox(j,2) + boundingbox(j,4) + 3,l); 
+                    phandle = line([xi xf xf xi xi],[yi yi yf yf yi],'Color',vcores(mod(j,7)+1,:));
+                    thandle = text(xi+2,yi+7,num2str(j),'FontSize',11,'Color',vcores(mod(j,7)+1,:));
+                end
+     
+                handles.waibar.setvalue(i/ length_frames_video);
+               drawnow
+        
     end    
+    
+
    
     [idx,centroids] = kmeans(avg_vector_pra_cada_frame, nanimais,'Replicates',how_many_replicates); % I recommend 5
     
