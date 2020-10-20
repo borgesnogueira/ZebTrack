@@ -1,8 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Autor: Marcelo Borges Nogueira
 %Data: 18/03/2015
-%Descricao: Cria o fundo de uma 
-sequencia de imagens fazendo a media destas
+%Descricao: Cria o fundo de uma sequencia de imagens fazendo a media destas
 %utilizando os quadros de procframe em procframe. Calcula tambem a
 %variancia de cada pixel, retornando na matriz V
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
