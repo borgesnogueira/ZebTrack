@@ -3774,8 +3774,8 @@ frameini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handle
 framefim = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')))*handles.frameRate;
 %}
 
-tempoini= 168;%(str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')));
-tempofini = 169;% (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')));
+tempoini = (str2double(get(handles.tinimin,'String'))*60 + str2double(get(handles.tiniseg,'String')));
+tempofini = (str2double(get(handles.tfimmin,'String'))*60 + str2double(get(handles.tfimseg,'String')));
 
 nanimais = str2double(get(handles.npeixes,'String'));
 tipsubfundo = get(handles.radiosfe,'Value');

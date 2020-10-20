@@ -22,6 +22,9 @@ imshow(Imback);
     avg_vector_pra_cada_frame = [];
     [l,c,nc] = size(frames_video(:,:,:,1));
      vcores = [0 0 1; 1 0 0; 0 1 0; 1 1 1; 1 1 0; 1 0 1; 0 1 1];
+     V =  V.^.5;
+    %garante que todo mundo em Vrm eh no mínimo 0.5
+    V(V<0.5) = 0.5;
       
     for i=1:1:length_frames_video
         %converte pra tons de cinza e double pra trabalhar
