@@ -58,14 +58,24 @@ disp(['colorida= ',int2str(colorida),' cor= ',int2str(cor)]);
        drawnow
         
     end    
-    
-
-   
+       
     [idx,centroids] = kmeans(avg_vector_pra_cada_frame, nanimais,'Replicates',how_many_replicates); % I recommend 5
     
     unique_idx = unique(idx);
     cov_matrices = {}; % matrix of variations
 
+    % remover depois
+    figure;
+    plot3(avg_vector_pra_cada_frame(idx==1,1),avg_vector_pra_cada_frame(idx==1,2),avg_vector_pra_cada_frame(idx==1,3),'r.','MarkerSize',12)
+    hold on
+    plot3(avg_vector_pra_cada_frame(idx==2,1),avg_vector_pra_cada_frame(idx==2,2),avg_vector_pra_cada_frame(idx==2,3),'b.','MarkerSize',12)
+    plot3(centroids(:,1),centroids(:,2),centroids(:,3),'kx','MarkerSize',15,'LineWidth',3) 
+    legend('Cluster 1','Cluster 2','Centroids','Location','NW')
+    title 'Cluster Assignments and Centroids'
+    grid on
+    hold off
+    % remover depois
+    
     for index = 1:1:nanimais
        cov_matrices{index} = cov(avg_vector_pra_cada_frame(idx==unique_idx(index),:));
     end   
