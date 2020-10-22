@@ -87,4 +87,3 @@ function [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tem
     frame_inicial = floor(video.FrameRate*tempo_inicial);
     frame_final = floor(video.FrameRate*tempo_final);  
 end
-
