@@ -44,7 +44,7 @@ daí basta somar:
     pxn = centroides_escolhidos(:,1);
     pyn = centroides_escolhidos(:,2);
     %disp(centroides_boundingbox(I,:));
-    %disp(['positions = ' num2str(I)]);
-    %disp(D);
+    disp(['positions = ' num2str(I)]);
+    disp(D);
     disp(centroides_boundingbox);
 end
