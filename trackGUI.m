@@ -820,7 +820,7 @@ if get(handles.splitexperiment,'Value')
     
 else
     [handles.e.t,handles.e.posicao,handles.e.velocidade,handles.e.parado,handles.e.dormindo,handles.e.tempoareas,handles.e.distperc,handles.e.comportamento]=...
-    track(visu,fini,ffim,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals, centroids, cov_matrices, actions);
+    track(visu,fini,ffim,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals, handles.centroids, handles.cov_matrices, actions);
     handles.e.areaproc=handles.areaproc;
     handles.e.pxcm = pxcm;
     handles.e.figdimensions.l = handles.l;
