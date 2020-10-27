@@ -30,7 +30,7 @@ da√≠ basta somar:
 
     mat_bc2_avg_v = cell2mat(bc2_avg_vector);
     
-    diagonal_tela = l^2 + c^2; 
+    diagonal_tela = l^2 + c^2; % note que a diagonal est· ao quadrado 
     
     D_cores = pdist2(mat_bc2_avg_v, centroids);
     
