@@ -492,7 +492,7 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
                                                                           alpha_distancia);
                 %}                                                      
                 %centroides = [72.8047 22.3412 30.9006; 23.3055 25.0995 57.2719]% definir na mão antes de rodar o código                                                      
-                [px(:,cont),py(:,cont)] =  associacao_soma_matrizes(avg_vector,centroides,cx,cy, px(:,cont-1), py(:,cont-1))                                                      
+                [px(:,cont),py(:,cont)] =  associacao_soma_matrizes(avg_vector,centroides,cx,cy, px(:,cont-1), py(:,cont-1),l,c)                                                      
 
             else
                 [px(:,cont) ,py(:,cont), detectado, caixa] = associateeuclid(nanimais, ndetect, px(:,cont-1), py(:,cont-1), cx, cy, radius, ...
