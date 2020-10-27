@@ -30,9 +30,15 @@ da√≠ basta somar:
 
     mat_bc2_avg_v = cell2mat(bc2_avg_vector);
     
-    diagonal_tela = l^2 + c^2; % note que a diagonal est· ao quadrado 
+    diagonal_tela = sqrt(l^2 + c^2);
+    diagonal_cores = 255*sqrt(3); % estou me valendo de abuso de linguagem ao chamar "diagonal cores"
+                                  % note que a maior dist‚ncia que pode
+                                  % ocorrer dentro de um cubo [0 255]x[0
+                                  % 255] È aquela da maior diagonal
+                                  % interna (um ponto em [0 0 0] e outro em [255 255 255])
+                                  % cujo tamanho È 255*sqrt(3)
     
-    D_cores = pdist2(mat_bc2_avg_v, centroids);
+    D_cores = pdist2(mat_bc2_avg_v, centroids) / diagonal_cores;
     
     centroides_boundingbox = [cx' cy'];
     pontos_anteriores_imagem = [px_ant py_ant];
