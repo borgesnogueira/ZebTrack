@@ -37,6 +37,13 @@ da√≠ basta somar:
                                   % 255] È aquela da maior diagonal
                                   % interna (um ponto em [0 0 0] e outro em [255 255 255])
                                   % cujo tamanho È 255*sqrt(3)
+
+    [lin, ~] = size(centroids)
+    for i=1:1:lin
+        if isempty(centroids{i,:})
+           centroids{i,1} = [0.5 0.5 0.5];
+        end
+    end                                  
     
     D_cores = pdist2(mat_bc2_avg_v, centroids) / diagonal_cores;
     
