@@ -29,11 +29,14 @@ daí basta somar:
 %}
 
     mat_bc2_avg_v = cell2mat(bc2_avg_vector);
+    
+    diagonal_tela = l^2 + c^2; 
+    
     D_cores = pdist2(mat_bc2_avg_v, centroids);
     
     centroides_boundingbox = [cx' cy'];
     pontos_anteriores_imagem = [px_ant py_ant];
-    D_imagem = pdist2(centroides_boundingbox, pontos_anteriores_imagem);
+    D_imagem = pdist2(centroides_boundingbox, pontos_anteriores_imagem)/diagonal_tela;
    % disp(D_cores);
     D = D_cores + D_imagem;
    % disp(D);
