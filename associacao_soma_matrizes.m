@@ -40,8 +40,8 @@ daí basta somar:
 
     [lin, ~] = size(centroids)
     for i=1:1:lin
-        if isempty(centroids{i,:})
-           centroids{i,1} = [0.5 0.5 0.5];
+        if isempty(centroids(i,:))
+           centroids(i,1) = [0.5 0.5 0.5];
         end
     end                                  
     
