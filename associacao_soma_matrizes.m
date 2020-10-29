@@ -40,22 +40,30 @@ daí basta somar:
 
     [lin, ~] = size(centroids)
     for i=1:1:lin
+        disp('entrei aqui')
         if isempty(centroids(i,:))
            centroids(i,1) = [0.5 0.5 0.5];
         end
     end                                  
     
     D_cores = pdist2(mat_bc2_avg_v, centroids) / diagonal_cores;
-    
+    disp('mat_bc2_avg_v=') %remover depois
+    mat_bc2_avg_v %remover depois
     centroides_boundingbox = [cx' cy'];
     pontos_anteriores_imagem = [px_ant py_ant];
     D_imagem = pdist2(centroides_boundingbox, pontos_anteriores_imagem)/diagonal_tela;
-   % disp(D_cores);
+    disp('dcores='); %remover depois
+    disp(D_cores); %remover depois
+    %disp(D_imagem);
     D = D_cores + D_imagem;
    % disp(D);
     %disp(centroides_boundingbox);
     %disp(pontos_anteriores_imagem);
     [~,I] = min(D,[],1);
+    disp('D='); %remover depois
+    D %remover depois
+    disp('I='); %remover depois
+    I %remover depois
     centroides_escolhidos = centroides_boundingbox(I,:);
     pxn = centroides_escolhidos(:,1);
     pyn = centroides_escolhidos(:,2);
