@@ -45,16 +45,22 @@ daí basta somar:
            centroids(i,1) = [0.5 0.5 0.5];
         end
     end                                  
-    
+    disp('centroids =\n ');
+    centroids
     D_cores = pdist2(mat_bc2_avg_v, centroids) / diagonal_cores;
-    disp('mat_bc2_avg_v=') %remover depois
-    mat_bc2_avg_v %remover depois
+    disp('size D_cores')
+    disp(size(D_cores))
+
+    %disp('mat_bc2_avg_v=') %remover depois
+    %mat_bc2_avg_v %remover depois
     centroides_boundingbox = [cx' cy'];
     pontos_anteriores_imagem = [px_ant py_ant];
     D_imagem = pdist2(centroides_boundingbox, pontos_anteriores_imagem)/diagonal_tela;
-    disp('dcores='); %remover depois
-    disp(D_cores); %remover depois
+%    disp('dcores='); %remover depois
+%    disp(D_cores); %remover depois
     %disp(D_imagem);
+    disp('size D_imagem')
+    disp(size(D_imagem))
     D = D_cores + D_imagem;
    % disp(D);
     %disp(centroides_boundingbox);
