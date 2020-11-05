@@ -28,6 +28,16 @@ daí basta somar:
 --------------
 %}
 
+%    save('checando_soma_matrizes','bc2_avg_vector','centroids','cx', 'cy', 'px_ant', 'py_ant', 'l', 'c', 'detectado')
+
+    [lin, ~] = size(bc2_avg_vector)
+    for i=1:1:lin
+        disp('entrei aqui')
+        if isempty(bc2_avg_vector{i,:})
+           bc2_avg_vector{i,1} = [0.5 0.5 0.5];
+        end
+    end 
+
     mat_bc2_avg_v = cell2mat(bc2_avg_vector);
     
     diagonal_tela = sqrt(l^2 + c^2);
@@ -38,15 +48,8 @@ daí basta somar:
                                   % interna (um ponto em [0 0 0] e outro em [255 255 255])
                                   % cujo tamanho � 255*sqrt(3)
 
-    [lin, ~] = size(centroids)
-    for i=1:1:lin
-        disp('entrei aqui')
-        if isempty(centroids(i,:))
-           centroids(i,1) = [0.5 0.5 0.5];
-        end
-    end                                  
-    disp('centroids =\n ');
-    centroids
+    disp('mat_bc2_avg_v = ');
+    mat_bc2_avg_v
     D_cores = pdist2(mat_bc2_avg_v, centroids) / diagonal_cores;
     disp('size D_cores')
     disp(size(D_cores))
