@@ -30,14 +30,6 @@ daí basta somar:
 
 %    save('checando_soma_matrizes','bc2_avg_vector','centroids','cx', 'cy', 'px_ant', 'py_ant', 'l', 'c', 'detectado')
 
-    [lin, ~] = size(bc2_avg_vector)
-    for i=1:1:lin
-        disp('entrei aqui')
-        if isempty(bc2_avg_vector{i,:})
-           bc2_avg_vector{i,1} = [0.5 0.5 0.5];
-        end
-    end 
-
     mat_bc2_avg_v = cell2mat(bc2_avg_vector);
     
     diagonal_tela = sqrt(l^2 + c^2);
@@ -50,7 +42,20 @@ daí basta somar:
 
     disp('mat_bc2_avg_v = ');
     mat_bc2_avg_v
-    D_cores = pdist2(mat_bc2_avg_v, centroids) / diagonal_cores;
+    
+    D_cores = pdist2(mat_bc2_avg_v, centroids)/diagonal_cores;
+
+    [lin, cols] = size(bc2_avg_vector)
+    for i=1:1:lin
+        disp('entrei aqui')
+        if isempty(bc2_avg_vector{i,:})
+           %bc2_avg_vector{i,1} = [0.5 0.5 0.5];
+            disp('vazioooo')
+            disp(['lin = ', int2str(lin)])
+            D_cores(lin,:) = 0.5*ones(1,cols)
+        end
+    end
+    
     disp('size D_cores')
     disp(size(D_cores))
 
