@@ -40,8 +40,7 @@ daí basta somar:
                                   % interna (um ponto em [0 0 0] e outro em [255 255 255])
                                   % cujo tamanho � 255*sqrt(3)
 
-    disp('mat_bc2_avg_v = ');
-    mat_bc2_avg_v
+
     
     D_cores = pdist2(mat_bc2_avg_v, centroids)/diagonal_cores;
 
@@ -56,16 +55,12 @@ daí basta somar:
         end
     end
     
-    disp('size D_cores')
-    disp(size(D_cores))
-
-
+    D_cores % I want to see its elements
+    
     centroides_boundingbox = [cx' cy'];
     pontos_anteriores_imagem = [px_ant py_ant];
     D_imagem = pdist2(centroides_boundingbox, pontos_anteriores_imagem)/diagonal_tela;
 
-    disp('size D_imagem')
-    disp(size(D_imagem))
     D = D_cores + D_imagem;
 
     [~,I] = min(D,[],1);
@@ -74,10 +69,4 @@ daí basta somar:
     pxn = centroides_escolhidos(:,1);
     pyn = centroides_escolhidos(:,2);
 
-    disp('estou dentro da associacao_soma_matrizes');
-    disp(['positions = ' num2str(I)]);
-    disp('D = ');
-    disp(D);
-    disp('centroides_boundigbox = ');
-    disp(centroides_boundingbox);
 end
