@@ -68,5 +68,7 @@ daí basta somar:
     centroides_escolhidos = centroides_boundingbox(I,:);
     pxn = centroides_escolhidos(:,1);
     pyn = centroides_escolhidos(:,2);
+    
+    [detectado,~] = ismember(centroides_boundingbox,centroides_escolhidos,'rows');
 
 end
