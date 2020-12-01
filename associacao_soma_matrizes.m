@@ -30,6 +30,9 @@ daí basta somar:
 
 %    save('checando_soma_matrizes','bc2_avg_vector','centroids','cx', 'cy', 'px_ant', 'py_ant', 'l', 'c', 'detectado')
 
+    pxn = px_ant;
+    pyn = py_ant;
+    
     mat_bc2_avg_v = cell2mat(bc2_avg_vector);
     
     diagonal_tela = sqrt(l^2 + c^2);
