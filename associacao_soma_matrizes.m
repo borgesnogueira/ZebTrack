@@ -1,4 +1,4 @@
-function [pxn,pyn,detectado,caixa] = associacao_soma_matrizes(nanimais, ndetect, bc2_avg_vector,centroids, cx, cy, px_ant, py_ant, l, c, detectado,caixa)
+function [pxn,pyn,detectado,caixa] = associacao_soma_matrizes(nanimais, ndetect, bc2_avg_vector,centroids, cx, cy, px_ant, py_ant, l, c, detectado,caixa,boundingbox)
 %{
 note que existem nanimais. Isso que define a quantidade de centroides 
 (existem, por definição, a mesma quantidade de centróides que de animais).
