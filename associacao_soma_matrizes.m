@@ -63,8 +63,6 @@ daí basta somar:
         end
     end
     
-    D_cores % I want to see its elements
-    
     centroides_boundingbox = [cx' cy'];
     pontos_anteriores_imagem = [px_ant py_ant];
     D_imagem = pdist2(centroides_boundingbox, pontos_anteriores_imagem)/diagonal_tela;
