@@ -30,6 +30,11 @@ daÃ­ basta somar:
 
 %    save('checando_soma_matrizes','bc2_avg_vector','centroids','cx', 'cy', 'px_ant', 'py_ant', 'l', 'c', 'detectado')
 
+    %se nenhum blob for achado minha função termina
+    if ndetect==0
+        return
+    end
+
     pxn = px_ant;
     pyn = py_ant;
     
