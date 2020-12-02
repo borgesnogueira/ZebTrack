@@ -69,6 +69,7 @@ daí basta somar:
 
     D = D_cores + D_imagem;
 
+    blobdetectado = zeros(1,ndetect);
     [~,I] = min(D,[],1);
 
     centroides_escolhidos = centroides_boundingbox(I,:);
