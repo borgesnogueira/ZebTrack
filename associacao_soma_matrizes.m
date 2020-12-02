@@ -70,12 +70,23 @@ daÃ­ basta somar:
     D = D_cores + D_imagem;
 
     blobdetectado = zeros(1,ndetect);
-    [~,I] = min(D,[],1);
-
-    centroides_escolhidos = centroides_boundingbox(I,:);
-    pxn = centroides_escolhidos(:,1);
-    pyn = centroides_escolhidos(:,2);
     
-    [detectado,~] = ismember(centroides_boundingbox,centroides_escolhidos,'rows');
-
+    %enquanto tiver aniamis nao associados ou blobs nao associados
+    while ~isempty(find(detectado==0, 1)) && ~isempty(find(blobdetectado==0, 1))
+    %acha o minimo atual
+    [blob,animal]=find(D==min(min(D)));
+    [value,ind] = min(D(:));
+    [blob,animal] = ind2sub(size(D),ind);
+       
+        if ~detectado(animal) && ~blobdetectado(blob) %associa o animal ao blob se eles estiverem livres
+            D(blob,:) = ones(1,nanimais)*(l^2 + c^2); %bota um valor alto para nao ser mais o minimo na linha e coluna inteira, ja que esse blob e animal serão associados
+            D(:,animal) = ones(ndetect,1)*(l^2 + c^2);
+            detectado(animal) = 1;
+            blobdetectado(blob) = 1;
+            pxn(animal) = cx(blob);           %Associando o centro de massa do blob com a posição do animal
+            pyn(animal) = cy(blob);
+        %    caixa(animal,1:4) = boundingbox(blob,:);
+        end
+        
+    end
 end
