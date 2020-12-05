@@ -158,7 +158,7 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
         tipsubfundo=0;
         V = handles.V;
     else
-        fps = video.FrameRate;
+        fps = handles.frameRate;
     end
 
     global abort
@@ -399,6 +399,8 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
         catch
             disp('Could not connect to serial device');
         end
+    else
+        serialcom = [];
     end
 
     ti=tic;
@@ -871,8 +873,8 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
             end
 
             if ~liveTracking
-                set(handles.tamin,'String',num2str(floor((numframeatual)/(handles.video.Framerate*60))));
-                set(handles.taseg,'String',num2str(floor((numframeatual)/(handles.video.Framerate) - 60*floor((numframeatual)/(handles.video.Framerate*60)))));
+                set(handles.tamin,'String',num2str(floor((numframeatual)/(handles.frameRate*60))));
+                set(handles.taseg,'String',num2str(floor((numframeatual)/(handles.frameRate) - 60*floor((numframeatual)/(handles.frameRate*60)))));
             end
 
             if cameralenta>0

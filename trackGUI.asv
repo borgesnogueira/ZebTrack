@@ -761,9 +761,9 @@ if actions.nactions>0
 end
 
 
-  if ~exist('handles.centroids','var')
-        handles.centroids = [];
-         handles.cov_matrices = [];
+  if ~exist('centroids','var')
+        centroids = [];
+        cov_matrices = [];
   end
 
 set(handles.run,'Visible','off');

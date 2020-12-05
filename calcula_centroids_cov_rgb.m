@@ -84,6 +84,7 @@ end
 
 %Função para converter meu tempo inicial e final em termos dos frames correspondentes.
 function [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video)
-    frame_inicial = floor(video.FrameRate*tempo_inicial);
-    frame_final = floor(video.FrameRate*tempo_final);  
+    frameRate = video.NumberOfFrames/video.Duration;
+    frame_inicial = floor(frameRate*tempo_inicial);
+    frame_final = floor(frameRate*tempo_final);  
 end
