@@ -5,16 +5,17 @@ Para esse código, estou deliberadamente ignorando a dica (dicax,dicay)
 function [centroids, cov_matrices] = calcula_centroids_cov_rgb(video, tempo_inicial, tempo_final ...
                                                        , Imback, V, nanimais, mascara, minpix, maxpix, tol, avi, criavideo, tipsubfundo ...
                                                        , colorida, cor ...
-                                                       , value_threshold, saturation_threshold, how_many_replicates, handles)
+                                                       , value_threshold, saturation_threshold, how_many_replicates, handles);
 disp(['tempo_inicial = ',int2str(tempo_inicial), ';  tempo_final= ', int2str(tempo_final)]);
-disp([video.name,' , nanimais= ',int2str(nanimais),' , maxpix = ',int2str(maxpix),', minpix= ',int2str(minpix)])
+disp([video.name,' , nanimais= ',int2str(nanimais),' , maxpix = ',int2str(maxpix),', minpix= ',int2str(minpix)]);
 disp(['tol=', int2str(tol),', avi= ',int2str(avi),'criavideo=', int2str(criavideo),'tipsubfundo= ',int2str(tipsubfundo)]);
 disp(['colorida= ',int2str(colorida),' cor= ',int2str(cor)]);
 %figure('Name','Mascara','NumberTitle','off');
 %imshow(mascara);
 %figure('Name','Imback','NumberTitle','off');
 %imshow(Imback);
-    [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video); %aqui obtenho os índices final e inicial para a calibração.
+    [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video);%aqui obtenho os índices final e inicial para a calibração.
+    %disp(frame_inicial);
     new_video = VideoReader([video.Path,'\',video.Name]); % preciso criar um novo VideoReader pra evitar um bug  
     %frames_video = read(new_video, floor([frame_inicial, frame_final]));                         %cria um vetor com todos os frames entre frame_incial e frame_final.
                                                                                              %Lembrando que para acessar o i-ésimo frame, uso a notação frames_video(:,:,:,i);                                                   
@@ -78,13 +79,14 @@ disp(['colorida= ',int2str(colorida),' cor= ',int2str(cor)]);
     
     for index = 1:1:nanimais
        cov_matrices{index} = cov(avg_vector_pra_cada_frame(idx==unique_idx(index),:));
-    end   
+    end 
+   % disp(centroids);
 end
 
 
 %Função para converter meu tempo inicial e final em termos dos frames correspondentes.
 function [frame_inicial, frame_final] = extraiIntervaloFrames(tempo_inicial, tempo_final, video)
     frameRate = video.NumberOfFrames/video.Duration;
-    frame_inicial = floor(frameRate*tempo_inicial);
+    frame_inicial = floor(frameRate*tempo_inicial)+1;
     frame_final = floor(frameRate*tempo_final);  
 end

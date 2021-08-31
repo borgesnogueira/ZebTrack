@@ -1,7 +1,7 @@
 
 
 function avg_vector = blob_colours_2(frame, boundingbox, ndetect...
-                                  , wframe_log, value_threshold, saturation_threshold)
+                                  , wframe_log, value_threshold, saturation_threshold);
 % value_threshold == INTENSIDADE                              
 avg_vector = cell(ndetect,1); %cell array com quantidade de espaços correspondentes aos vetores de cor para cada animal.
 
@@ -25,10 +25,8 @@ for k=1:1:ndetect %iterar sobre cada blob
     if how_many_pixels ~= 0
         avg_p_i = avg_p_i/how_many_pixels;
         avg_vector{k,1} = avg_p_i;
-        avg_p_i
     else
-        disp('no valid pixels found');
-        avg_p_i
+      %  disp('no valid pixels found');
     end
     
     %figure; %test only, remove later

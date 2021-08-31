@@ -29,17 +29,29 @@ daÃ­ basta somar:
 %}
 
 %    save('checando_soma_matrizes','bc2_avg_vector','centroids','cx', 'cy', 'px_ant', 'py_ant', 'l', 'c', 'detectado')
-
-    %se nenhum blob for achado minha função termina
-    if ndetect==0
-        return
-    end
-
     pxn = px_ant;
     pyn = py_ant;
     
-    mat_bc2_avg_v = cell2mat(bc2_avg_vector);
+    %se nenhum blob for achado minha função termina
     
+    if ndetect==0
+        return
+    end
+    
+    %percorrer a matriz bc2_avg_vector e substituir as células vazias por
+    %-1
+    
+    for i=1:ndetect
+        if isempty(bc2_avg_vector{i,1})
+            bc2_avg_vector{i,1} = [-1 -1 -1];
+        end
+    end
+    mat_bc2_avg_v = cell2mat(bc2_avg_vector);
+   
+  % if (mat_bc2_avg_v == [])
+  %   mat_bc2_avg_v = [0 0 0];
+  %  end
+  %  mat_bc2_avg_v = [1 1 1];
     diagonal_tela = sqrt(l^2 + c^2);
     diagonal_cores = 255*sqrt(3); % estou me valendo de abuso de linguagem ao chamar "diagonal cores"
                                   % note que a maior distância que pode
@@ -49,44 +61,61 @@ daÃ­ basta somar:
                                   % cujo tamanho é 255*sqrt(3)
 
 
-    
-    D_cores = pdist2(mat_bc2_avg_v, centroids)/diagonal_cores;
-
-    [lin, cols] = size(bc2_avg_vector)
-    for i=1:1:lin
-        disp('entrei aqui')
-        if isempty(bc2_avg_vector{i,:})
-           %bc2_avg_vector{i,1} = [0.5 0.5 0.5];
-            disp('vazioooo')
-            disp(['lin = ', int2str(lin)])
-            D_cores(lin,:) = 0.5*ones(1,cols)
-        end
-    end
-    
     centroides_boundingbox = [cx' cy'];
     pontos_anteriores_imagem = [px_ant py_ant];
     D_imagem = pdist2(centroides_boundingbox, pontos_anteriores_imagem)/diagonal_tela;
-
-    D = D_cores + D_imagem;
+    D_cores = pdist2(mat_bc2_avg_v, centroids)/diagonal_cores;
+   
+    [lin, cols] = size(bc2_avg_vector);
+    for i=1:1:ndetect
+        if bc2_avg_vector{i,1} == -1
+           D_cores(i,:) = D_imagem(i,:);
+        end
+    end
+    
+    %media das distancias euclidiana e de cores em cada frame
+%    iter = 0;
+%    xImagem = 0;
+%    yImagem = 0;
+%    xCores = 0;
+%    yCores = 0;
+%    
+%   [a,b] = size(D_imagem);
+%   for i=1:1:a
+%       xImagem = D_imagem(i,1) + xImagem;
+%       yImagem = D_imagem(i,2) + yImagem;
+%       xCores = D_cores(i,1) + xCores;
+%       yCores = D_cores(i,2) + yCores;
+%       iter = iter+1;
+%   end
+%   
+%   xImagem = xImagem/iter;
+%   yImagem = yImagem/iter;
+%   xCores = xCores/iter;
+%   yCores = yCores/iter;
+    
+    alfa = 1;
+    D = (alfa*D_cores) + ((1-alfa)*D_imagem);
 
     blobdetectado = zeros(1,ndetect);
     
-    %enquanto tiver aniamis nao associados ou blobs nao associados
+    %enquanto tiver animais nao associados ou blobs nao associados
     while ~isempty(find(detectado==0, 1)) && ~isempty(find(blobdetectado==0, 1))
-    %acha o minimo atual
-    [blob,animal]=find(D==min(min(D)));
-    [value,ind] = min(D(:));
-    [blob,animal] = ind2sub(size(D),ind);
+        %acha o minimo atual
+        [blob,animal]=find(D==min(min(D)));
+        [value,ind] = min(D(:));
+        [blob,animal] = ind2sub(size(D),ind);
        
         if ~detectado(animal) && ~blobdetectado(blob) %associa o animal ao blob se eles estiverem livres
-            D(blob,:) = ones(1,nanimais)*(l^2 + c^2); %bota um valor alto para nao ser mais o minimo na linha e coluna inteira, ja que esse blob e animal serão associados
-            D(:,animal) = ones(ndetect,1)*(l^2 + c^2);
+            D(blob,:) = ones(1,nanimais)*2; %bota um valor alto para nao ser mais o minimo na linha e coluna inteira, ja que esse blob e animal serão associados
+            D(:,animal) = ones(ndetect,1)*2;
             detectado(animal) = 1;
             blobdetectado(blob) = 1;
             pxn(animal) = cx(blob);           %Associando o centro de massa do blob com a posição do animal
             pyn(animal) = cy(blob);
-        %    caixa(animal,1:4) = boundingbox(blob,:);
-        end
+            caixa(animal,1:4) = boundingbox(blob,:);
+        else
+            break
         
     end
 end

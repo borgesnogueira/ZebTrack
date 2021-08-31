@@ -404,7 +404,13 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
     end
 
     ti=tic;
-    while i<=quadrofim
+%     vetor_Ximagem = [];
+%     vetor_Yimagem = [];
+%     vetor_Xcores = [];
+%     vetor_Ycores = [];
+%     indice_atual_medias = 1;
+    
+     while i<=quadrofim
         
         %disp(['frame atual: ', num2str(i)])
 
@@ -482,10 +488,10 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
                                                   INTENSO);
                 %}
                 avg_vector = blob_colours_2(frame, boundingbox, ndetect...
-                                                    ,imdif, 0.15,0.5) % avg_vector é o novo vetor_cores_atuais
+                                                    ,imdif, 0.15,0.5); % avg_vector é o novo vetor_cores_atuais
                 %definindo um valor para alpha:
                 alpha_distancia = 0;    %20% para a distância euclidiana e 80% para a distância no espaço de cores.
-                
+               
                 
                 %{
                 [px(:,cont),py(:,cont),detectado,caixa] = associatefudera(nanimais, ndetect, px(:,cont-1), py(:,cont-1), cx, cy, radius,...
@@ -494,8 +500,12 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
                                                                           alpha_distancia);
                 %}                                                      
                 %centroides = [72.8047 22.3412 30.9006; 23.3055 25.0995 57.2719]% definir na mão antes de rodar o código                                                      
-                [px(:,cont),py(:,cont),detectado,caixa] =  associacao_soma_matrizes(nanimais, ndetect,avg_vector,centroides,cx,cy, px(:,cont-1), py(:,cont-1),l,c,detectado,caixa, boundingbox)                                                      
-
+                [px(:,cont),py(:,cont),detectado,caixa] =  associacao_soma_matrizes(nanimais, ndetect,avg_vector,centroides,cx,cy, px(:,cont-1), py(:,cont-1),l,c,detectado,caixa, boundingbox);                                                      
+%                     vetor_Ximagem(indice_atual_medias) = Ximagem;
+%                     vetor_Yimagem(indice_atual_medias) = Yimagem;
+%                     vetor_Xcores(indice_atual_medias) = Xcores;
+%                     vetor_Ycores(indice_atual_medias) = Ycores;
+%                     indice_atual_medias = indice_atual_medias + 1;
             else
                 [px(:,cont) ,py(:,cont), detectado, caixa] = associateeuclid(nanimais, ndetect, px(:,cont-1), py(:,cont-1), cx, cy, radius, ...
                                                                              boundingbox, detectado, dicax, dicay, ...
@@ -949,8 +959,18 @@ function [t,posicao,velocidade,parado,dormindo,tempoareas,distperc,comportamento
         if liveTracking
             quadrofim=i+1;
         end
-    end
-
+     end
+     
+%      figure ('Name','Gráfico da média de distâncias euclidianas e cores')
+%      plot (vetor_Ximagem,vetor_Yimagem,'k*',vetor_Xcores,vetor_Ycores,'r*')
+%      legend ('Euclidiana', 'Cores')
+%      figure ('Name','Gráfico da média de distâncias euclidianas')
+%      plot (vetor_Ximagem,vetor_Yimagem,'k*')
+%      legend ('Euclidiana')
+%      figure ('Name','Gráfico da média de distâncias de cores')
+%      plot (vetor_Xcores,vetor_Ycores,'r*')
+%      legend ('Cores')
+     
     if liveTracking
         delete(videoLive);
     end

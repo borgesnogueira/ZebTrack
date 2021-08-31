@@ -730,14 +730,18 @@ trackmouse = get(handles.trackmouse,'Value');
 %live tracking
 liveTracking = handles.live;
 %track individuals
-trackindividuals = get(handles.checkboxTrack_Ind,'Value');
+trackindividuals = get(handles.checkboxTrack_Ind,'Value'); %tenta capturar os centroides
 if trackindividuals 
     try
     centroids = handles.centroids;
     cov_matrices = handles.cov_matrices;
     catch
         msgbox('Generate Feature Dataset First! ','Erro','error');
+        return;
     end
+else
+      centroids = [];
+      cov_matrices = [];
 end
 %actions to external hardware
 actions.nactions = handles.nactions;
@@ -759,12 +763,6 @@ if actions.nactions>0
        eval(['actions.command(i) =   get(handles.popupmenu' num2str(3*i+2) ',''Value'');'] );
      end
 end
-
-
-  if ~exist('handles.centroids','var')
-        handles.centroids = [];
-         handles.cov_matrices = [];
-  end
 
 set(handles.run,'Visible','off');
 set(handles.abortar,'Visible','on');
@@ -810,13 +808,13 @@ if get(handles.splitexperiment,'Value')
         guidata(hObject, handles);
         if i==1
             [handles.e(i).t,handles.e(i).posicao,handles.e(i).velocidade,handles.e(i).parado,handles.e(i).dormindo,handles.e(i).tempoareas,handles.e(i).distperc,handles.e(i).comportamento]=...
-            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals,  handles.centroids,  handles.cov_matrices, actions);
+            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals, centroids, cov_matrices, actions);
         else
             pinicial.x(:,1) = px(:,end);
             pinicial.y(:,1) = py(:,end);
 
             [handles.e(i).t,handles.e(i).posicao,handles.e(i).velocidade,handles.e(i).parado,handles.e(i).dormindo,handles.e(i).tempoareas,handles.e(i).distperc,handles.e(i).comportamento]=...
-            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals,  handles.centroids,  handles.cov_matrices, actions,pinicial);
+            track(visu,finitemp,ffimtemp,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals, centroids, cov_matrices, actions,pinicial);
         end
         
         if abort
@@ -826,7 +824,7 @@ if get(handles.splitexperiment,'Value')
     
 else
     [handles.e.t,handles.e.posicao,handles.e.velocidade,handles.e.parado,handles.e.dormindo,handles.e.tempoareas,handles.e.distperc,handles.e.comportamento]=...
-    track(visu,fini,ffim,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals, handles.centroids, handles.cov_matrices, actions);
+    track(visu,fini,ffim,handles.directoryname,handles.video,pxcm,np,procf,handles.areaproc,handles.areaint,handles.areaexc,criavideores,mostradiff,thresh,filt,handles,fundodina,tipfilt,tipsubfundo,velmin,tempmin,tempminparado,subcor,camlent,trackmouse,liveTracking,trackindividuals, centroids, cov_matrices, actions);
     handles.e.areaproc=handles.areaproc;
     handles.e.pxcm = pxcm;
     handles.e.figdimensions.l = handles.l;
@@ -3826,7 +3824,7 @@ handles.waibarfundo.visivel('off');
 handles.waibarfundo.setvalue(0);
 handles.centroids = centroids;
 handles.cov_matrices = cov_matrices;
-centroids %mostrar cores achadas no console
+centroids; %mostrar cores achadas no console
 %V_pos = handles.V;  % usado durante o save, abaixo. Remover depois
 %save('V_pos_apagar_coisas_da_pasta_raiz','V_pos','mascara'); %remover depois
 %ajeitar o codigo. do jeito que esta nao ira funcionar
@@ -3834,7 +3832,7 @@ centroids %mostrar cores achadas no console
 for ite=1:1:nanimais
     figure('Name',['Cor Associada ao Centroide ',int2str(ite)],'NumberTitle','off');
     image(reshape(uint8(centroids(ite,:)),[1,1,3]));
-    disp(['variancia{',int2str(ite),'} = ']);
+    %disp(['variancia{',int2str(ite),'} = ']);
     cov_matrices{ite};
 end
 
