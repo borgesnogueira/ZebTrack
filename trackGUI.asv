@@ -1874,26 +1874,20 @@ else
         %deixa ela lá. se depois o usuario quiser adicinar mais areas,
         %tambem pode)
         n = length(handles.areaint);
-        hx = abs(handles.fimgrid(1) - handles.inigrid(1))/ncolunas;
-        hy = abs(handles.fimgrid(2) - handles.inigrid(2))/nlinhas; %lembrando que a origem do y fica em cima
+        hx = (handles.fimgrid(1) - handles.inigrid(1))/ncolunas;
+        hy = (handles.fimgrid(2) - handles.inigrid(2))/nlinhas; %lembrando que a origem do y fica em cima
         for l = 1:nlinhas
             for c = 1:ncolunas
                 n = n + 1;
                 %cria os 5 vertices (repete o ultimo)              
-                handles.areaint(n).x(1) = round(min(handles.inigrid(1),handles.fimgrid(1)) + (c-1)*hx);
-                handles.areaint(n).y(1) = round(min(handles.inigrid(2),handles.fimgrid(2)) + (l-1)*hy);
-                
+                handles.areaint(n).x(1) = round(handles.inigrid(1) + (c-1)*hx);
+                handles.areaint(n).y(1) = round(handles.inigrid(2) + (l-1)*hy);
                 handles.areaint(n).x(2) = round(handles.areaint(n).x(1) + hx - 1);
                 handles.areaint(n).y(2) = handles.areaint(n).y(1);
-                
                 handles.areaint(n).x(3) = handles.areaint(n).x(2);
-                handles.areaint(n).y(3) = round(handles.areaint(n).y(2) + hy - 1);
-                
-                handles.areaint(n).x(4) = handles.areaint(n).x(1) ;
+                handles.areaint(n).y(3) = round(handles.areaint(n).y(3) + hy - 1);
+                handles.areaint(n).x(4) = handles.areaint(n).x(1) 
                 handles.areaint(n).y(4) = handles.areaint(n).y(3);
-                
-                handles.areaint(n).x(5) = handles.areaint(n).x(1) ;
-                handles.areaint(n).y(5) = handles.areaint(n).y(1) ;
         
         
             end
@@ -1902,19 +1896,10 @@ else
         set(handles.mensagem,'Visible','off');
         set(handles.posicaomouse,'Visible','off');
         set(handles.posicaomouse2,'Visible','off');
-        set(handles.figure1,'WindowButtonMotionFcn','');
-        %plota na figura
-        axes(handles.axes4)
-        hold off
-        fundohandle = imshow(handles.fundo);
-        set(fundohandle,'ButtonDownFcn', @axes4_ButtonDownFcn);
-        hold on
-        desenha_areas(handles.areaproc,@axes4_ButtonDownFcn,'g',-1);
-        desenha_areas(handles.areaint,@axes4_ButtonDownFcn,'b',1);    
-        desenha_areas(handles.areaexc,@axes4_ButtonDownFcn,'r',-1);
    end
 end
    
+
 % Update handles structure
 guidata(axesHandle, handles);
 
