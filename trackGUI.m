@@ -1883,19 +1883,17 @@ else
                 handles.areaint(n).x(1) = round(min(handles.inigrid(1),handles.fimgrid(1)) + (c-1)*hx);
                 handles.areaint(n).y(1) = round(min(handles.inigrid(2),handles.fimgrid(2)) + (l-1)*hy);
                 
-                handles.areaint(n).x(2) = round(handles.areaint(n).x(1) + hx - 1);
+                handles.areaint(n).x(2) = round(handles.areaint(n).x(1) + hx) ;
                 handles.areaint(n).y(2) = handles.areaint(n).y(1);
                 
                 handles.areaint(n).x(3) = handles.areaint(n).x(2);
-                handles.areaint(n).y(3) = round(handles.areaint(n).y(2) + hy - 1);
+                handles.areaint(n).y(3) = round(handles.areaint(n).y(2) + hy);
                 
                 handles.areaint(n).x(4) = handles.areaint(n).x(1) ;
                 handles.areaint(n).y(4) = handles.areaint(n).y(3);
                 
                 handles.areaint(n).x(5) = handles.areaint(n).x(1) ;
                 handles.areaint(n).y(5) = handles.areaint(n).y(1) ;
-        
-        
             end
         end
         handles.definirapc = 0;
